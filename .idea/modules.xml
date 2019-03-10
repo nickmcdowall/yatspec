@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/yatspec.iml" filepath="$PROJECT_DIR$/yatspec.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/yatspec_main.iml" filepath="$PROJECT_DIR$/.idea/modules/yatspec_main.iml" group="yatspec" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/yatspec_test.iml" filepath="$PROJECT_DIR$/.idea/modules/yatspec_test.iml" group="yatspec" />
     </modules>
   </component>
 </project>
-

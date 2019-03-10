@@ -13,16 +13,16 @@ Alternative tools:
 * [Fit](http://fit.c2.com/) - YatSpec is different because you write your tests in pure Java and JUnit instead of HTML.  
 
 Currently this library supports several features:
-  * Generate [HTML](https://github.com/bodar/yatspec/raw/wiki/example.html) based on a [JUnit Java](/test/com/googlecode/yatspec/junit/SpecificationExampleTest.java) file
+  * Generate [HTML](https://github.com/bodar/yatspec/raw/wiki/example.html) based on a [JUnit Java](src/test/java/com/googlecode/yatspec/junit/SpecificationExampleTest.java) file
   * BDD "Given / When / Then" support with automatic capturing and display of "givens" and captured inputs and output.
-  * Tabular data tests by using [@TableRunner](src/com/googlecode/yatspec/junit/TableRunner.java) 
-  with [@Table](src/com/googlecode/yatspec/junit/Table.java) and [@Row](src/com/googlecode/yatspec/junit/Row.java) support for JUnit Methods (similar to in MBUnit / NUnit)
-  * [@Notes](src/com/googlecode/yatspec/junit/Notes.java) to add comments to tests
-  * [@LinkingNote](/src/com/googlecode/yatspec/junit/LinkingNote.java) to [generate links between tests](https://www.youtube.com/watch?v=CFMkD-t363c)  
+  * Tabular data tests by using [@TableRunner](src/main/java/com/googlecode/yatspec/junit/TableRunner.java) 
+  with [@Table](src/main/java/com/googlecode/yatspec/junit/Table.java) and [@Row](src/main/java/com/googlecode/yatspec/junit/Row.java) support for JUnit Methods (similar to in MBUnit / NUnit)
+  * [@Notes](src/main/java/com/googlecode/yatspec/junit/Notes.java) to add comments to tests
+  * [@LinkingNote](src/main/java/com/googlecode/yatspec/junit/LinkingNote.java) to [generate links between tests](https://www.youtube.com/watch?v=CFMkD-t363c)  
 
 ### Quick Start ###
 
-The simplest example would be to add the JUnit [@RunWith](http://junit.sourceforge.net/javadoc/org/junit/runner/RunWith.html) attribute specifying the [SpecRunner](/src/com/googlecode/yatspec/junit/SpecRunner.java) class to your Test class.
+The simplest example would be to add the JUnit [@RunWith](http://junit.sourceforge.net/javadoc/org/junit/runner/RunWith.html) attribute specifying the [SpecRunner](src/main/java/com/googlecode/yatspec/junit/SpecRunner.java) class to your Test class.
 
 ```java
 @RunWith(SpecRunner.class)

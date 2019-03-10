@@ -2,7 +2,8 @@
 *.iws
 .idea/workspace.xml
 out
-build/artifacts
+build/
+.idea/
 lib/build
 lib/runtime
 lib/optional
