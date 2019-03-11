@@ -4,8 +4,5 @@
 out
 build/
 .idea/
-lib/build
-lib/runtime
-lib/optional
 .gradle/
 *.iml

@@ -5,6 +5,7 @@ plugins {
 }
 
 repositories {
+    maven { url 'http://repo.bodar.com/' }
     mavenCentral()
 }
 
@@ -24,12 +25,21 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 artifacts {
     archives sourcesJar
 }
-
 dependencies {
-    compile fileTree(dir: './lib/build', include: ['*.jar'])
-    compile fileTree(dir: './lib/build', include: ['totallylazy-1130.jar'])
-    compile fileTree(dir: './lib/manual', include: ['*.jar'])
-    compile fileTree(dir: './lib/optional', include: ['*.jar'])
+    compile "antlr:antlr:2.7.7"
+    compile "org.antlr:stringtemplate:3.2.1"
+    compile "com.thoughtworks.qdox:qdox:1.12.1"
+    compile "com.googlecode.jarjar:jarjar:1.1"
+    compile "com.googlecode.totallylazy:totallylazy:1130"
+    compile "com.googlecode.funclate:funclate:110"
+    compile "org.hamcrest:hamcrest-core:1.2"
+    compile "org.hamcrest:hamcrest-library:1.2"
+    compile "org.junit.platform:junit-platform-console-standalone:1.3.2"
+    compile "net.sourceforge.plantuml:plantuml:7933"
+    compile "jaxen:jaxen:1.1.1"
+    compile "org.jdom:jdom:1.1"
+    compile "com.googlecode.yadic:yadic:167"
+    compile fileTree(dir: 'lib/manual', include: ['*.jar'])
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiter"
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiter"
@@ -37,6 +47,7 @@ dependencies {
     testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitJupiter"
 }
+
 
 test {
     useJUnitPlatform()
