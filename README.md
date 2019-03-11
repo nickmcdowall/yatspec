@@ -68,23 +68,20 @@ We will test that Weather Application API using YatSpec.
 The whole example is available at https://github.com/wojciechbulaty/examples/tree/master/weather-yatspec-example
 
 ##### YatSpec Tutorial Step 0: Set up the project #####
-Start with adding YatSpec to your project. If you use maven, add a dependency to `pom.xml`:
-````xml
-<dependency>
-    <groupId>com.googlecode.yatspec</groupId>
-    <artifactId>yatspec</artifactId>
-    <version>1.27</version>
-    <scope>test</scope>
-</dependency>
+Start with adding YatSpec to your project `build.gradle` file e.g.:
 ````
-You will also need a repository in your `pom.xml`:
-````xml
-<repositories>
-    <repository>
-        <id>http://repo.bodar.com/</id>
-        <url>http://repo.bodar.com/</url>
-    </repository>
-</repositories>
+dependencies {
+    implementation 'com.github.nickmcdowall:yatspec:release-2019.1.1'
+}
+````
+You will also need a repository in your `build.gradle`:
+````
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
 ````
 
 ##### YatSpec Tutorial Step 1: Create a test #####
