@@ -7,3 +7,5 @@ build/
 lib/build
 lib/runtime
 lib/optional
+.gradle/
+*.iml
