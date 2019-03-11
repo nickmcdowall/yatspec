@@ -1,5 +1,7 @@
 <h1><img src="https://raw.githubusercontent.com/wiki/bodar/yatspec/logo.jpg" align="absmiddle"/> YatSpec</h1>
 
+[![Release](https://jitpack.io/v/nickmcdowall/yatspec.svg?label=Release)](https://jitpack.io/#nickmcdowall/yatspec)
+
 YatSpec is a [BDD test framework](https://en.wikipedia.org/wiki/Behavior-driven_development). YatSpec runs your JUnit tests and generates human-readable HTML reports.
  
 YatSpec replaces test tools like Concordion and Fit by allowing your tests to stay maintainable (i.e refactoring support 
