@@ -111,52 +111,34 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
     }
 
     private ActionUnderTest heDemandsFoodFromBambam() {
-        return new ActionUnderTest() {
-            public CapturedInputAndOutputs execute(InterestingGivens givens, CapturedInputAndOutputs capturedInputAndOutputs) {
-                capturedInputAndOutputs.add("food demand from mrflintstone to bambam", "I want a burger");
-                return capturedInputAndOutputs;
-            }
+        return (givens, capturedInputAndOutputs) -> {
+            capturedInputAndOutputs.add("food demand from mrflintstone to bambam", "I want a burger");
+            return capturedInputAndOutputs;
         };
     }
 
 
     private StateExtractor<Object> bambam() {
-        return new StateExtractor<Object>() {
-            public Object execute(CapturedInputAndOutputs inputAndOutputs) throws Exception {
-                return ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
-            }
-        };
+        return inputAndOutputs -> ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
     }
 
     private StateExtractor<Object> mrFlintstone() {
-        return new StateExtractor<Object>() {
-            public Object execute(CapturedInputAndOutputs inputAndOutputs) throws Exception {
-                return ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
-            }
-        };
+        return inputAndOutputs -> ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
     }
 
     private StateExtractor<Object> barney() {
-        return new StateExtractor<Object>() {
-            public Object execute(CapturedInputAndOutputs inputAndOutputs) throws Exception {
-                return ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
-            }
-        };
+        return inputAndOutputs -> ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
     }
 
     private GivensBuilder aHungryMrFlintstone() {
-        return new GivensBuilder() {
-            public InterestingGivens build(InterestingGivens givens) throws Exception {
-                return givens;
-            }
-        };
+        return givens -> givens;
     }
 
     public void when(Object o, Object oo) {
     }
 
     private BaseMatcher<Object> dummyMatcher() {
-        return new BaseMatcher<Object>() {
+        return new BaseMatcher<>() {
             public boolean matches(Object o) {
                 return true;
             }

@@ -11,7 +11,7 @@ public class RandomFixtures {
         return anyStringOfLength(anyNumberBetween(8, 12));
     }
 
-    public static String anyStringOfLength(int length) {
+    private static String anyStringOfLength(int length) {
         String anyString = "";
         for (int index = 0; index < length; index++) {
             anyString += anyCapitalLetter();
@@ -19,7 +19,7 @@ public class RandomFixtures {
         return anyString;
     }
 
-    public static String anyCapitalLetter() {
+    private static String anyCapitalLetter() {
         return String.valueOf((char) (random.nextInt(26) + 'A'));
     }
 
@@ -31,13 +31,4 @@ public class RandomFixtures {
         return choices[random.nextInt(choices.length)];
     }
 
-    public static <T> T pickOneOf(Collection<T> choices) {
-        //noinspection unchecked
-        return (T) pickOneOf(choices.toArray());
-    }
-
-    public static <E extends Enum> E pickOneOf(Class<E> choices) {
-        //noinspection unchecked
-        return pickOneOf(choices.getEnumConstants());
-    }
 }

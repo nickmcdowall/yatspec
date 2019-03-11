@@ -6,9 +6,7 @@ import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.rendering.html.tagindex.HtmlTagIndexRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
-import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
-import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.hamcrest.Matchers;
@@ -31,7 +29,7 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
 
     @Test
     @Notes("#tag-one")
-    public void reallySimpleExample() throws Exception {
+    public void reallySimpleExample() {
         assertThat(sqrt(9), is(3.0));
     }
 
@@ -49,19 +47,19 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
 
     @Test
     @LinkingNote(message = "The details of how the Linking Note works can be seen in the %s", links = {LinkingNoteRendererTest.class})
-    public void testWithALinkingNote() throws Exception {
+    public void testWithALinkingNote() {
 
     }
 
     @Test
-    public void printEmptyTestName() throws Exception {
+    public void printEmptyTestName() {
 
     }
 
     @Test
     @Table({@Row({"someParam", "varargA", "varargB"}),
             @Row({"anotherParam"})})
-    public void callMethodsWithTrailingVarargs(String firstParam, String... otherParams) throws Exception {
+    public void callMethodsWithTrailingVarargs(String firstParam, String... otherParams) {
         assertThat(firstParam, Matchers.not(Matchers.isIn(otherParams)));
     }
 
@@ -70,19 +68,13 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
     }
 
     private GivensBuilder theRadicand(final int number) {
-        return new GivensBuilder() {
-            public InterestingGivens build(InterestingGivens interestingGivens) throws Exception {
-                return interestingGivens.add(RADICAND, number);
-            }
-        };
+        return interestingGivens -> interestingGivens.add(RADICAND, number);
     }
 
     private ActionUnderTest weTakeTheSquareRoot() {
-        return new ActionUnderTest() {
-            public CapturedInputAndOutputs execute(InterestingGivens interestingGivens, CapturedInputAndOutputs capturedInputAndOutputs) {
-                int number = interestingGivens.getType(RADICAND, Integer.class);
-                return capturedInputAndOutputs.add(RESULT, sqrt(number));
-            }
+        return (interestingGivens, capturedInputAndOutputs) -> {
+            int number = interestingGivens.getType(RADICAND, Integer.class);
+            return capturedInputAndOutputs.add(RESULT, sqrt(number));
         };
     }
 
@@ -90,7 +82,7 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
         return getValue(RESULT, Double.class);
     }
 
-    public Iterable<SpecResultListener> getResultListeners() throws Exception {
+    public Iterable<SpecResultListener> getResultListeners() {
         return sequence(
                 new HtmlResultRenderer().
                         withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)", "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")),

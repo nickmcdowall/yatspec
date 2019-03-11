@@ -14,8 +14,8 @@ import static org.hamcrest.core.Is.*;
 @RunWith(SpecRunner.class)
 public class BeforeClassTest extends TestState {
 
-    public static final List<String> list = new ArrayList<String>();
-    public final String item1 = theFirstItemInTheList();
+    private static final List<String> list = new ArrayList<>();
+    private final String item1 = theFirstItemInTheList();
 
     @BeforeClass
     public static void addItemsToList() {

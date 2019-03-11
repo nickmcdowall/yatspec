@@ -13,7 +13,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static com.googlecode.yatspec.fixture.RandomFixtures.pickOneOf;
 import static com.googlecode.yatspec.rendering.ScenarioNameRendererFactory.SCENARIO_NAME_RENDERER;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -28,7 +27,7 @@ public class DecoratingFrameworkMethodTest {
     private Method method;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         originalScenarioNameRenderer = System.getProperty(SCENARIO_NAME_RENDERER);
         args = asList(RandomFixtures.anyString(), RandomFixtures.anyString());
         method = method();
@@ -37,7 +36,7 @@ public class DecoratingFrameworkMethodTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         if (null != originalScenarioNameRenderer) {
             System.setProperty(SCENARIO_NAME_RENDERER, originalScenarioNameRenderer);
         } else {
@@ -46,7 +45,7 @@ public class DecoratingFrameworkMethodTest {
     }
 
     @Test
-    public void getsNameUsingDefaultRenderer() throws Exception {
+    public void getsNameUsingDefaultRenderer() {
         System.clearProperty(SCENARIO_NAME_RENDERER);
         String expectedName = new HumanReadableScenarioNameRenderer().render(new ScenarioName(methodName, args));
 
@@ -56,7 +55,7 @@ public class DecoratingFrameworkMethodTest {
     }
 
     @Test
-    public void getsNameUsingRenderSpecifiedBySystemProperty() throws Exception {
+    public void getsNameUsingRenderSpecifiedBySystemProperty() {
         System.setProperty(SCENARIO_NAME_RENDERER, MAVEN_SCENARIO_NAME_RENDERER);
         String expectedName = new MavenSurefireScenarioNameRenderer().render(new ScenarioName(methodName, args));
 
@@ -65,11 +64,11 @@ public class DecoratingFrameworkMethodTest {
         assertThat(actualName, is(expectedName));
     }
 
-    private Method method() throws NoSuchMethodException {
+    private Method method() {
         return RandomFixtures.pickOneOf(Object.class.getMethods());
     }
 
-    private FrameworkMethod frameworkMethod() throws NoSuchMethodException {
+    private FrameworkMethod frameworkMethod() {
         return new FrameworkMethod(method);
     }
 

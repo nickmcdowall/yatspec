@@ -13,9 +13,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @ExtendWith(SpecListener.class)
-public class BeforeClassTest extends TestState {
+class BeforeClassTest extends TestState {
 
-    public static final List<String> list = new ArrayList<String>();
+    private static final List<String> list = new ArrayList<>();
     private final String item1 = theFirstItemInTheList();
 
     @BeforeAll

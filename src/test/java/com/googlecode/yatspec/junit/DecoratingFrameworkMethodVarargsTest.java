@@ -52,17 +52,17 @@ public class DecoratingFrameworkMethodVarargsTest {
     }
 
     private Method getMethod(String methodName) {
-        return sequence(VarargFixture.class.getDeclaredMethods()).filter(Predicates.where(new Mapper<Method, String>() {
+        return sequence(VarargFixture.class.getDeclaredMethods()).filter(Predicates.where(new Mapper<>() {
             @Override
-            public String call(Method method) throws Exception {
+            public String call(Method method) {
                 return method.getName();
             }
         }, Predicates.is(methodName))).headOption().getOrThrow(new RuntimeException("Couldn't find method called " + methodName));
     }
 
-    public void testVarargsForMethod(Method underTest) throws Throwable {
+    private void testVarargsForMethod(Method underTest) throws Throwable {
         final List<String> varArgs = asList("a", "b", "c");
-        final List<String> params = new ArrayList<String>();
+        final List<String> params = new ArrayList<>();
         if (underTest.getParameterTypes().length > 1) {
             params.add("someParam");
         }

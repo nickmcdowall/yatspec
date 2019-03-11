@@ -17,15 +17,15 @@ class JUnit5Test implements WithCustomResultListeners {
 
     @ParameterizedTest
     @Table({
-        @Row({"1", "1", "2"}),
-        @Row({"2", "3", "5"})
+            @Row({"1", "1", "2"}),
+            @Row({"2", "3", "5"})
     })
     void sum(int a, int b, int sum) {
         assertEquals(sum, a + b);
     }
 
     @Override
-    public Iterable<SpecResultListener> getResultListeners() throws Exception {
+    public Iterable<SpecResultListener> getResultListeners() {
         return sequence(
                 new HtmlResultRenderer().
                         withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)", "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")),

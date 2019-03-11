@@ -14,7 +14,7 @@ public class TableExampleTest {
 
     @Test
     @Table({@Row("some value")})
-    public void demonstratingPassingSingleArgument(String argument) throws Exception {
+    public void demonstratingPassingSingleArgument(String argument) {
         assertThat(argument, is(notNullValue()));
     }
 

@@ -11,7 +11,7 @@ import static org.hamcrest.core.Is.is;
 @RunWith(SpecRunner.class)
 public abstract class AbstractTestCase extends TestState {
     @Test
-    public void testInParentClass() throws Exception {
+    public void testInParentClass() {
         assertThat(sqrt(9), is(3.0));
     }
 

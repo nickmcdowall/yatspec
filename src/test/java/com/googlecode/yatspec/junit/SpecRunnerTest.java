@@ -1,12 +1,7 @@
 package com.googlecode.yatspec.junit;
 
 import com.googlecode.totallylazy.StringPrintStream;
-import org.junit.After;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.notification.RunNotifier;
 
 import java.io.PrintStream;
@@ -20,14 +15,14 @@ public class SpecRunnerTest {
     private PrintStream systemStandardOutStream;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         systemStandardOutStream = System.out;
         standardOutStream = new StringPrintStream();
         System.setOut(standardOutStream);
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         System.setOut(systemStandardOutStream);
     }
 
@@ -53,13 +48,13 @@ public class SpecRunnerTest {
         specRunner.run(notifier);
 
         String standardOut = standardOutStream.toString();
-        assertThat(standardOut,not(containsString("Exception")));
+        assertThat(standardOut, not(containsString("Exception")));
     }
 
     public static class IgnoredTest {
         @Test
         @Ignore
-        public void ignored() throws Exception {
+        public void ignored() {
 
         }
     }
@@ -71,7 +66,7 @@ public class SpecRunnerTest {
         }
 
         @Test
-        public void ignored() throws Exception {
+        public void ignored() {
             throw new RuntimeException("");
         }
     }
@@ -83,7 +78,7 @@ public class SpecRunnerTest {
         }
 
         @Test
-        public void ignored() throws Exception {
+        public void ignored() {
             throw new RuntimeException("");
         }
     }

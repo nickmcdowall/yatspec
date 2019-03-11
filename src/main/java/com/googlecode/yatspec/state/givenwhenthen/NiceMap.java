@@ -8,7 +8,7 @@ import static java.util.Collections.unmodifiableMap;
 
 @SuppressWarnings({"unused", "unchecked"})
 class NiceMap<T extends NiceMap> {
-    private final Map<String, Object> map = Collections.synchronizedMap(new LinkedHashMap<String, Object>());
+    private final Map<String, Object> map = Collections.synchronizedMap(new LinkedHashMap<>());
 
     public NiceMap(Object... instances) {
         for (Object instance : instances) {
@@ -29,7 +29,7 @@ class NiceMap<T extends NiceMap> {
 
     public Map<String, Object> getTypes() {
         synchronized (map) {
-            return unmodifiableMap(new LinkedHashMap<String, Object>(map));
+            return unmodifiableMap(new LinkedHashMap<>(map));
         }
     }
 

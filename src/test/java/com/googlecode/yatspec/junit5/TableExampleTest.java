@@ -17,7 +17,7 @@ class TableExampleTest {
 
     @ParameterizedTest
     @Table({@Row("some value")})
-    void demonstratingPassingSingleArgument(String argument) throws Exception {
+    void demonstratingPassingSingleArgument(String argument) {
         assertThat(argument, is(notNullValue()));
     }
 
