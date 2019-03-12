@@ -24,13 +24,13 @@ Currently this library supports several features:
 
 ### Quick Start ###
 
-The simplest example would be to add the JUnit [@RunWith](http://junit.sourceforge.net/javadoc/org/junit/runner/RunWith.html) attribute specifying the [SpecRunner](src/main/java/com/googlecode/yatspec/junit/SpecRunner.java) class to your Test class.
+JUnit 5:
 
 ```java
-@RunWith(SpecRunner.class)
-public class ExampleTest {
+@ExtendWith(SpecListener.class)
+class ExampleJUnit5Test implements WithCustomResultListeners {
     @Test
-    public void reallySimpleExample() throws Exception {
+    void someTest() {
         assertThat("The quick brown fox".contains("fox"), is(true));
     }
 }
@@ -68,13 +68,15 @@ We will test that Weather Application API using YatSpec.
 The whole example is available at https://github.com/wojciechbulaty/examples/tree/master/weather-yatspec-example
 
 ##### YatSpec Tutorial Step 0: Set up the project #####
-Start with adding YatSpec to your project `build.gradle` file e.g.:
+Add YatSpec to your project `build.gradle` file
+(The latest version can be found at [Jitpack](https://jitpack.io/#nickmcdowall/yatspec)
+) e.g.:
 ````
 dependencies {
-    implementation 'com.github.nickmcdowall:yatspec:release-2019.1.1'
+    implementation 'com.github.nickmcdowall:yatspec:release-xxx'
 }
 ````
-You will also need a repository in your `build.gradle`:
+You will also need the jitpack repository to your `build.gradle` e.g.:
 ````
 allprojects {
     repositories {
@@ -302,8 +304,5 @@ public void reportsErrorWhenDarkSkyReturnsANonSuccessfulResponse(String darkSkyR
 The whole example is available at https://github.com/wojciechbulaty/examples/tree/master/weather-yatspec-example 
 
 ---
-
-Maven repo  => http://repo.bodar.com/
-
 ### Java Support ###
-Version 1.1 requires Java 7 or higher. Version 217 is the last build that supports Java 6.
+Version 2019.1.2 requires Java 11 or higher.
