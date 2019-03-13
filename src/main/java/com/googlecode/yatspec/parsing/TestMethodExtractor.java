@@ -1,8 +1,5 @@
 package com.googlecode.yatspec.parsing;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Strings;
 import com.googlecode.yatspec.junit.Table;
 import com.googlecode.yatspec.state.ScenarioTable;
 import com.googlecode.yatspec.state.TestMethod;
@@ -13,11 +10,13 @@ import com.thoughtworks.qdox.model.annotation.EvaluatingVisitor;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-import static com.googlecode.totallylazy.Predicates.is;
-import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Sequences.sequence;
+import static java.util.stream.Collectors.toList;
 
 public class TestMethodExtractor {
     public TestMethod toTestMethod(Class aClass, JavaMethod javaMethod, Method method) {
@@ -33,10 +32,14 @@ public class TestMethodExtractor {
         ScenarioTable table = new ScenarioTable();
         table.setHeaders(getNames(method.getParameters()));
 
-        final Sequence<Annotation> rows = getRows(method);
+        final Collection<Annotation> rows = getRows(method);
         for (Annotation row : rows) {
             List<String> values = getRowValues(row);
-            table.addRow(sequence(values).map(Strings.trim()).toList());
+            table.addRow(
+                    values.stream()
+                            .map(value -> value.trim())
+                            .collect(toList())
+            );
         }
         return table;
     }
@@ -64,28 +67,31 @@ public class TestMethodExtractor {
         }
     }
 
-    private Sequence<Annotation> getRows(JavaMethod method) {
-        return sequence(method.getAnnotations()).filter(where(TestParser.name(), is(Table.class.getName()))).flatMap(rows());
+    private Collection<Annotation> getRows(JavaMethod method) {
+        return Arrays.stream(method.getAnnotations())
+                .filter(isATable())
+                .flatMap(rows())
+                .collect(toList());
     }
 
-    private Callable1<? super Annotation, Iterable<Annotation>> rows() {
-        return new Callable1<Annotation, Iterable<Annotation>>() {
-            @Override
-            public Iterable<Annotation> call(Annotation annotation) throws Exception {
-                return ((AnnotationValueList) annotation.getProperty("value")).getValueList();
-            }
+    private Predicate<Annotation> isATable() {
+        return annotation -> {
+            String name = annotation.getType().getFullyQualifiedName();
+            return name.equals(Table.class.getName());
+        };
+    }
+
+    private Function<Annotation, Stream<Annotation>> rows() {
+        return annotation -> {
+            AnnotationValue value = annotation.getProperty("value");
+            return ((AnnotationValueList) value).getValueList().stream();
         };
     }
 
     private List<String> getNames(JavaParameter[] javaParameters) {
-        return sequence(javaParameters).map(getName()).toList();
+        return Arrays.stream(javaParameters)
+                .map(JavaParameter::getName)
+                .collect(toList());
     }
 
-    private Callable1<JavaParameter, String> getName() {
-        return new Callable1<JavaParameter, String>() {
-            public String call(JavaParameter javaParameter) {
-                return javaParameter.getName();
-            }
-        };
-    }
 }

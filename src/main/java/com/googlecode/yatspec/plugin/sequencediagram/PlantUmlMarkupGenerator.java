@@ -1,35 +1,28 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Sequences;
+import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.lang.String.format;
 
 public class PlantUmlMarkupGenerator {
-    public String generateMarkup(Iterable<SequenceDiagramMessage> messages) {
+    public String generateMarkup(Collection<SequenceDiagramMessage> messages) {
         Markup markup = new Markup();
-        Sequences.sequence(messages).map(plantUmlMarkup()).forEach(addTo(markup));
+        messages.stream()
+                .map(plantUmlMarkup())
+                .forEach(addTo(markup));
+
         return markup.build();
     }
 
-    private Callable1<String, Void> addTo(final Markup markup) {
-        return new Callable1<String, Void>() {
-            @Override
-            public Void call(String s) throws Exception {
-                markup.addMessage(s);
-                return null;
-            }
-        };
+    private Consumer<String> addTo(final Markup markup) {
+        return s -> markup.addMessage(s);
     }
 
-    private Callable1<SequenceDiagramMessage, String> plantUmlMarkup() {
-        return new Callable1<SequenceDiagramMessage, String>() {
-            @Override
-            public String call(SequenceDiagramMessage message) throws Exception {
-                return format("%s ->> %s:<text class=sequence_diagram_clickable sequence_diagram_message_id=%s>%s</text>", message.from(), message.to(), message.messageId(), message.messageName());
-            }
-        };
+    private Function<SequenceDiagramMessage, String> plantUmlMarkup() {
+        return message -> format("%s ->> %s:<text class=sequence_diagram_clickable sequence_diagram_message_id=%s>%s</text>",
+                message.from(), message.to(), message.messageId(), message.messageName());
     }
 
     private class Markup {

@@ -4,7 +4,7 @@ import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.rendering.ToStringRenderer;
 
 public class DontHighlightRenderer<T> implements Renderer<T> {
-    public String render(T instance) throws Exception {
+    public String render(T instance) {
         return "<div class='nohighlight'>" + new ToStringRenderer().render(instance) + "</div>";
     }
 }

@@ -16,6 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Collection;
+import java.util.stream.Stream;
+
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 @RunWith(SpecRunner.class)
@@ -85,7 +88,7 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
     @After
     public void generateSequenceDiagram() {
-        Sequence<SequenceDiagramMessage> messages = sequence(new ByNamingConventionMessageProducer().messages(capturedInputAndOutputs));
+        Collection<SequenceDiagramMessage> messages = new ByNamingConventionMessageProducer().messages(capturedInputAndOutputs);
         capturedInputAndOutputs.add("Sequence Diagram", sequenceDiagramGenerator.generateSequenceDiagram(messages));
     }
 

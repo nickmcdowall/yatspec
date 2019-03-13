@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.totallylazy.Predicate;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestResult;
@@ -16,12 +15,15 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.lang.System.getProperty;
+import static java.util.function.Predicate.not;
+import static java.util.stream.Collectors.toList;
 
 public class SpecRunner extends TableRunner {
-    public static final String OUTPUT_DIR = "yatspec.output.dir";
+    private static final String OUTPUT_DIR = "yatspec.output.dir";
+
     private final Result testResult;
     private Map<String, Scenario> currentScenario = new HashMap<>();
 
@@ -32,11 +34,13 @@ public class SpecRunner extends TableRunner {
 
     @Override
     protected List<FrameworkMethod> computeTestMethods() {
-        return sequence(super.computeTestMethods()).filter(isNotEvaluateMethod()).toList();
+        return super.computeTestMethods().stream()
+                .filter(not(isEvaluateMethod()))
+                .collect(toList());
     }
 
-    private static Predicate<FrameworkMethod> isNotEvaluateMethod() {
-        return method -> !method.getName().equals("evaluate");
+    private Predicate<FrameworkMethod> isEvaluateMethod() {
+        return method -> "evaluate".equals(method.getName());
     }
 
     private WithCustomResultListeners listeners = new DefaultResultListeners();
@@ -61,7 +65,7 @@ public class SpecRunner extends TableRunner {
         listeners.complete(testResult);
     }
 
-    public static File outputDirectory() {
+    static File outputDirectory() {
         return new File(getProperty(OUTPUT_DIR, getProperty("java.io.tmpdir")));
     }
 
@@ -86,9 +90,10 @@ public class SpecRunner extends TableRunner {
 
     private final class SpecListener extends RunListener {
         @Override
-        public void testFailure(Failure failure) throws Exception {
+        public void testFailure(Failure failure) {
             String fullyQualifiedTestMethod = failure.getDescription().getClassName() + "." + failure.getDescription().getMethodName();
-            if (currentScenario.get(fullyQualifiedTestMethod) != null) currentScenario.get(fullyQualifiedTestMethod).setException(failure.getException());
+            if (currentScenario.get(fullyQualifiedTestMethod) != null)
+                currentScenario.get(fullyQualifiedTestMethod).setException(failure.getException());
         }
     }
 }

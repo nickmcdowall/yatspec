@@ -8,11 +8,6 @@ import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 
 public class Renderers {
     public static Callable2<EnhancedStringTemplateGroup, Pair<Predicate, Renderer>, EnhancedStringTemplateGroup> registerRenderer() {
-        return new Callable2<EnhancedStringTemplateGroup, Pair<Predicate, Renderer>, EnhancedStringTemplateGroup>() {
-            @Override
-            public EnhancedStringTemplateGroup call(EnhancedStringTemplateGroup group, Pair<Predicate, Renderer> entry) throws Exception {
-                return group.registerRenderer(entry.first(), HtmlResultRenderer.callable(entry.second()));
-            }
-        };
+        return (group, entry) -> group.registerRenderer(entry.first(), HtmlResultRenderer.callable(entry.second()));
     }
 }

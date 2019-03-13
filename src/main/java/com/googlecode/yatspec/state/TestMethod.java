@@ -18,6 +18,7 @@ import java.util.Map;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
 import static java.lang.System.lineSeparator;
+import static java.util.stream.Collectors.toList;
 
 @SuppressWarnings({"unused"})
 public class TestMethod {
@@ -26,7 +27,7 @@ public class TestMethod {
     private final String methodName;
     private final ScenarioTable scenarioTable;
     private final JavaSource specification;
-    private final Map<String, Scenario> scenarioResults = new LinkedHashMap<String, Scenario>();
+    private final Map<String, Scenario> scenarioResults = new LinkedHashMap<>();
 
     public TestMethod(Class testClass, Method method, String methodName, JavaSource methodBody, ScenarioTable scenarioTable) {
         this.testClass = testClass;
@@ -62,12 +63,7 @@ public class TestMethod {
     }
 
     private static <T> Callable1<? super Value<T>, T> value(Class<T> aClass) {
-        return new Callable1<Value<T>, T>() {
-            @Override
-            public T call(Value<T> instance) throws Exception {
-                return instance.value();
-            }
-        };
+        return (Callable1<Value<T>, T>) instance -> instance.value();
     }
 
     public String getName() {
@@ -83,14 +79,13 @@ public class TestMethod {
     }
 
     public Status getStatus() {
-        return calculateStatus(Sequences.sequence(getScenarios()).map(new Callable1<Scenario, Status>() {
-            public Status call(Scenario scenario) {
-                return scenario.getStatus();
-            }
-        }));
+        List<Status> statuses = getScenarios().stream()
+                .map(scenario -> scenario.getStatus())
+                .collect(toList());
+        return calculateStatus(statuses);
     }
 
-    public static Status calculateStatus(final Sequence<Status> statuses) {
+    private static Status calculateStatus(final List<Status> statuses) {
         if (statuses.contains(Status.Failed)) {
             return Status.Failed;
         }
@@ -118,7 +113,7 @@ public class TestMethod {
     }
 
     public List<Scenario> getScenarios() {
-        return new ArrayList<Scenario>(scenarioResults.values());
+        return new ArrayList<>(scenarioResults.values());
     }
 
     public boolean hasScenario(String name) {

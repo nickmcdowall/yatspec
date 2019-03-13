@@ -20,13 +20,13 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Maps.entries;
-import static com.googlecode.totallylazy.Predicates.*;
+import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 
 public class WikiResultRenderer implements SpecResultListener {
-    private final List<Pair<Predicate, Renderer>> customRenderers = new ArrayList<Pair<Predicate, Renderer>>();
+    private final List<Pair<Predicate, Renderer>> customRenderers = new ArrayList<>();
+
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
         Files.overwrite(outputFile(yatspecOutputDir, result), render(result));
@@ -45,25 +45,11 @@ public class WikiResultRenderer implements SpecResultListener {
         return writer.toString();
     }
 
-    public <T> WikiResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer){
-        return withCustomRenderer((Predicate)instanceOf(klazz), renderer);
+    private static <T> Callable1<T, String> callable(final Renderer<T> value) {
+        return o -> value.render(o);
     }
 
-    private <T> WikiResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
-        customRenderers.add(Pair.<Predicate, Renderer>pair(predicate, renderer));
-        return this;
-    }
-
-    public static <T> Callable1<T, String> callable(final Renderer<T> value) {
-        return new Callable1<T, String>() {
-            @Override
-            public String call(T o) throws Exception {
-                return value.render(o);
-            }
-        };
-    }
-
-    public static File outputFile(File outputDirectory, Result result) {
+    private static File outputFile(File outputDirectory, Result result) {
         return new File(outputDirectory, Files.toPath(result.getTestClass()).replaceFirst("Test$", "") + ".wiki");
     }
 }

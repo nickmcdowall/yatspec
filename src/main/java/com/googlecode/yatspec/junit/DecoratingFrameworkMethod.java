@@ -35,9 +35,7 @@ public class DecoratingFrameworkMethod extends FrameworkMethod {
 
         DecoratingFrameworkMethod that = (DecoratingFrameworkMethod) o;
 
-        if (!row.equals(that.row)) return false;
-
-        return true;
+        return row.equals(that.row);
     }
 
     @Override

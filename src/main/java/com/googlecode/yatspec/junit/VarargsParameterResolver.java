@@ -9,7 +9,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 public class VarargsParameterResolver implements ParameterResolver {
 
     @Override
-    public Object[] resolveParameters(Row row, Class<?> testClass, Method testMethod) throws Exception {
+    public Object[] resolveParameters(Row row, Class<?> testClass, Method testMethod) {
         final Object[] suppliedParams = row.value();
         final Class<?>[] requiredParams = testMethod.getParameterTypes();
 
@@ -21,7 +21,10 @@ public class VarargsParameterResolver implements ParameterResolver {
             throw new IllegalArgumentException("Missing parameters.");
         }
 
-        return sequence(suppliedParams).take(Math.min(requiredParams.length - 1, suppliedParams.length)).append(getVarargsFrom(suppliedParams, requiredParams)).toArray();
+        return sequence(suppliedParams)
+                .take(Math.min(requiredParams.length - 1, suppliedParams.length))
+                .append(getVarargsFrom(suppliedParams, requiredParams))
+                .toArray();
     }
 
     private boolean isMissingRequiredArguments(Object[] input, Class<?>[] expected) {

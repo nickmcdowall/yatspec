@@ -14,7 +14,7 @@ import static java.lang.System.lineSeparator;
 
 public class JavaSourceRenderer implements Renderer<JavaSource> {
     @Override
-    public String render(JavaSource javaSource) throws Exception {
+    public String render(JavaSource javaSource) {
         return removeBlankLines(removeIndentation(javaSource.value()));
     }
 
@@ -26,34 +26,19 @@ public class JavaSourceRenderer implements Renderer<JavaSource> {
         Sequence<String> lines = lines(value);
         String indentation = lines.
                 find(not(blankLine())).
-                map(indentation()).getOrElse("");
+                map(indentation()).getOrElse(EMPTY);
         return lines.map(remove(indentation)).toString(lineSeparator());
     }
 
     private Callable1<String, String> remove(final String indentation) {
-        return new Callable1<String, String>() {
-            @Override
-            public String call(String line) throws Exception {
-                return line.replaceFirst(indentation, EMPTY);
-            }
-        };
+        return line -> line.replaceFirst(indentation, EMPTY);
     }
 
-    private Callable1<? super String, String> indentation() {
-        return new Callable1<String, String>() {
-            @Override
-            public String call(String line) throws Exception {
-                return Regex.regex("^\\s*").match(line).group();
-            }
-        };
+    private Callable1<String, String> indentation() {
+        return line -> Regex.regex("^\\s*").match(line).group();
     }
 
-    private Predicate<? super String> blankLine() {
-        return new Predicate<String>() {
-            @Override
-            public boolean matches(String other) {
-                return other.trim().equals(EMPTY);
-            }
-        };
+    private Predicate<String> blankLine() {
+        return String::isBlank;
     }
 }

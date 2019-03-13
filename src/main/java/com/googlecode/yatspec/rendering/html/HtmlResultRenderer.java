@@ -20,14 +20,11 @@ import org.antlr.stringtemplate.NoIndentWriter;
 import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
 
 import static com.googlecode.totallylazy.Callables.asString;
-import static com.googlecode.totallylazy.Predicates.always;
-import static com.googlecode.totallylazy.Predicates.instanceOf;
-import static com.googlecode.totallylazy.Predicates.not;
+import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
 import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
@@ -35,7 +32,7 @@ import static java.lang.String.format;
 
 
 public class HtmlResultRenderer implements SpecResultListener {
-    private final List<Pair<Predicate, Renderer>> customRenderers = new ArrayList<Pair<Predicate, Renderer>>();
+    private final List<Pair<Predicate, Renderer>> customRenderers = new ArrayList<>();
 
     private List<Content> customScripts = Collections.emptyList();
     private List<Content> customHeaderContents = Collections.emptyList();
@@ -77,29 +74,24 @@ public class HtmlResultRenderer implements SpecResultListener {
     }
 
     public <T> HtmlResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer) {
-        return withCustomRenderer((Predicate) instanceOf(klazz), renderer);
+        return withCustomRenderer(instanceOf(klazz), renderer);
     }
 
-    public <T> HtmlResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
-        customRenderers.add(Pair.<Predicate, Renderer>pair(predicate, renderer));
+    private <T> HtmlResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
+        customRenderers.add(Pair.pair(predicate, renderer));
         return this;
     }
 
     public static <T> Callable1<T, String> callable(final Renderer<T> value) {
-        return new Callable1<T, String>() {
-            @Override
-            public String call(T o) throws Exception {
-                return value.render(o);
-            }
-        };
+        return o -> value.render(o);
     }
 
-    public static Content loadContent(final String resource) throws IOException {
+    public static Content loadContent(final String resource) {
         return new ContentAtUrl(HtmlResultRenderer.class.getResource(resource));
     }
 
     public static Map<Status, String> getCssMap() {
-        return new HashMap<Status, String>() {{
+        return new HashMap<>() {{
             put(Status.Passed, "test-passed");
             put(Status.Failed, "test-failed");
             put(Status.NotRun, "test-not-run");
@@ -110,7 +102,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         return Files.toPath(resultClass) + ".html";
     }
 
-    public static File htmlResultFile(File outputDirectory, Class resultClass) {
+    private static File htmlResultFile(File outputDirectory, Class resultClass) {
         return new File(outputDirectory, htmlResultRelativePath(resultClass));
     }
 

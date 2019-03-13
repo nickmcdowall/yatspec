@@ -9,14 +9,13 @@ import java.util.regex.Pattern;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.Xml.escape;
-import static com.googlecode.yatspec.parsing.Text.wordify;
 import static java.lang.System.lineSeparator;
 
 public class JavaSourceRenderer implements Renderer<JavaSource> {
     private static final Pattern DOT_CLASS = Pattern.compile("\\.class(\\W|$)");
 
     @Override
-    public String render(JavaSource javaSource) throws Exception {
+    public String render(JavaSource javaSource) {
         return escape(lines(removateDotClass(javaSource.value().trim())).map(Text.wordify()).toString("\n"));
     }
 

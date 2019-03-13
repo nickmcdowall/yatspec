@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static com.googlecode.totallylazy.Sequences.sequence;
 
 public class Index {
-    private final List<Result> files = new CopyOnWriteArrayList<Result>();
+    private final List<Result> files = new CopyOnWriteArrayList<>();
 
     public Index add(Result result) {
         files.add(result);

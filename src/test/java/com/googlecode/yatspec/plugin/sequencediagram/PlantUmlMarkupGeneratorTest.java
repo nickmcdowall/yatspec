@@ -17,7 +17,7 @@ public class PlantUmlMarkupGeneratorTest {
     }
 
     @Test
-    public void doesGroups() throws Exception {
+    public void doesGroups() {
         CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
         capturedInputAndOutputs.add("(hello) a message from here to there", "message body");
         String markup = new PlantUmlMarkupGenerator().generateMarkup(sequence(new SequenceDiagramMessage("here", "there", "(hello) a message", "message_id")));

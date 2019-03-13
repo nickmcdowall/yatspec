@@ -1,8 +1,7 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
-import com.googlecode.totallylazy.Sequences;
-import com.googlecode.yatspec.rendering.ContentAtUrl;
 import com.googlecode.yatspec.rendering.Content;
+import com.googlecode.yatspec.rendering.ContentAtUrl;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.jdom.Document;
@@ -15,16 +14,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Collection;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static net.sourceforge.plantuml.FileFormat.SVG;
 
 public class SequenceDiagramGenerator {
 
     private StringBuffer optionalPlantUmlCollector;
 
-    public SvgWrapper generateSequenceDiagram(Iterable<SequenceDiagramMessage> messages) {
-        String plantUmlMarkup = new PlantUmlMarkupGenerator().generateMarkup(Sequences.sequence(messages));
+    public SvgWrapper generateSequenceDiagram(Collection<SequenceDiagramMessage> messages) {
+        String plantUmlMarkup = new PlantUmlMarkupGenerator().generateMarkup(messages);
         makePlantUmlAvailableToAnyRegisteredCollector(plantUmlMarkup);
 
         return new SvgWrapper(prettyPrint(createSvg(plantUmlMarkup)));

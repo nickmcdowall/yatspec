@@ -30,6 +30,6 @@ public class DefaultResultListeners implements WithCustomResultListeners {
         if (!parseBoolean(getProperty(INDEX_ENABLE))) {
             return none();
         }
-        return some((SpecResultListener) create(forName(getProperty(INDEX_RENDER, HtmlIndexRenderer.class.getName()))));
+        return some(create(forName(getProperty(INDEX_RENDER, HtmlIndexRenderer.class.getName()))));
     }
 }
