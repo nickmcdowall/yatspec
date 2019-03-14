@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.junit5;
 
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.junit.*;
 import com.googlecode.yatspec.plugin.sequencediagram.ByNamingConventionMessageProducer;
 import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
@@ -45,8 +44,6 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
         when(heDemandsFoodFromBambam());
         then(bambam(), placesABurgerOrderWithBarney(testNumber));
-
-
         then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testNumber));
     }
 
@@ -62,7 +59,6 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
         then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testNumber));
     }
-
 
     @Table({
             @Row({"row_a"}),
@@ -82,7 +78,7 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
     }
 
     @Override
-    public Collection<SpecResultListener> getResultListeners() throws Exception {
+    public Collection<SpecResultListener> getResultListeners() {
         return sequence(
                 new HtmlResultRenderer().
                         withCustomHeaderContent(SequenceDiagramGenerator.getHeaderContentForModalWindows()).
@@ -92,16 +88,16 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
     @AfterEach
     public void generateSequenceDiagram() {
-        Sequence<SequenceDiagramMessage> messages = sequence(new ByNamingConventionMessageProducer().messages(capturedInputAndOutputs));
+        Collection<SequenceDiagramMessage> messages = new ByNamingConventionMessageProducer().messages(capturedInputAndOutputs);
         capturedInputAndOutputs.add("Sequence Diagram", sequenceDiagramGenerator.generateSequenceDiagram(messages));
     }
 
-    private Matcher<? super Object> sharesHisFoodWithBarneyBecauseHeLikesHim(String testNumber) {
+    private Matcher<Object> sharesHisFoodWithBarneyBecauseHeLikesHim(String testNumber) {
         capturedInputAndOutputs.add("(grouped) food from mrflintstone to barney", "have some of my burger because I like you (test:" + testNumber + ")");
         return dummyMatcher();
     }
 
-    private Matcher<? super Object> givesFoodToMrFlintstone(String testNumber) {
+    private Matcher<Object> givesFoodToMrFlintstone(String testNumber) {
         capturedInputAndOutputs.add("(grouped) food from bambam to mrflintstone", "here is your burger (test:" + testNumber + ")");
         return dummyMatcher();
     }
@@ -111,7 +107,7 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
         return ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
     }
 
-    private Matcher<? super Object> placesABurgerOrderWithBarney(String testNumber) {
+    private Matcher<Object> placesABurgerOrderWithBarney(String testNumber) {
         capturedInputAndOutputs.add("burger order from bambam to barney", "Get me a burger (test:" + testNumber + ")");
         interestingGivens.add("burger");
         return dummyMatcher();

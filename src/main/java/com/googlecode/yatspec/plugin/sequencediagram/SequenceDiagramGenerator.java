@@ -36,9 +36,7 @@ public class SequenceDiagramGenerator {
             StringWriter stringWriter = new StringWriter();
             new XMLOutputter(Format.getPrettyFormat()).output(doc, stringWriter);
             return stringWriter.toString();
-        } catch (JDOMException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (JDOMException | IOException e) {
             throw new RuntimeException(e);
         }
     }
