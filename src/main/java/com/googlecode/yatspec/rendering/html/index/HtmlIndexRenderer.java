@@ -6,8 +6,8 @@ import com.googlecode.yatspec.parsing.Files;
 import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.ContentAtUrl;
 import com.googlecode.yatspec.rendering.Index;
-import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
+import com.googlecode.yatspec.state.Result;
 import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
@@ -21,10 +21,10 @@ public class HtmlIndexRenderer implements SpecResultListener {
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
         index.add(result);
-        Files.overwrite(outputFile(yatspecOutputDir), render(yatspecOutputDir, index));
+        Files.overwrite(outputFile(yatspecOutputDir), render(index));
     }
 
-    private String render(File yatspecOutputDir, Index index) throws Exception {
+    private String render(Index index) {
         EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         group.setRootDir(null); //forces use of classpath lookup
         StringTemplate template = group.getInstanceOf("index",
@@ -32,7 +32,7 @@ public class HtmlIndexRenderer implements SpecResultListener {
                         add("script", loadContent("index.js")).
                         add("stylesheet", HtmlResultRenderer.loadContent("yatspec.css")).
                         add("cssClass", getCssMap()).
-                        add("result", new IndexModel(index, yatspecOutputDir).asModel()).toMap());
+                        add("result", new IndexModel(index).asModel()).toMap());
         return template.toString();
     }
 

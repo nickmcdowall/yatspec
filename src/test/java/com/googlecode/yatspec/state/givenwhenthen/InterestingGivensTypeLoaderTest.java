@@ -4,9 +4,7 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.googlecode.yatspec.state.givenwhenthen.InterestingGivensTypeLoader.interestingGivensType;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class InterestingGivensTypeLoaderTest {
     private InterestingGivens interestingGivens;
@@ -25,7 +23,7 @@ public class InterestingGivensTypeLoaderTest {
     public void shouldGetTypeByClass() throws Exception {
         MatcherAssert.assertThat(InterestingGivensTypeLoader.interestingGivensType(interestingGivens, CLASS).call(), is(VALUE));
     }
-    
+
     @Test(expected = IllegalStateException.class)
     public void throwsExceptionWhenTypeByClassIsNotFound() throws Exception {
         InterestingGivensTypeLoader.interestingGivensType(interestingGivens, Integer.class).call();

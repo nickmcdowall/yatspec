@@ -7,7 +7,8 @@ import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Collections;
+import java.util.Collection;
+import java.util.List;
 
 @RunWith(SpecRunner.class)
 public class ExampleDictionaryTest implements WithCustomResultListeners {
@@ -22,10 +23,11 @@ public class ExampleDictionaryTest implements WithCustomResultListeners {
     }
 
     @Override
-    public Iterable<SpecResultListener> getResultListeners() {
-        return Collections.<SpecResultListener>singletonList(
+    public Collection<SpecResultListener> getResultListeners() {
+        return List.of(
                 new HtmlResultRenderer()
                         .withCustomScripts(new DictionaryJavaScript())
-                        .withCustomHeaderContent(new DictionaryCss()));
+                        .withCustomHeaderContent(new DictionaryCss())
+        );
     }
 }

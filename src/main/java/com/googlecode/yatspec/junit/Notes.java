@@ -1,9 +1,8 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Sequences;
-
 import java.lang.annotation.*;
+import java.util.Collection;
+import java.util.Optional;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
@@ -12,8 +11,11 @@ public @interface Notes {
     String value();
 
     class methods {
-        public static Option<Notes> notes(Iterable<Annotation> annotations) {
-            return Sequences.sequence(annotations).safeCast(Notes.class).headOption();
+        public static Optional<Notes> notes(Collection<Annotation> annotations) {
+            return annotations.stream()
+                    .filter(Notes.class::isInstance)
+                    .map(Notes.class::cast)
+                    .findFirst();
         }
     }
 }

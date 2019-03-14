@@ -4,6 +4,8 @@ import com.googlecode.totallylazy.Option;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 
+import java.util.Collection;
+
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.some;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -18,7 +20,7 @@ public class DefaultResultListeners implements WithCustomResultListeners {
     public static final String INDEX_RENDER = "yatspec.index.renderer";
 
     @Override
-    public Iterable<SpecResultListener> getResultListeners() throws Exception {
+    public Collection<SpecResultListener> getResultListeners() throws Exception {
         return sequence(resultListener()).join(indexListener());
     }
 

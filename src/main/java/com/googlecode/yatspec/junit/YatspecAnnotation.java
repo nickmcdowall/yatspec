@@ -3,6 +3,7 @@ package com.googlecode.yatspec.junit;
 import com.googlecode.totallylazy.predicates.LogicalPredicate;
 
 import java.lang.annotation.*;
+import java.util.Collection;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Predicates.instanceOf;
@@ -12,7 +13,7 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface YatspecAnnotation {
     class methods {
-        public static List<Annotation> yatspecAnnotations(Iterable<Annotation> annotations) {
+        public static List<Annotation> yatspecAnnotations(Collection<Annotation> annotations) {
             return sequence(annotations)
                     .filter(predicates.annotatedWith(YatspecAnnotation.class))
                     .toList();

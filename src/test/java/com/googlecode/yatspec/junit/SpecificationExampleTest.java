@@ -13,6 +13,8 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Collection;
+
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.plugin.jdom.StateExtractors.getValue;
 import static java.lang.Double.valueOf;
@@ -82,7 +84,7 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
         return getValue(RESULT, Double.class);
     }
 
-    public Iterable<SpecResultListener> getResultListeners() {
+    public Collection<SpecResultListener> getResultListeners() {
         return sequence(
                 new HtmlResultRenderer().
                         withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)", "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")),

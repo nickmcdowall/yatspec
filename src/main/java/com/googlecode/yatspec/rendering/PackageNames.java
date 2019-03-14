@@ -2,6 +2,8 @@ package com.googlecode.yatspec.rendering;
 
 import com.googlecode.totallylazy.*;
 
+import java.util.Collection;
+
 import static com.googlecode.totallylazy.Callables.returnArgument;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
@@ -9,8 +11,8 @@ import static java.lang.String.format;
 import static java.util.regex.Pattern.quote;
 
 public class PackageNames {
-    public static Predicate<? super String> directSubpackageOf(final String parentPackage) {
-        return (Predicate<String>) packageName -> {
+    public static Predicate<String> directSubpackageOf(final String parentPackage) {
+        return packageName -> {
             String pattern = format("%s\\.?[^.]+$", quote(parentPackage));
             return packageName.matches(pattern);
         };
@@ -35,16 +37,16 @@ public class PackageNames {
     "com.googlecode"
     "com.googlecode.yatspec"
      */
-    public static Callable1<? super String, ? extends Iterable<String>> allAncestors() {
+    public static Callable1<String, Collection<String>> allAncestors() {
         return new Callable1<>() {
             @Override
-            public Iterable<String> call(String name) {
+            public Collection<String> call(String name) {
                 return sequence(name.split("\\.")).
                         fold(empty(String.class), buildPath());
             }
 
-            private Callable2<? super Sequence<String>, ? super String, Sequence<String>> buildPath() {
-                return (Callable2<Sequence<String>, String, Sequence<String>>) (allPaths, name) -> {
+            private Callable2<Sequence<String>, String, Sequence<String>> buildPath() {
+                return (allPaths, name) -> {
                     Option<String> longestPath = allPaths.
                             sortBy(returnArgument(String.class)).
                             lastOption();

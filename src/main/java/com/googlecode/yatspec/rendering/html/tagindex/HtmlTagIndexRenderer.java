@@ -16,6 +16,7 @@ import com.googlecode.yatspec.state.TestMethod;
 import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
+import java.util.Collection;
 
 import static com.googlecode.funclate.Model.mutable.model;
 import static com.googlecode.totallylazy.Callables.first;
@@ -25,7 +26,7 @@ import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
 
 public class HtmlTagIndexRenderer implements SpecResultListener {
-    public static final String TAG_NAME = "tag";
+    private static final String TAG_NAME = "tag";
     private final static Index index = new Index();
     private final TagFinder tagFinder;
 
@@ -33,7 +34,7 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
         this(new NotesTagFinder());
     }
 
-    public HtmlTagIndexRenderer(TagFinder tagFinder) {
+    private HtmlTagIndexRenderer(TagFinder tagFinder) {
         this.tagFinder = tagFinder;
     }
 
@@ -43,7 +44,7 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
         Files.overwrite(outputFile(yatspecOutputDir), render(index));
     }
 
-    public String render(Index index) throws Exception {
+    public String render(Index index) {
         EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         group.setRootDir(null); //forces use of classpath to lookup template
         StringTemplate template = group.getInstanceOf("tagindex_index",
@@ -66,14 +67,14 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
                 map(toTagModel());
     }
 
-    private Callable1<? super TestMethod, ? extends Iterable<Pair<String, TestMethod>>> methodTags() {
-        return (Callable1<TestMethod, Iterable<Pair<String, TestMethod>>>) resultFileAndTestMethod ->
+    private Callable1<TestMethod, Collection<Pair<String, TestMethod>>> methodTags() {
+        return resultFileAndTestMethod ->
                 sequence(tagFinder.tags(resultFileAndTestMethod))
                         .zip(repeat(resultFileAndTestMethod));
     }
 
     private static <K> Callable1<Group<K, ?>, K> groupKey() {
-        return group -> group.key();
+        return Group::key;
     }
 
     private static Callable1<Pair<String, TestMethod>, Model> tagModel() {
@@ -89,8 +90,8 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
         };
     }
 
-    private static Callable1<? super Result, ? extends Iterable<TestMethod>> testMethods() {
-        return (Callable1<Result, Iterable<TestMethod>>) fileResult ->
+    private static Callable1<Result, Collection<TestMethod>> testMethods() {
+        return fileResult ->
                 sequence(fileResult)
                         .flatMap(Results.testMethods());
     }

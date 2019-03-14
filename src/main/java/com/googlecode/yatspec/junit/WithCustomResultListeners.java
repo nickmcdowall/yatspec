@@ -2,6 +2,8 @@ package com.googlecode.yatspec.junit;
 
 import com.googlecode.yatspec.state.Result;
 
+import java.util.Collection;
+
 public interface WithCustomResultListeners {
     default void complete(Result testResult) {
         try {
@@ -14,5 +16,5 @@ public interface WithCustomResultListeners {
         }
     }
 
-    Iterable<SpecResultListener> getResultListeners() throws Exception;
+    Collection<SpecResultListener> getResultListeners() throws Exception;
 }

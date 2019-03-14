@@ -13,7 +13,7 @@ public final class InterestingGivensTypeLoader<T> implements Callable<T> {
         this.key = key;
     }
 
-    public T call() throws Exception {
+    public T call() {
         T type = key == null ? interestingGivens.getType(klazz) : interestingGivens.getType(key, klazz);
         checkThatTypeIsNotNull(type, key, klazz);
         return type;
@@ -25,11 +25,11 @@ public final class InterestingGivensTypeLoader<T> implements Callable<T> {
         }
     }
 
-    public static <T> Callable<T> interestingGivensType(InterestingGivens interestingGivens, Class<T> klazz) {
-        return new InterestingGivensTypeLoader<T>(interestingGivens, null, klazz);
+    static <T> Callable<T> interestingGivensType(InterestingGivens interestingGivens, Class<T> klazz) {
+        return new InterestingGivensTypeLoader<>(interestingGivens, null, klazz);
     }
 
-    public static <T> Callable<T> interestingGivensType(InterestingGivens interestingGivens, String key, Class<T> klazz) {
-        return new InterestingGivensTypeLoader<T>(interestingGivens, key, klazz);
+    static <T> Callable<T> interestingGivensType(InterestingGivens interestingGivens, String key, Class<T> klazz) {
+        return new InterestingGivensTypeLoader<>(interestingGivens, key, klazz);
     }
 }

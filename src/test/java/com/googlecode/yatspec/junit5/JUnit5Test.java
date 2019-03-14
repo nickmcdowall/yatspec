@@ -9,6 +9,8 @@ import com.googlecode.yatspec.rendering.html.tagindex.HtmlTagIndexRenderer;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import java.util.Collection;
+
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,7 +27,7 @@ class JUnit5Test implements WithCustomResultListeners {
     }
 
     @Override
-    public Iterable<SpecResultListener> getResultListeners() {
+    public Collection<SpecResultListener> getResultListeners() {
         return sequence(
                 new HtmlResultRenderer().
                         withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)", "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")),

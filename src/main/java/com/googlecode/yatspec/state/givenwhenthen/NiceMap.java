@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,10 +19,10 @@ class NiceMap<T extends NiceMap> {
 
     public <R> R getType(String key, Class<R> aClass) {
         Object value = map.get(key);
-        if(value == null) {
+        if (value == null) {
             return null;
         }
-        if(!aClass.isAssignableFrom(value.getClass())){
+        if (!aClass.isAssignableFrom(value.getClass())) {
             throw new ClassCastException("You requested a " + aClass.getSimpleName() + " but got a " + value.getClass() + " (" + value + ")");
         }
         return (R) value;
@@ -37,7 +38,7 @@ class NiceMap<T extends NiceMap> {
         return getType(defaultName(aClass), aClass);
     }
 
-    public T add(String key, Object instance){
+    public T add(String key, Object instance) {
         map.put(key, instance);
         return (T) this;
     }
@@ -46,14 +47,14 @@ class NiceMap<T extends NiceMap> {
         return map.isEmpty();
     }
 
-    public T add(Object instance){
-        if(instance == null) {
+    public T add(Object instance) {
+        if (instance == null) {
             return (T) this;
         }
         return add(defaultName(instance.getClass()), instance);
     }
 
-    public boolean contains(Class aClass){
+    public boolean contains(Class aClass) {
         return contains(defaultName(aClass));
     }
 
@@ -65,7 +66,7 @@ class NiceMap<T extends NiceMap> {
         return aClass.getSimpleName();
     }
 
-    public T  putAll(Iterable<Map.Entry<String, Object>> entries) {
+    public T putAll(Collection<Map.Entry<String, Object>> entries) {
         for (Map.Entry<String, Object> entry : entries) {
             map.put(entry.getKey(), entry.getValue());
         }

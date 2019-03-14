@@ -32,7 +32,7 @@ public class StateExtractorsTest {
     @Test
     public void shouldExtractValues() throws Exception {
         CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add(KEY, Arrays.asList(NAME, NAME));
-        MatcherAssert.assertThat(StateExtractors.<Collection<String>, String>getValues(KEY, String.class).execute(inputAndOutputs), hasItem(NAME));
+        MatcherAssert.assertThat(StateExtractors.<Collection<String>, String>getValues(KEY).execute(inputAndOutputs), hasItem(NAME));
     }
 
     @Test

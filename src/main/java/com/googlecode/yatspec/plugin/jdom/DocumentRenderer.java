@@ -8,7 +8,7 @@ import org.jdom.output.XMLOutputter;
 import static org.jdom.output.Format.getPrettyFormat;
 
 public class DocumentRenderer implements Renderer<Document> {
-    public String render(Document document) throws Exception {
+    public String render(Document document) {
         return Xml.escape(prettyFormat(document));
     }
 
