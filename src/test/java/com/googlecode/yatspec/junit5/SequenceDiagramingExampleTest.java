@@ -1,9 +1,7 @@
 package com.googlecode.yatspec.junit5;
 
 import com.googlecode.yatspec.junit.*;
-import com.googlecode.yatspec.plugin.sequencediagram.ByNamingConventionMessageProducer;
 import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
-import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramMessage;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
@@ -14,8 +12,6 @@ import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,16 +20,10 @@ import java.util.Collection;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 
-@ExtendWith(SpecListener.class)
+@ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
 public class SequenceDiagramingExampleTest extends TestState implements WithCustomResultListeners {
+
     private static final Object ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST = new Object();
-
-    private SequenceDiagramGenerator sequenceDiagramGenerator;
-
-    @BeforeEach
-    public void setup() {
-        sequenceDiagramGenerator = new SequenceDiagramGenerator();
-    }
 
     @Test
     public void bambamGetsFoodForHisDad() throws Exception {
@@ -84,12 +74,6 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
                         withCustomHeaderContent(SequenceDiagramGenerator.getHeaderContentForModalWindows()).
                         withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())).
                 safeCast(SpecResultListener.class);
-    }
-
-    @AfterEach
-    public void generateSequenceDiagram() {
-        Collection<SequenceDiagramMessage> messages = new ByNamingConventionMessageProducer().messages(capturedInputAndOutputs);
-        capturedInputAndOutputs.add("Sequence Diagram", sequenceDiagramGenerator.generateSequenceDiagram(messages));
     }
 
     private Matcher<Object> sharesHisFoodWithBarneyBecauseHeLikesHim(String testNumber) {
