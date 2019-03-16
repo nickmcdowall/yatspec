@@ -1,7 +1,11 @@
 package com.googlecode.yatspec.junit;
 
+import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
+import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.ScenarioNameRenderer;
 import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
+import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
+import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.ScenarioName;
@@ -9,6 +13,7 @@ import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
 import org.junit.jupiter.api.extension.AfterAllCallback;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 import org.junit.jupiter.engine.execution.AfterEachMethodAdapter;
@@ -17,6 +22,7 @@ import org.junit.platform.commons.util.Preconditions;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
@@ -68,9 +74,23 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
     private WithCustomResultListeners resultListeners(Object testInstance) {
         if (testInstance instanceof WithCustomResultListeners) {
             return (WithCustomResultListeners) testInstance;
+        } else if (hasSequenceDiagramExtension(testInstance)) {
+            return defaultSequenceDiagramResultListener();
         } else {
             return new DefaultResultListeners();
         }
+    }
+
+    private WithCustomResultListeners defaultSequenceDiagramResultListener() {
+        return () -> List.of(
+                new HtmlResultRenderer().
+                        withCustomHeaderContent(SequenceDiagramGenerator.getHeaderContentForModalWindows()).
+                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer()));
+    }
+
+    private boolean hasSequenceDiagramExtension(Object testInstance) {
+        ExtendWith annotation = testInstance.getClass().getAnnotation(ExtendWith.class);
+        return asList(annotation.value()).contains(SequenceDiagramExtension.class);
     }
 
     private static class MethodNameWithArguments {

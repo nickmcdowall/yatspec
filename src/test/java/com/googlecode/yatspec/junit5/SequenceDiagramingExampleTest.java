@@ -1,10 +1,9 @@
 package com.googlecode.yatspec.junit5;
 
-import com.googlecode.yatspec.junit.*;
-import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
-import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
-import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
-import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
+import com.googlecode.yatspec.junit.Row;
+import com.googlecode.yatspec.junit.SequenceDiagramExtension;
+import com.googlecode.yatspec.junit.SpecListener;
+import com.googlecode.yatspec.junit.Table;
 import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
 import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
 import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
@@ -16,12 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
-import java.util.Collection;
-
-import static com.googlecode.totallylazy.Sequences.sequence;
-
 @ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
-public class SequenceDiagramingExampleTest extends TestState implements WithCustomResultListeners {
+public class SequenceDiagramingExampleTest extends TestState {
 
     private static final Object ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST = new Object();
 
@@ -65,15 +60,6 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
         then(bambam(), givesFoodToMrFlintstone(testName));
 
         then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testName));
-    }
-
-    @Override
-    public Collection<SpecResultListener> getResultListeners() {
-        return sequence(
-                new HtmlResultRenderer().
-                        withCustomHeaderContent(SequenceDiagramGenerator.getHeaderContentForModalWindows()).
-                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())).
-                safeCast(SpecResultListener.class);
     }
 
     private Matcher<Object> sharesHisFoodWithBarneyBecauseHeLikesHim(String testNumber) {
