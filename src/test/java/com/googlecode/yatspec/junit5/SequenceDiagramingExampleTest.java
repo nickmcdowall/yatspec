@@ -4,45 +4,39 @@ import com.googlecode.yatspec.junit.Row;
 import com.googlecode.yatspec.junit.SequenceDiagramExtension;
 import com.googlecode.yatspec.junit.SpecListener;
 import com.googlecode.yatspec.junit.Table;
-import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
-import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
-import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
+import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
 @ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
-public class SequenceDiagramingExampleTest extends TestState {
+public class SequenceDiagramingExampleTest implements WithTestState {
 
-    private static final Object ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST = new Object();
+    private TestState interactions = new TestState();
 
     @Test
-    public void bambamGetsFoodForHisDad() throws Exception {
+    void bambamGetsFoodForHisDad() {
         String testNumber = "test:1";
-        given(aHungryMrFlintstone());
-        when(barney(), givesTheBurgerToBambam(testNumber));
-        then(bambam(), givesFoodToMrFlintstone(testNumber));
+        givenAHungryMrFlintstone();
+        whenBarneyGivesTheBurgerToBambam("1 burger here u go (test:" + testNumber + ")");
+        thenBambamGivesFoodToMrFlintstone("here is your burger (test:" + testNumber + ")");
 
-        when(heDemandsFoodFromBambam());
-        then(bambam(), placesABurgerOrderWithBarney(testNumber));
-        then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testNumber));
+        whenHeDemandsFoodFromBambam();
+        thenBambamPlacesABurgerOrderWithBarney("Get me a burger (test:" + testNumber + ")");
+        thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim("have some of my burger because I like you (test:" + testNumber + ")");
     }
 
     @Test
-    public void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleSequenceDiagramsOnOnePage() throws Exception {
-        String testNumber = "test:2";
-        given(aHungryMrFlintstone());
-        when(heDemandsFoodFromBambam());
-        then(bambam(), placesABurgerOrderWithBarney(testNumber));
+    void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleSequenceDiagramsOnOnePage() {
+        String testNumber = "(test:2)";
+        givenAHungryMrFlintstone();
+        whenHeDemandsFoodFromBambam();
+        thenBambamPlacesABurgerOrderWithBarney("Get me a burger " + testNumber);
 
-        when(barney(), givesTheBurgerToBambam(testNumber));
-        then(bambam(), givesFoodToMrFlintstone(testNumber));
-
-        then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testNumber));
+        whenBarneyGivesTheBurgerToBambam("1 burger here u go " + testNumber);
+        thenBambamGivesFoodToMrFlintstone("here is your burger " + testNumber);
+        thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim("have some of my burger because I like you " + testNumber);
     }
 
     @Table({
@@ -50,75 +44,45 @@ public class SequenceDiagramingExampleTest extends TestState {
             @Row({"row_b"})
     })
     @ParameterizedTest
-    public void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(String scenarioName) throws Exception {
+    void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(String scenarioName) {
         String testName = "test:3 scenario: " + scenarioName;
-        given(aHungryMrFlintstone());
-        when(heDemandsFoodFromBambam());
-        then(bambam(), placesABurgerOrderWithBarney(testName));
+        givenAHungryMrFlintstone();
+        whenHeDemandsFoodFromBambam();
+        thenBambamPlacesABurgerOrderWithBarney("Get me a burger (test:" + testName + ")");
 
-        when(barney(), givesTheBurgerToBambam(testName));
-        then(bambam(), givesFoodToMrFlintstone(testName));
+        whenBarneyGivesTheBurgerToBambam("1 burger here u go (test:" + testName + ")");
+        thenBambamGivesFoodToMrFlintstone("here is your burger (test:" + testName + ")");
 
-        then(mrFlintstone(), sharesHisFoodWithBarneyBecauseHeLikesHim(testName));
+        thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim("have some of my burger because I like you (test:" + testName + ")");
     }
 
-    private Matcher<Object> sharesHisFoodWithBarneyBecauseHeLikesHim(String testNumber) {
-        capturedInputAndOutputs.add("(grouped) food from mrflintstone to barney", "have some of my burger because I like you (test:" + testNumber + ")");
-        return dummyMatcher();
+    private void thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim(String food) {
+        interactions.log("(grouped) food from mrflintstone to barney", food);
     }
 
-    private Matcher<Object> givesFoodToMrFlintstone(String testNumber) {
-        capturedInputAndOutputs.add("(grouped) food from bambam to mrflintstone", "here is your burger (test:" + testNumber + ")");
-        return dummyMatcher();
+    private void thenBambamGivesFoodToMrFlintstone(String food) {
+        interactions.log("(grouped) food from bambam to mrflintstone", food);
     }
 
-    private Object givesTheBurgerToBambam(String testNumber) {
-        capturedInputAndOutputs.add("burger from barney to bambam", "1 burger here u go (test:" + testNumber + ")");
-        return ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
+    private void whenBarneyGivesTheBurgerToBambam(String burger) {
+        interactions.log("burger from barney to bambam", burger);
     }
 
-    private Matcher<Object> placesABurgerOrderWithBarney(String testNumber) {
-        capturedInputAndOutputs.add("burger order from bambam to barney", "Get me a burger (test:" + testNumber + ")");
-        interestingGivens.add("burger");
-        return dummyMatcher();
+    private void thenBambamPlacesABurgerOrderWithBarney(String burgerOrder) {
+        interactions.log("burger order from bambam to barney", burgerOrder);
+        interactions.interestingGivens.add("burger");
     }
 
-    private ActionUnderTest heDemandsFoodFromBambam() {
-        return (givens, capturedInputAndOutputs) -> {
-            capturedInputAndOutputs.add("food demand from mrflintstone to bambam", "I want a burger");
-            return capturedInputAndOutputs;
-        };
+    private void whenHeDemandsFoodFromBambam() {
+        interactions.log("food demand from mrflintstone to bambam", "I want a burger");
     }
 
-
-    private StateExtractor<Object> bambam() {
-        return inputAndOutputs -> ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
+    private void givenAHungryMrFlintstone() {
+        interactions.interestingGivens.add("Flintstone is very hungry");
     }
 
-    private StateExtractor<Object> mrFlintstone() {
-        return inputAndOutputs -> ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
+    @Override
+    public TestState testState() {
+        return interactions;
     }
-
-    private StateExtractor<Object> barney() {
-        return inputAndOutputs -> ANY_THING_FOR_THE_PURPOSES_OF_THIS_TEST;
-    }
-
-    private GivensBuilder aHungryMrFlintstone() {
-        return givens -> givens;
-    }
-
-    private void when(Object o, Object oo) {
-    }
-
-    private BaseMatcher<Object> dummyMatcher() {
-        return new BaseMatcher<>() {
-            public boolean matches(Object o) {
-                return true;
-            }
-
-            public void describeTo(Description description) {
-            }
-        };
-    }
-
 }

@@ -3,6 +3,7 @@ package com.googlecode.yatspec.junit;
 import com.googlecode.yatspec.plugin.sequencediagram.ByNamingConventionMessageProducer;
 import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -13,8 +14,8 @@ import java.util.Optional;
 public class SequenceDiagramExtension implements TestInstancePostProcessor, BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
     private SequenceDiagramGenerator sequenceDiagramGenerator;
+    private Optional<TestState> interactions = Optional.empty();
 
-    Optional<TestState> testState;
 
     @Override
     public void beforeTestExecution(ExtensionContext extensionContext) {
@@ -23,17 +24,19 @@ public class SequenceDiagramExtension implements TestInstancePostProcessor, Befo
 
     @Override
     public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) {
-        testState = Optional.of(testInstance)
-                .filter(TestState.class::isInstance)
-                .map(TestState.class::cast);
+        if (testInstance instanceof WithTestState) {
+            interactions = Optional.ofNullable(((WithTestState) testInstance).testState());
+        }
     }
+
 
     @Override
     public void afterTestExecution(ExtensionContext extensionContext) {
-        testState.ifPresent(testState -> {
+        interactions.ifPresent(testState -> {
             var messages = new ByNamingConventionMessageProducer().messages(testState.capturedInputAndOutputs);
             testState.capturedInputAndOutputs.add(
                     "Sequence Diagram", sequenceDiagramGenerator.generateSequenceDiagram(messages));
         });
     }
+
 }
