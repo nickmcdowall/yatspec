@@ -17,68 +17,64 @@ public class SequenceDiagramingExampleTest implements WithTestState {
 
     @Test
     void bambamGetsFoodForHisDad() {
-        String testNumber = "test:1";
-        givenAHungryMrFlintstone();
-        whenBarneyGivesTheBurgerToBambam("1 burger here u go (test:" + testNumber + ")");
-        thenBambamGivesFoodToMrFlintstone("here is your burger (test:" + testNumber + ")");
+        givenMrFlintstoneIs("very hungry");
+        whenBarneyGivesToBambam("2 burgers");
+        thenBambamGivesToMrFlintstone("2 burgers");
 
         whenHeDemandsFoodFromBambam();
-        thenBambamPlacesABurgerOrderWithBarney("Get me a burger (test:" + testNumber + ")");
-        thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim("have some of my burger because I like you (test:" + testNumber + ")");
+        thenBambamPlacesABurgerOrderWithBarney("a burger");
+        thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim();
     }
 
     @Test
     void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleSequenceDiagramsOnOnePage() {
-        String testNumber = "(test:2)";
-        givenAHungryMrFlintstone();
+        givenMrFlintstoneIs("hungry");
         whenHeDemandsFoodFromBambam();
-        thenBambamPlacesABurgerOrderWithBarney("Get me a burger " + testNumber);
+        thenBambamPlacesABurgerOrderWithBarney("a burger");
 
-        whenBarneyGivesTheBurgerToBambam("1 burger here u go " + testNumber);
-        thenBambamGivesFoodToMrFlintstone("here is your burger " + testNumber);
-        thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim("have some of my burger because I like you " + testNumber);
+        whenBarneyGivesToBambam("1 burger");
+        thenBambamGivesToMrFlintstone("1 burger");
+        thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim();
     }
 
     @Table({
-            @Row({"row_a"}),
-            @Row({"row_b"})
+            @Row({"starving"}),
+            @Row({"peckish"})
     })
     @ParameterizedTest
-    void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(String scenarioName) {
-        String testName = "test:3 scenario: " + scenarioName;
-        givenAHungryMrFlintstone();
+    void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(String feeling) {
+        givenMrFlintstoneIs(feeling);
         whenHeDemandsFoodFromBambam();
-        thenBambamPlacesABurgerOrderWithBarney("Get me a burger (test:" + testName + ")");
+        thenBambamPlacesABurgerOrderWithBarney("a burger");
 
-        whenBarneyGivesTheBurgerToBambam("1 burger here u go (test:" + testName + ")");
-        thenBambamGivesFoodToMrFlintstone("here is your burger (test:" + testName + ")");
+        whenBarneyGivesToBambam("1 burger");
+        thenBambamGivesToMrFlintstone("1 burger");
 
-        thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim("have some of my burger because I like you (test:" + testName + ")");
+        thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim();
     }
 
-    private void thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim(String food) {
-        interactions.log("(grouped) food from mrflintstone to barney", food);
+    private void thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim() {
+        interactions.log("(kindness) bite of burger from mrflintstone to barney", "have some of my burger because I like you");
     }
 
-    private void thenBambamGivesFoodToMrFlintstone(String food) {
-        interactions.log("(grouped) food from bambam to mrflintstone", food);
+    private void thenBambamGivesToMrFlintstone(String foodItem) {
+        interactions.log("(kindness) " + foodItem + " from bambam to mrflintstone", "here is your " + foodItem);
     }
 
-    private void whenBarneyGivesTheBurgerToBambam(String burger) {
-        interactions.log("burger from barney to bambam", burger);
+    private void whenBarneyGivesToBambam(String foodItem) {
+        interactions.log(foodItem + " from barney to bambam", foodItem + " here u go");
     }
 
-    private void thenBambamPlacesABurgerOrderWithBarney(String burgerOrder) {
-        interactions.log("burger order from bambam to barney", burgerOrder);
-        interactions.interestingGivens.add("burger");
+    private void thenBambamPlacesABurgerOrderWithBarney(String foodItem) {
+        interactions.log("food order from bambam to barney", "Get me " + foodItem);
     }
 
     private void whenHeDemandsFoodFromBambam() {
         interactions.log("food demand from mrflintstone to bambam", "I want a burger");
     }
 
-    private void givenAHungryMrFlintstone() {
-        interactions.interestingGivens.add("Flintstone is very hungry");
+    private void givenMrFlintstoneIs(String feeling) {
+        interactions.interestingGivens.add("Flintstone is " + feeling);
     }
 
     @Override
