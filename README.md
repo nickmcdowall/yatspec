@@ -24,15 +24,32 @@ Currently this library supports several features:
 
 ### Quick Start ###
 
-JUnit 5:
+__JUnit 5__:
 
 ```java
-@ExtendWith(SpecListener.class)
-class ExampleJUnit5Test implements WithCustomResultListeners {
+@ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
+class ExampleJUnit5Test implements WithTestState {
+    
+    private TestState interactions = new TestState();
+
     @Test
     void someTest() {
-        assertThat("The quick brown fox".contains("fox"), is(true));
+        givenThatUpstreamHasPublishedA("create message");
+        //when...
+        //then..
     }
+    
+    private void givenThatUpstreamHasPublishedA(String message) {
+        interactions.log("message from Upstream to APP", message);
+        interactions.interestingGivens
+                .add("message-id", "123")
+                .add("type", "Create");
+    }
+    
+    public TestState testState() {
+        return interactions;
+    }
+
 }
 ```
 
@@ -41,7 +58,7 @@ If you ran this test you would see the following in standard output (console):
 ```
 (...)
 Html output:
-/tmp/com/googlecode/yatspec/junit/ExampleTest.html
+/tmp/com/googlecode/yatspec/junit5/ExampleJUnit5Test.html
 ```
 
 If you opened the HTML file you would see:
