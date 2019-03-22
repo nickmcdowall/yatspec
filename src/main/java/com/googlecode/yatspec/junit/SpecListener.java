@@ -6,6 +6,7 @@ import com.googlecode.yatspec.rendering.ScenarioNameRenderer;
 import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
+import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.ScenarioName;
@@ -85,7 +86,9 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
         return () -> List.of(
                 new HtmlResultRenderer().
                         withCustomHeaderContent(SequenceDiagramGenerator.getHeaderContentForModalWindows()).
-                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer()));
+                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer()),
+                new HtmlIndexRenderer()
+        );
     }
 
     private boolean hasSequenceDiagramExtension(Object testInstance) {
