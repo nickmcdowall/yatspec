@@ -11,18 +11,20 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import static java.lang.System.getProperty;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * @Deprecated Moving towards JUnit 5 only support -
+ * See SpecListener.java
+ */
+@Deprecated(forRemoval = true)
 public class SpecRunner extends TableRunner {
-    private static final String OUTPUT_DIR = "yatspec.output.dir";
 
     private final Result testResult;
     private Map<String, Scenario> currentScenario = new HashMap<>();
@@ -63,10 +65,6 @@ public class SpecRunner extends TableRunner {
         super.run(notifier);
         notifier.removeListener(listener);
         listeners.complete(testResult);
-    }
-
-    static File outputDirectory() {
-        return new File(getProperty(OUTPUT_DIR, getProperty("java.io.tmpdir")));
     }
 
     @Override
