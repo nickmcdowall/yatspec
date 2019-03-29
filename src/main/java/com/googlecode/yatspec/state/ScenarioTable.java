@@ -10,7 +10,8 @@ public class ScenarioTable {
     private List<ScenarioTableHeader> headers = new ArrayList<>();
     private List<List<String>> rows = new ArrayList<>();
 
-    List<ScenarioTableHeader> getHeaders() {
+    @SuppressWarnings("WeakerAccess")//Used by templates
+    public List<ScenarioTableHeader> getHeaders() {
         return headers;
     }
 
@@ -25,7 +26,8 @@ public class ScenarioTable {
         rows.add(values);
     }
 
-    List<List<String>> getRows() {
+    @SuppressWarnings("WeakerAccess")//Used by templates
+    public List<List<String>> getRows() {
         return rows;
     }
 
