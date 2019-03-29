@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.state.StatusPriority.statusPriority;
-import static com.googlecode.yatspec.state.TestMethods.status;
 
 public class Results {
     public static Callable1<Result, Collection<TestMethod>> testMethods() {
@@ -19,7 +18,7 @@ public class Results {
 
     public static Callable1<Result, Status> resultStatus() {
         return result -> sequence(result.getTestMethods()).
-                map(status()).
+                map(TestMethod::getStatus).
                 sortBy(statusPriority()).
                 headOption().getOrElse(Status.Passed);
     }

@@ -9,7 +9,6 @@ import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
-import static com.googlecode.yatspec.parsing.Text.wordify;
 import static java.util.Arrays.asList;
 
 @SuppressWarnings({"unused"})

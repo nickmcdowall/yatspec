@@ -4,27 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.yatspec.state.ScenarioTableHeader.toScenarioTableHeader;
 
 @SuppressWarnings("unused")
 public class ScenarioTable {
-    private List<ScenarioTableHeader> headers = new ArrayList<ScenarioTableHeader>();
-    private List<List<String>> rows = new ArrayList<List<String>>();
+    private List<ScenarioTableHeader> headers = new ArrayList<>();
+    private List<List<String>> rows = new ArrayList<>();
 
-    public List<ScenarioTableHeader> getHeaders() {
+    List<ScenarioTableHeader> getHeaders() {
         return headers;
     }
 
     public void setHeaders(List<String> headers) {
-        if(headers != null)
-            this.headers = sequence(headers).map(toScenarioTableHeader()).toList();
+        if (headers != null)
+            this.headers = sequence(headers)
+                    .map(ScenarioTableHeader::new)
+                    .toList();
     }
 
     public void addRow(List<String> values) {
         rows.add(values);
     }
 
-    public List<List<String>> getRows() {
+    List<List<String>> getRows() {
         return rows;
     }
 

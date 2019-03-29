@@ -15,14 +15,5 @@ public class ScenarioTableHeader implements Value<String> {
         return header;
     }
 
-    public static Callable1<? super String, ScenarioTableHeader> toScenarioTableHeader() {
-        return new Callable1<String, ScenarioTableHeader>() {
-            @Override
-            public ScenarioTableHeader call(String value) throws Exception {
-                return new ScenarioTableHeader(value);
-            }
-        };
-    }
-
 
 }

@@ -45,19 +45,11 @@ public class Files {
         return characters(name).map(dotsToForwardSlashes()).toString(Strings.EMPTY, Strings.EMPTY, Strings.EMPTY);
     }
 
-    private static Callable1<? super Character, Character> dotsToSlashes() {
-        return new Callable1<Character, Character>() {
-            public Character call(Character character) throws Exception {
-                return character == '.' ? File.separatorChar : character;
-            }
-        };
+    private static Callable1<Character, Character> dotsToSlashes() {
+        return character -> character == '.' ? File.separatorChar : character;
     }
 
-    private static Callable1<? super Character, Character> dotsToForwardSlashes() {
-        return new Callable1<Character, Character>() {
-            public Character call(Character character) throws Exception {
-                return character == '.' ? '/' : character;
-            }
-        };
+    private static Callable1<Character, Character> dotsToForwardSlashes() {
+        return character -> character == '.' ? '/' : character;
     }
 }

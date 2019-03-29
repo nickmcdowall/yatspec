@@ -16,7 +16,9 @@ public class JavaSourceRenderer implements Renderer<JavaSource> {
 
     @Override
     public String render(JavaSource javaSource) {
-        return escape(lines(removateDotClass(javaSource.value().trim())).map(Text.wordify()).toString("\n"));
+        return escape(lines(removateDotClass(javaSource.value().trim()))
+                .map(Text::wordify)
+                .toString("\n"));
     }
 
     public static Sequence<String> lines(final String sourceCode) {
