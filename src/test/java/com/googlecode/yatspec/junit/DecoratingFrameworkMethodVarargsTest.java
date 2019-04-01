@@ -1,17 +1,15 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.totallylazy.Mapper;
-import com.googlecode.totallylazy.Predicates;
 import com.googlecode.yatspec.fixture.VarargFixture;
 import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.junit.DecoratingFrameworkMethodTest.row;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -52,12 +50,10 @@ public class DecoratingFrameworkMethodVarargsTest {
     }
 
     private Method getMethod(String methodName) {
-        return sequence(VarargFixture.class.getDeclaredMethods()).filter(Predicates.where(new Mapper<>() {
-            @Override
-            public String call(Method method) {
-                return method.getName();
-            }
-        }, Predicates.is(methodName))).headOption().getOrThrow(new RuntimeException("Couldn't find method called " + methodName));
+        return Arrays.stream(VarargFixture.class.getDeclaredMethods())
+                .filter(method -> method.getName().equals(methodName))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Couldn't find method called " + methodName));
     }
 
     private void testVarargsForMethod(Method underTest) throws Throwable {
@@ -78,10 +74,11 @@ public class DecoratingFrameworkMethodVarargsTest {
     }
 
     private void checkVarargs(Method underTest, List<String> varArgs, List<String> params) throws Throwable {
-        final List<String> paramsToUse = sequence(params).join(varArgs).toList();
+        List<String> paramsToUse = new ArrayList<>(params);
+        paramsToUse.addAll(varArgs);
         final Map<String, Object> result = checkNonVarargs(underTest, paramsToUse);
 
-        assertThat((String[])result.get("lotsOfParams"), arrayContaining(varArgs.toArray()));
+        assertThat((String[]) result.get("lotsOfParams"), arrayContaining(varArgs.toArray()));
     }
 
     private Map<String, Object> checkNonVarargs(Method underTest, List<String> params) throws Throwable {

@@ -19,8 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Collection;
-
-import static com.googlecode.totallylazy.Sequences.sequence;
+import java.util.List;
 
 @RunWith(SpecRunner.class)
 public class SequenceDiagramingExampleTest extends TestState implements WithCustomResultListeners {
@@ -80,11 +79,11 @@ public class SequenceDiagramingExampleTest extends TestState implements WithCust
 
     @Override
     public Collection<SpecResultListener> getResultListeners() {
-        return sequence(
+        return List.of(
                 new HtmlResultRenderer().
                         withCustomHeaderContent(SequenceDiagramGenerator.getHeaderContentForModalWindows()).
-                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())).
-                safeCast(SpecResultListener.class);
+                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())
+        );
     }
 
     @After

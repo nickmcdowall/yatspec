@@ -14,8 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Collection;
+import java.util.List;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.plugin.jdom.StateExtractors.getValue;
 import static java.lang.Double.valueOf;
 import static java.lang.Math.sqrt;
@@ -85,10 +85,13 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
     }
 
     public Collection<SpecResultListener> getResultListeners() {
-        return sequence(
-                new HtmlResultRenderer().
-                        withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)", "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")),
+        return List.of(
+                new HtmlResultRenderer().withCustomRenderer(
+                        Notes.class,
+                        new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)", "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")
+                ),
                 new HtmlIndexRenderer(),
-                new HtmlTagIndexRenderer());
+                new HtmlTagIndexRenderer()
+        );
     }
 }
