@@ -10,8 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import java.util.Collection;
+import java.util.List;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpecListener.class)
@@ -28,7 +28,7 @@ class JUnit5Test implements WithCustomResultListeners {
 
     @Override
     public Collection<SpecResultListener> getResultListeners() {
-        return sequence(
+        return List.of(
                 new HtmlResultRenderer().
                         withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)", "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")),
                 new HtmlIndexRenderer(),

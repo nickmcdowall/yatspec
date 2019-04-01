@@ -3,13 +3,11 @@ package com.googlecode.yatspec.junit5;
 import com.googlecode.yatspec.junit.LinkingNote;
 import com.googlecode.yatspec.junit.SpecListener;
 import com.googlecode.yatspec.rendering.LinkingNoteRenderer;
-import com.googlecode.yatspec.state.TestMethod;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.List;
+import java.util.Optional;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.TestParser.parseTestMethods;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -24,7 +22,12 @@ class LinkingNoteRendererTest {
     }
 
     private String theRenderedValueOfTheLinkingNoteOfThisMethod() throws Exception {
-        final List<TestMethod> methods = parseTestMethods(getClass());
-        return new LinkingNoteRenderer(LinkingNoteRendererTest.class).render(sequence(sequence(methods).first().getAnnotations()).safeCast(LinkingNote.class).head());
+        Optional<LinkingNote> linkingNote = parseTestMethods(getClass()).stream()
+                .flatMap(testMethod -> testMethod.getAnnotations().stream())
+                .filter(LinkingNote.class::isInstance)
+                .map(LinkingNote.class::cast)
+                .findFirst();
+
+        return new LinkingNoteRenderer(LinkingNoteRendererTest.class).render(linkingNote.get());
     }
 }
