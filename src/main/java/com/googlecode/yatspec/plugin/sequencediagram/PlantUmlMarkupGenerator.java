@@ -7,6 +7,8 @@ import java.util.function.Function;
 import static java.lang.String.format;
 
 public class PlantUmlMarkupGenerator {
+    public static final String DEFAULT_SKIN = "skin BlueModern";
+
     public String generateMarkup(Collection<SequenceDiagramMessage> messages) {
         Markup markup = new Markup();
         messages.stream()
@@ -27,7 +29,7 @@ public class PlantUmlMarkupGenerator {
 
     private class Markup {
         private GroupHelper groupHelper = new GroupHelper();
-        StringBuffer plantUmlMarkup = new StringBuffer(format("@startuml%n"));
+        StringBuffer plantUmlMarkup = new StringBuffer(format("@startuml%n" + DEFAULT_SKIN + "%n"));
 
         private void addMessage(String messageLine) {
             plantUmlMarkup.append(groupHelper.markupGroup(messageLine));

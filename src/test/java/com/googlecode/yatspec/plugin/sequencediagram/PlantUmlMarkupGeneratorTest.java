@@ -10,6 +10,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PlantUmlMarkupGeneratorTest {
 
+    private static final String DEFAULT_SKIN = "skin BlueModern";
+
     @Test
     public void generatesPlantUmlMarkup() {
         String markup = new PlantUmlMarkupGenerator().generateMarkup(sequence(new SequenceDiagramMessage("Bob", "Alice", "How are you Alice?", "message_id")));
@@ -26,7 +28,7 @@ public class PlantUmlMarkupGeneratorTest {
 
     private Matcher<? super String> markupContaining(final String... expected) {
         StringBuilder expectation = new StringBuilder();
-        expectation.append(String.format("@startuml%n"));
+        expectation.append(String.format("@startuml%n" + DEFAULT_SKIN + "%n"));
         for (String s : expected) {
             expectation.append(String.format("%s%n", s));
         }
