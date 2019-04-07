@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'maven'
     id 'pl.allegro.tech.build.axion-release' version '1.10.0'
 }
@@ -18,48 +18,37 @@ ext {
     junitPlatformVersion = '1.3.2'
 }
 
+configurations {
+    inFatJar
+}
+
 // Add non-maven-central dependencies to jar (fat jar)
 jar {
     from {
-        configurations.compile.filter {
-            it.name in [
-                    'funclate-110.jar',
-                    'yadic-167.jar',
-                    'totallylazy-1130.jar'
-            ]
-        }.collect {
+        configurations.inFatJar.collect {
             zipTree(it)
         }
     }
 }
 
 dependencies {
-    implementation "com.googlecode.totallylazy:totallylazy:1130"
-    implementation "com.googlecode.funclate:funclate:110"
-    implementation  "com.googlecode.yadic:yadic:167"
-    implementation "antlr:antlr:2.7.7"
-    implementation "org.antlr:stringtemplate:3.2.1"
-    implementation "com.thoughtworks.qdox:qdox:1.12.1"
-    implementation "org.hamcrest:hamcrest-core:1.2"
-    implementation "org.hamcrest:hamcrest-library:1.2"
-    implementation "org.junit.platform:junit-platform-console-standalone:1.3.2"
-    implementation "net.sourceforge.plantuml:plantuml:1.2018.14"
-    implementation "jaxen:jaxen:1.1.1"
-    implementation "org.jdom:jdom:1.1"
+    inFatJar        "com.googlecode.funclate:funclate:110"
+    implementation  "com.googlecode.funclate:funclate:110"
+    api "antlr:antlr:2.7.7"
+    api "org.antlr:stringtemplate:3.2.1"
+    api "com.thoughtworks.qdox:qdox:1.12.1"
+    api "org.hamcrest:hamcrest-core:1.2"
+    api "org.hamcrest:hamcrest-library:1.2"
+    api "org.junit.platform:junit-platform-console-standalone:1.3.2"
+    api "net.sourceforge.plantuml:plantuml:1.2018.14"
+    api "jaxen:jaxen:1.1.1"
+    api "org.jdom:jdom:1.1"
 
     testCompile fileTree(dir: 'lib/manual', include: ['*.jar'])
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiter"
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiter"
 
     testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitJupiter"
-}
-
-// Remove non-maven-central dependencies from generated pom (bundled in jar)
-install.repositories.mavenInstaller.pom.whenConfigured { pom ->
-    pom.dependencies.removeAll {
-        dep -> dep.groupId ==~ /com\.googlecode.*/
-    }
 }
 
 test {
@@ -69,5 +58,3 @@ test {
 wrapper {
     gradleVersion = "5.3"
 }
-
-
