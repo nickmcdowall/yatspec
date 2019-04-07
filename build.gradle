@@ -51,6 +51,13 @@ dependencies {
     testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitJupiter"
 }
 
+// Remove non-maven-central dependencies from generated pom (bundled in jar)
+install.repositories.mavenInstaller.pom.whenConfigured { pom ->
+    pom.dependencies.removeAll {
+        dep -> dep.groupId ==~ /com\.googlecode.*/
+    }
+}
+
 test {
     useJUnitPlatform()
 }
