@@ -32,22 +32,19 @@ jar {
 }
 
 dependencies {
-    inFatJar        "com.googlecode.funclate:funclate:110"
-    implementation  "com.googlecode.funclate:funclate:110"
+    inFatJar "com.googlecode.funclate:funclate:110"
+    implementation "com.googlecode.funclate:funclate:110"
+    
+    api "net.sourceforge.plantuml:plantuml:1.2018.14"
     api "antlr:antlr:2.7.7"
     api "org.antlr:stringtemplate:3.2.1"
     api "com.thoughtworks.qdox:qdox:1.12.1"
-    api "org.junit.platform:junit-platform-console-standalone:1.4.2"
-    api "net.sourceforge.plantuml:plantuml:1.2018.14"
     api "jaxen:jaxen:1.1.1"
     api "org.jdom:jdom:1.1"
-
-    testCompile fileTree(dir: 'lib/manual', include: ['*.jar'])
-    testImplementation "org.hamcrest:hamcrest-library:1.2"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiter"
-
-    testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
-    testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitJupiter"
+    api "org.junit.jupiter:junit-jupiter-api:$junitJupiter"
+    api "org.junit.jupiter:junit-jupiter-params:$junitJupiter"
+    api "org.junit.jupiter:junit-jupiter-engine:$junitJupiter"
+    api "org.hamcrest:hamcrest-library:1.3"
 }
 
 // Remove non-maven-central dependencies from generated pom (bundled in jar)

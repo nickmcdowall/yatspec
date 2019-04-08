@@ -11,17 +11,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
-import java.util.Locale;
 
 import static com.googlecode.yatspec.junit.Notes.methods.notes;
 import static com.googlecode.yatspec.parsing.TestParser.parseTestMethods;
-import static java.lang.String.format;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpecListener.class)
 class TestParserTest {
+
     private static final String A_SIMPLE_STRING = "aString";
 
     @Test
@@ -65,7 +64,7 @@ class TestParserTest {
             @Row(A_SIMPLE_STRING)
     })
     void shouldParseParametersDeclaredAsConstants(String param) {
-        assertEquals(format(Locale.ENGLISH, "failed to parse parameter [%s]", param), "aString", param);
+        assertEquals("aString", param);
     }
 
 }
