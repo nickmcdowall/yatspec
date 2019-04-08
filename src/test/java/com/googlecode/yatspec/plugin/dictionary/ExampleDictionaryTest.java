@@ -1,20 +1,21 @@
 package com.googlecode.yatspec.plugin.dictionary;
 
+import com.googlecode.yatspec.junit.SpecListener;
 import com.googlecode.yatspec.junit.SpecResultListener;
-import com.googlecode.yatspec.junit.SpecRunner;
 import com.googlecode.yatspec.junit.WithCustomResultListeners;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Collection;
 import java.util.List;
 
-@RunWith(SpecRunner.class)
-public class ExampleDictionaryTest implements WithCustomResultListeners {
+@ExtendWith(SpecListener.class)
+class ExampleDictionaryTest extends TestState implements WithCustomResultListeners {
 
     @Test
-    public void theDictionaryWordsAreHighlightedTest() {
+    void theDictionaryWordsAreHighlightedTest() {
         theWordYatspecWillBeHighlightedAndHoveringWillShowTheDefinition();
     }
 
