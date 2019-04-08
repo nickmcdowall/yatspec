@@ -2,19 +2,19 @@ package com.googlecode.yatspec.plugin.sequencediagram;
 
 import com.googlecode.totallylazy.Arrays;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-public class ByNamingConventionMessageProducerTest {
+class ByNamingConventionMessageProducerTest {
 
-    public static final int FIRST = 0;
-    public static final int SECOND = 1;
+    private static final int FIRST = 0;
+    private static final int SECOND = 1;
 
     @Test
-    public void ignoresValuesWithoutNamingConvention() {
+    void ignoresValuesWithoutNamingConvention() {
         CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add("Shopping Basket", new Object());
         Object[] messages = new ByNamingConventionMessageProducer().messages(inputAndOutputs).toArray();
 
@@ -22,7 +22,7 @@ public class ByNamingConventionMessageProducerTest {
     }
 
     @Test
-    public void convertsValuesWithNamingConventionToSequenceDiagramMessages() {
+    void convertsValuesWithNamingConventionToSequenceDiagramMessages() {
         CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add("Kiss from Boy to Girl", new Object()).add("Slap from Girl to Boy", new Object());
         Object[] messages = new ByNamingConventionMessageProducer().messages(inputAndOutputs).toArray();
         assertThat(messages.length, is(equalTo(2)));
@@ -31,7 +31,7 @@ public class ByNamingConventionMessageProducerTest {
     }
 
     @Test
-    public void dealsWithGroups() {
+    void dealsWithGroups() {
         CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add("(grouped) Kiss from Boy to Girl", new Object());
         Object[] messages = new ByNamingConventionMessageProducer().messages(inputAndOutputs).toArray();
         assertThat(messages.length, is(equalTo(1)));

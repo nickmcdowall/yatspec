@@ -17,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpecListener.class)
 class JUnit5Test implements WithCustomResultListeners {
 
+    private static final String NOTE_REGEX_PATTERN = "(?:#)([^\\s]+)";
+    private static final String REPLACEMENT_PATTERN = "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>";
+
     @ParameterizedTest
     @Table({
             @Row({"1", "1", "2"}),
@@ -30,7 +33,7 @@ class JUnit5Test implements WithCustomResultListeners {
     public Collection<SpecResultListener> getResultListeners() {
         return List.of(
                 new HtmlResultRenderer().
-                        withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)", "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")),
+                        withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), NOTE_REGEX_PATTERN, REPLACEMENT_PATTERN)),
                 new HtmlIndexRenderer(),
                 new HtmlTagIndexRenderer());
     }

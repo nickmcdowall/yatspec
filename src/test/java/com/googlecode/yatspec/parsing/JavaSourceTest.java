@@ -1,15 +1,15 @@
 package com.googlecode.yatspec.parsing;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class JavaSourceTest {
+class JavaSourceTest {
 
     @Test
-    public void replaceMethodArgumentsWithValues() {
+    void replaceMethodArgumentsWithValues() {
         verifyReplacement("given(radicand(radicand));", "given(radicand(9));", "radicand", "9");
         verifyReplacement("given(radicand(xyz, radicand));", "given(radicand(xyz, 9));", "radicand", "9");
         verifyReplacement("given(radicand(radicand, xyz));", "given(radicand(9, xyz));", "radicand", "9");

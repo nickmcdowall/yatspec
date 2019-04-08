@@ -6,7 +6,7 @@ import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Paths;
 
@@ -16,19 +16,19 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
 
-public class HtmlResultRendererTest {
+class HtmlResultRendererTest {
 
-    public static final String CUSTOM_RENDERED_TEXT = "some crazy and likely random string that wouldn't appear in the html";
+    private static final String CUSTOM_RENDERED_TEXT = "some crazy and likely random string that wouldn't appear in the html";
 
     @Test
-    public void providesLinksToResultOutputRelativeToOutputDirectory() throws Exception {
+    void providesLinksToResultOutputRelativeToOutputDirectory() {
         assertThat(
                 HtmlResultRenderer.htmlResultRelativePath(this.getClass()),
                 is(Paths.get("com/googlecode/yatspec/rendering/html/HtmlResultRendererTest.html").toString()));
     }
 
     @Test
-    public void loadsTemplateOffClassPath() throws Exception {
+    void loadsTemplateOffClassPath() throws Exception {
         TestResult result = new TestResult(this.getClass());
 
         String html = new HtmlResultRenderer().render(result);
@@ -37,7 +37,7 @@ public class HtmlResultRendererTest {
     }
 
     @Test
-    public void supportsCustomRenderingOfScenarioLogs() throws Exception {
+    void supportsCustomRenderingOfScenarioLogs() throws Exception {
         TestResult result = aTestResultWithCustomRenderTypeAddedToScenarioLogs();
 
         String html = new HtmlResultRenderer().
@@ -48,7 +48,7 @@ public class HtmlResultRendererTest {
     }
 
     @Test
-    public void supportsCustomHeaderContent() throws Exception {
+    void supportsCustomHeaderContent() throws Exception {
         TestResult result = new TestResult(getClass());
 
         String html = new HtmlResultRenderer().
@@ -59,7 +59,7 @@ public class HtmlResultRendererTest {
     }
 
     @Test
-    public void supportsCustomJavaScript() throws Exception {
+    void supportsCustomJavaScript() throws Exception {
         TestResult result = new TestResult(getClass());
 
         String html = new HtmlResultRenderer().
@@ -82,17 +82,17 @@ public class HtmlResultRendererTest {
         scenario.setTestState(testState);
     }
 
-    public static class RenderedType {
+    static class RenderedType {
     }
 
     private class DefaultReturningRenderer implements Renderer<RenderedType> {
         private String rendererOutput;
 
-        public DefaultReturningRenderer(final String rendererOutput) {
+        DefaultReturningRenderer(final String rendererOutput) {
             this.rendererOutput = rendererOutput;
         }
 
-        public String render(RenderedType renderedType) throws Exception {
+        public String render(RenderedType renderedType) {
             return rendererOutput;
         }
     }

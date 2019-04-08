@@ -2,9 +2,10 @@ package com.googlecode.yatspec.plugin.sequencediagram;
 
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import org.hamcrest.Matcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -13,16 +14,18 @@ public class PlantUmlMarkupGeneratorTest {
     private static final String DEFAULT_SKIN = "skin BlueModern";
 
     @Test
-    public void generatesPlantUmlMarkup() {
-        String markup = new PlantUmlMarkupGenerator().generateMarkup(sequence(new SequenceDiagramMessage("Bob", "Alice", "How are you Alice?", "message_id")));
+    void generatesPlantUmlMarkup() {
+        String markup = new PlantUmlMarkupGenerator().generateMarkup(List.of(new SequenceDiagramMessage("Bob", "Alice", "How are you Alice?", "message_id")));
         assertThat(markup, is(markupContaining("Bob ->> Alice:<text class=sequence_diagram_clickable sequence_diagram_message_id=message_id>How are you Alice?</text>")));
     }
 
     @Test
-    public void doesGroups() {
+    void doesGroups() {
         CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
         capturedInputAndOutputs.add("(hello) a message from here to there", "message body");
-        String markup = new PlantUmlMarkupGenerator().generateMarkup(sequence(new SequenceDiagramMessage("here", "there", "(hello) a message", "message_id")));
+        String markup = new PlantUmlMarkupGenerator().generateMarkup(
+                List.of(new SequenceDiagramMessage("here", "there", "(hello) a message", "message_id"))
+        );
         assertThat(markup, is(markupContaining("group hello", "here ->> there:<text class=sequence_diagram_clickable sequence_diagram_message_id=message_id>(hello) a message</text>", "end")));
     }
 

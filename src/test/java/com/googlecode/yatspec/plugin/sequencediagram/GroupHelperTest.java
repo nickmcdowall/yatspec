@@ -1,29 +1,30 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class GroupHelperTest {
+class GroupHelperTest {
     private GroupHelper groupHelper = new GroupHelper();
 
     @Test
-    public void ignoresNoGroup() throws Exception {
+    void ignoresNoGroup() {
         String response = groupHelper.markupGroup("here ->> there:<text>basdjlakjds</text>");
 
         assertThat(response, is(""));
     }
 
     @Test
-    public void marksGroupStart() throws Exception {
+    void marksGroupStart() {
         String response = groupHelper.markupGroup("here ->> there:<text>(theGroup) basdjlakjds</text>");
-        
+
         assertThat(response, is(String.format("group theGroup%n")));
     }
-    
+
     @Test
-    public void ignoresIfGroupStarted() throws Exception {
+    void ignoresIfGroupStarted() {
         groupHelper.markupGroup("here ->> there:<text>(theGroup) basdjlakjds1</text>");
         String response = groupHelper.markupGroup("here ->> there:<text>(theGroup) basdjlakjds2</text>");
 
@@ -31,15 +32,15 @@ public class GroupHelperTest {
     }
 
     @Test
-    public void endsGroupInSequence() throws Exception {
+    void endsGroupInSequence() {
         groupHelper.markupGroup("here ->> there:<text>(theGroup) basdjlakjds1</text>");
         String response = groupHelper.markupGroup("here ->> there:basdjlakjds2");
 
-        assertThat(response, is(String.format("end%n")));        
+        assertThat(response, is(String.format("end%n")));
     }
-    
+
     @Test
-    public void cleansUpOpenGroups() throws Exception {
+    void cleansUpOpenGroups() {
         groupHelper.markupGroup("here ->> there:<text>(theGroup) basdjlakjds1</text>");
         String response = groupHelper.cleanUpOpenGroups();
 
@@ -47,7 +48,7 @@ public class GroupHelperTest {
     }
 
     @Test
-    public void notCleanupWhenNoOpenGroups() throws Exception {
+    void notCleanupWhenNoOpenGroups() {
         groupHelper.markupGroup("here ->> there:<text>(theGroup) basdjlakjds1</text>");
         groupHelper.markupGroup("here ->> there:<text>basdjlakjds2</text>");
         String response = groupHelper.cleanUpOpenGroups();

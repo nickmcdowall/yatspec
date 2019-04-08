@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.fixture;
 
-import java.util.Collection;
 import java.util.Random;
 
 public class RandomFixtures {
@@ -27,6 +26,7 @@ public class RandomFixtures {
         return random.nextInt(inclusiveEnd - inclusiveStart + 1) + inclusiveStart;
     }
 
+    @SuppressWarnings("unused")
     public static <T> T pickOneOf(T... choices) {
         return choices[random.nextInt(choices.length)];
     }

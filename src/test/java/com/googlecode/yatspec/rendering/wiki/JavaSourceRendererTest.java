@@ -1,22 +1,23 @@
 package com.googlecode.yatspec.rendering.wiki;
 
 import com.googlecode.yatspec.parsing.JavaSource;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.lang.System.lineSeparator;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class JavaSourceRendererTest {
+class JavaSourceRendererTest {
+
     @Test
-    public void removesFirstLevelOfIndentation() throws Exception {
-        String withIndentation = "\tFoo" + lineSeparator() +"\tBar";
+    void removesFirstLevelOfIndentation() {
+        String withIndentation = "\tFoo" + lineSeparator() + "\tBar";
         String withoutIndentation = "Foo" + lineSeparator() + "Bar";
         assertThat(new JavaSourceRenderer().render(new JavaSource(withIndentation)), is(withoutIndentation));
     }
 
     @Test
-    public void removesLeadingAndTrailingBlankLines() throws Exception {
+    void removesLeadingAndTrailingBlankLines() {
         assertThat(new JavaSourceRenderer().render(new JavaSource("\n\nFoo\nBar\n\n")), is("Foo\nBar"));
     }
 }

@@ -4,6 +4,7 @@ import com.googlecode.yatspec.junit.Row;
 import com.googlecode.yatspec.junit.SequenceDiagramExtension;
 import com.googlecode.yatspec.junit.SpecListener;
 import com.googlecode.yatspec.junit.Table;
+import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
 import org.junit.jupiter.api.Test;
@@ -11,9 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
 @ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
-public class SequenceDiagramingExampleTest implements WithTestState {
+class SequenceDiagramingExampleTest implements WithTestState {
 
     private TestState interactions = new TestState();
+    private InterestingGivens interestingGivens = interactions.interestingGivens;
 
     @Test
     void bambamGetsFoodForHisDad() {
@@ -74,7 +76,7 @@ public class SequenceDiagramingExampleTest implements WithTestState {
     }
 
     private void givenMrFlintstoneIs(String feeling) {
-        interactions.interestingGivens.add("Flintstone is " + feeling);
+        interestingGivens.add("Flintstone is " + feeling);
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.thoughtworks.qdox.model.AbstractBaseJavaEntity;
 import com.thoughtworks.qdox.model.Annotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import java.io.IOException;
@@ -17,16 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Files.path;
-import static com.googlecode.totallylazy.Files.recursiveFiles;
-import static com.googlecode.totallylazy.Files.workingDirectory;
+import static com.googlecode.totallylazy.Files.*;
 import static com.googlecode.totallylazy.Methods.annotation;
 import static com.googlecode.totallylazy.Option.none;
 import static com.googlecode.totallylazy.Option.option;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.totallylazy.Sequences.empty;
 import static com.googlecode.totallylazy.Sequences.sequence;
-import static com.googlecode.totallylazy.Strings.endsWith;
 import static com.googlecode.totallylazy.URLs.toURL;
 import static java.util.Arrays.asList;
 
@@ -46,7 +43,7 @@ public class TestParser {
         }
 
         Map<String, List<JavaMethod>> sourceMethodsByName = getMethods(javaClass.get()).toMap(AbstractBaseJavaEntity::getName);
-        Map<String, List<Method>> reflectionMethodsByName = methods.toMap((Callable1<? super Method,String>) (Callable1<Method, String>) Method::getName);
+        Map<String, List<Method>> reflectionMethodsByName = methods.toMap((Callable1<? super Method, String>) (Callable1<Method, String>) Method::getName);
 
         List<TestMethod> testMethods = new ArrayList<>();
         TestMethodExtractor extractor = new TestMethodExtractor();
@@ -63,7 +60,7 @@ public class TestParser {
         return myTestMethods.join(parentTestMethods);
     }
 
-    private static Option<JavaClass> getJavaClass(final Class aClass) throws IOException {
+    private static Option<JavaClass> getJavaClass(final Class aClass) {
         Option<URL> option = getJavaSourceFromClassPath(aClass);
         option = !option.isEmpty() ? option : getJavaSourceFromFileSystem(aClass);
         return option.map(asAJavaClass(aClass));
@@ -81,7 +78,6 @@ public class TestParser {
         return sequence(aClass.getDeclaredMethods()).join(asList(aClass.getMethods()))
                 .filter(or(
                         where(annotation(Test.class), notNullValue()),
-                        where(annotation(org.junit.jupiter.api.Test.class), notNullValue()),
                         where(annotation(ParameterizedTest.class), notNullValue())));
     }
 
@@ -90,7 +86,6 @@ public class TestParser {
         return sequence(javaClass.getMethods())
                 .filter(where(annotations(), or(
                         contains(Test.class),
-                        contains(org.junit.jupiter.api.Test.class),
                         contains(ParameterizedTest.class))));
     }
 

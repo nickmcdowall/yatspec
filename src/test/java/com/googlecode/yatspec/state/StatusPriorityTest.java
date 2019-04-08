@@ -1,16 +1,16 @@
 package com.googlecode.yatspec.state;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import static com.googlecode.yatspec.state.StatusPriority.statusPriority;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 
-public class StatusPriorityTest {
+class StatusPriorityTest {
+
     @Test
-    public void ordersStatusesAccordingToImportance() throws Exception {
+    void ordersStatusesAccordingToImportance() {
         assertThat(statusPriority().compare(Status.Passed, Status.Passed), is(0));
 
         assertThat(statusPriority().compare(Status.Passed, Status.Failed), greaterThan(0));

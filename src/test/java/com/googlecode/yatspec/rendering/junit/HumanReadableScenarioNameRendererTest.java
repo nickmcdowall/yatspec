@@ -2,8 +2,8 @@ package com.googlecode.yatspec.rendering.junit;
 
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.state.ScenarioName;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,17 +13,17 @@ import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class HumanReadableScenarioNameRendererTest {
+class HumanReadableScenarioNameRendererTest {
 
     private Renderer<ScenarioName> renderer;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
         renderer = new HumanReadableScenarioNameRenderer();
     }
 
     @Test
-    public void rendersAScenarioNameWithoutArgs() throws Exception {
+    void rendersAScenarioNameWithoutArgs() throws Exception {
         String methodName = anyString();
         String expectedInvocationName = methodName + "()";
         List<String> noArgs = emptyList();
@@ -35,7 +35,7 @@ public class HumanReadableScenarioNameRendererTest {
     }
 
     @Test
-    public void rendersAScenarioNameWithArgs() throws Exception {
+    void rendersAScenarioNameWithArgs() throws Exception {
         String methodName = anyString();
         String firstArg = anyString();
         String secondArg = anyString();

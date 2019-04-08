@@ -6,30 +6,35 @@ import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.rendering.html.tagindex.HtmlTagIndexRenderer;
-import com.googlecode.yatspec.state.givenwhenthen.ActionUnderTest;
-import com.googlecode.yatspec.state.givenwhenthen.GivensBuilder;
-import com.googlecode.yatspec.state.givenwhenthen.StateExtractor;
-import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import org.hamcrest.Matchers;
+import com.googlecode.yatspec.state.givenwhenthen.*;
+import org.hamcrest.Matcher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Supplier;
 
-import static com.googlecode.yatspec.plugin.jdom.StateExtractors.getValue;
 import static java.lang.Double.valueOf;
 import static java.lang.Math.sqrt;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 
 @ExtendWith(SpecListener.class)
 @Notes("This is a note on the whole class\n" +
         "It will preserve space")
-public class SpecificationExampleTest extends TestState implements WithCustomResultListeners {
+public class SpecificationExampleTest implements WithTestState, WithCustomResultListeners {
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
+    private static final String REGEX_PATTERN = "(?:#)([^\\s]+)";
+    private static final String REPLACEMENT_PATTERN = "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>";
+
+    private final TestState testState = new TestState();
+    private final CapturedInputAndOutputs capturedInputAndOutputs = testState.capturedInputAndOutputs;
+    private final InterestingGivens interestingGivens = testState.interestingGivens;
 
     @Test
     @Notes("#tag-one")
@@ -43,7 +48,7 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
     @Notes("#tag-one\n" +
             "#tag-two\n" +
             "This example combines table / row tests with specification and given when then")
-    void takeTheSquareRoot(String radicand, String result) throws Exception {
+    void takeTheSquareRoot(String radicand, String result) {
         given(theRadicand(radicand));
         when(weTakeTheSquareRoot());
         then(theResult(), is(valueOf(result)));
@@ -52,48 +57,59 @@ public class SpecificationExampleTest extends TestState implements WithCustomRes
     @Test
     @LinkingNote(message = "The details of how the Linking Note works can be seen in the %s", links = {LinkingNoteRendererTest.class})
     void testWithALinkingNote() {
-
     }
 
     @Test
     void printEmptyTestName() {
-
     }
 
     @ParameterizedTest
-    @Table({@Row({"someParam", "varargA", "varargB"}),
-            @Row({"anotherParam"})})
+    @Table({
+            @Row({"someParam", "varargA", "varargB"}),
+            @Row({"anotherParam"})
+    })
     void callMethodsWithTrailingVarargs(String firstParam, String... otherParams) {
-        assertThat(firstParam, Matchers.not(Matchers.isIn(otherParams)));
+        assertThat(firstParam, not(isIn(otherParams)));
     }
 
-    private GivensBuilder theRadicand(final String number) {
-        return theRadicand(Integer.valueOf(number));
+    private Action theRadicand(final String number) {
+        return () -> interestingGivens.add(RADICAND, Integer.valueOf(number));
     }
 
-    private GivensBuilder theRadicand(final int number) {
-        return interestingGivens -> interestingGivens.add(RADICAND, number);
-    }
-
-    private ActionUnderTest weTakeTheSquareRoot() {
-        return (interestingGivens, capturedInputAndOutputs) -> {
+    private Action weTakeTheSquareRoot() {
+        return () -> {
             int number = interestingGivens.getType(RADICAND, Integer.class);
-            return capturedInputAndOutputs.add(RESULT, sqrt(number));
+            capturedInputAndOutputs.add(RESULT, sqrt(number));
         };
     }
 
-    private static StateExtractor<Double> theResult() {
-        return getValue(RESULT, Double.class);
+    private Supplier<Double> theResult() {
+        return () -> capturedInputAndOutputs.getType(RESULT, Double.class);
+    }
+
+    private void then(Supplier<Double> extractor, Matcher<Double> matcher) {
+        assertThat(extractor.get(), matcher);
+    }
+
+    private void when(Action action) {
+        action.execute();
+    }
+
+    private void given(Action action) {
+        action.execute();
     }
 
     public Collection<SpecResultListener> getResultListeners() {
         return List.of(
-                new HtmlResultRenderer().withCustomRenderer(
-                        Notes.class,
-                        new HyperlinkRenderer(new NotesRenderer(), "(?:#)([^\\s]+)", "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>")
-                ),
+                new HtmlResultRenderer()
+                        .withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), REGEX_PATTERN, REPLACEMENT_PATTERN)),
                 new HtmlIndexRenderer(),
                 new HtmlTagIndexRenderer()
         );
+    }
+
+    @Override
+    public TestState testState() {
+        return testState;
     }
 }
