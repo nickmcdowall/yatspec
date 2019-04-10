@@ -2,7 +2,6 @@ package com.googlecode.yatspec.plugin.sequencediagram;
 
 import java.util.Collection;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static java.lang.String.format;
 
@@ -12,7 +11,7 @@ public class PlantUmlMarkupGenerator {
     public String generateMarkup(Collection<SequenceDiagramMessage> messages) {
         Markup markup = new Markup();
         messages.stream()
-                .map(plantUmlMarkup())
+                .map(SequenceDiagramMessage::toPlantUmlMarkup)
                 .forEach(addTo(markup));
 
         return markup.build();
@@ -20,11 +19,6 @@ public class PlantUmlMarkupGenerator {
 
     private Consumer<String> addTo(final Markup markup) {
         return s -> markup.addMessage(s);
-    }
-
-    private Function<SequenceDiagramMessage, String> plantUmlMarkup() {
-        return message -> format("%s ->> %s:<text class=sequence_diagram_clickable sequence_diagram_message_id=%s>%s</text>",
-                message.from(), message.to(), message.messageId(), message.messageName());
     }
 
     private class Markup {

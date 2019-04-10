@@ -20,11 +20,11 @@ class SequenceDiagramingExampleTest implements WithTestState {
     @Test
     void bambamGetsFoodForHisDad() {
         givenMrFlintstoneIs("very hungry");
-        whenBarneyGivesToBambam("2 burgers");
-        thenBambamGivesToMrFlintstone("2 burgers");
-
         whenHeDemandsFoodFromBambam();
         thenBambamPlacesABurgerOrderWithBarney("a burger");
+
+        whenBarneyGivesToBambam("2 burgers");
+        thenBambamGivesToMrFlintstone("2 burgers");
         thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim();
     }
 
@@ -60,11 +60,11 @@ class SequenceDiagramingExampleTest implements WithTestState {
     }
 
     private void thenBambamGivesToMrFlintstone(String foodItem) {
-        interactions.log("(kindness) " + foodItem + " from bambam to mrflintstone", "here is your " + foodItem);
+        interactions.log("(kindness) response from bambam to mrflintstone", "here is your " + foodItem);
     }
 
     private void whenBarneyGivesToBambam(String foodItem) {
-        interactions.log(foodItem + " from barney to bambam", foodItem + " here u go");
+        interactions.log( "(kindness) food response from barney to bambam", foodItem + " here u go");
     }
 
     private void thenBambamPlacesABurgerOrderWithBarney(String foodItem) {

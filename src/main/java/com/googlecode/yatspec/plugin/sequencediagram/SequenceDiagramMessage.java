@@ -1,5 +1,7 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
+import static java.lang.String.format;
+
 public class SequenceDiagramMessage {
     private final String from;
     private final String to;
@@ -21,12 +23,13 @@ public class SequenceDiagramMessage {
         return to;
     }
 
-    public String messageName() {
-        return messageName;
+    public String toPlantUmlMarkup() {
+        return format("%s " + determineArrowType() + " %s:<text class=sequence_diagram_clickable sequence_diagram_message_id=%s>%s</text>",
+                from, to, messageId, messageName);
     }
 
-    public String messageId() {
-        return messageId;
+    public String determineArrowType() {
+        return messageId.contains("response") ? ArrowType.RESPONSE.getMarkup() : ArrowType.REQUEST.getMarkup();
     }
 
     @Override
