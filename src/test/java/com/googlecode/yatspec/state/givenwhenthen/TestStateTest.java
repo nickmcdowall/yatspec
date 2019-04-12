@@ -10,21 +10,8 @@ import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.matchers.Matchers.is;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestStateTest {
-    @Test
-    void shouldImplementCorrectInterfaceForSpecRunner() {
-        final TestState state = new TestState();
-        assertTrue(WithTestState.class.isAssignableFrom(state.getClass()));
-    }
-
-    @Test
-    void shouldReturnSensibleValueFromInterfaceMethod() {
-        final TestState state = new TestState();
-        assertSame(state, state.testState());
-    }
 
     @Test
     void loggerShouldHandleNamingForMultiThreadCalls() {
