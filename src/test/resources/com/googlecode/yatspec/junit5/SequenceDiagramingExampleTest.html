@@ -1,0 +1,1731 @@
+<!DOCTYPE>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
+          type="text/css" media="all"/>
+    <link rel="stylesheet" href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css"
+          media="all"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+
+    <style type="text/css">
+    .ui-dialog {
+        pointer-events: none;
+    }
+    .ui-dialog-titlebar-close {
+        pointer-events: all;
+    }
+</style>
+
+    <script type="text/javascript">
+
+    var createDialogsForSequenceDiagramMessages = function() {
+        var messagePayloadDialogs = {};
+        $(".sequence_diagram_clickable").each(function() {
+            var sequenceDiagramMessage = $(this);
+            var myScenario = sequenceDiagramMessage.parents(".scenario");
+            var scenarioUid = myScenario.attr("id");
+            var sequenceDiagramMessageId = sequenceDiagramMessage.attr("sequence_diagram_message_id");
+
+            var dialogContent = myScenario.find('H3[logKey="' + sequenceDiagramMessageId + '"]').next("div").clone();
+
+            var capturedInputAndOutputsName = sequenceDiagramMessage.text();
+            sequenceDiagramMessageId = "" + sequenceDiagramMessageId + "_" + scenarioUid;
+            messagePayloadDialogs[sequenceDiagramMessageId] = dialogContent.dialog({title:capturedInputAndOutputsName,minWidth: 800,stack:false,closeOnEscape:true, autoOpen:false });
+        });
+        return messagePayloadDialogs;
+    };
+
+    var dialogsCreated = false;
+    var messagePayloadDialogs = {};
+    $(document).ready(function () {
+
+        $(".SvgWrapper").toggleClass("hide");
+
+        $(".sequence_diagram_clickable").click(function() {
+            openDialog($(this), "click");
+        });
+
+        $(".sequence_diagram_clickable").hover(function() {
+            openDialog($(this), "hover");
+        }, function(){
+            closeHoveredDialog($(this));
+        })
+    });
+
+    function dialogForSequenceDiagramMessage(sequenceDiagramMessage) {
+        var myScenario = sequenceDiagramMessage.parents(".scenario");
+        var scenarioUid = myScenario.attr("id");
+        var sequenceDiagramMessageId = "" + sequenceDiagramMessage.attr("sequence_diagram_message_id") + "_" + scenarioUid;
+        return messagePayloadDialogs[sequenceDiagramMessageId];
+    }
+
+    function closeHoveredDialog(sequenceDiagramMessage) {
+        var dialog = dialogForSequenceDiagramMessage(sequenceDiagramMessage);
+        if(dialog.openMethod == "hover" ) {
+            dialog.dialog("close")
+        }
+    }
+
+    function openDialog(sequenceDiagramMessage, openMethod) {
+        if (!dialogsCreated) {
+            messagePayloadDialogs = createDialogsForSequenceDiagramMessages();
+            dialogsCreated = true;
+        }
+
+        var dialog = dialogForSequenceDiagramMessage(sequenceDiagramMessage);
+        dialog.openMethod=openMethod;
+        dialog.dialog("open");
+    }
+
+</script>
+
+
+
+
+    <style type="text/css">
+                /* <![CDATA[ */
+html, body {
+    margin: 1em 2ex 2em;
+    padding: 0;
+    background-color: #fff;
+    color: #000;
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    font-size: 10pt;
+}
+
+body {
+    position: absolute;
+    width: 95%;
+}
+
+h1, h2, h3, h4, h5, h6, th {
+    text-transform: capitalize;
+}
+
+h1 {
+    font-size: 170%;
+}
+
+h2 {
+    font-size: 150%;
+}
+
+h3 {
+    font-size: 140%;
+}
+
+h4 {
+    font-size: 130%;
+}
+
+h5 {
+    font-size: 120%;
+}
+
+h6 {
+    font-size: 110%;
+}
+
+.highlight {
+    background-color: #E8EEF7;
+    border: 1px solid #C3D9FF;
+    padding: 5px;
+    font: 10pt Arial, sans-serif;
+}
+
+.highlight .literal {
+    color: #066;
+}
+
+.highlight .keyword {
+    color: #008;
+}
+
+.highlight .constant {
+    color: #606;
+}
+
+.highlight .quote {
+    color: #080;
+}
+
+.highlight.specification .literal,
+.highlight.specification .keyword,
+.highlight.specification .constant,
+.highlight.specification .quote {
+    font-weight: bold;
+}
+
+pre.test-not-run, .test-not-run, .interestingGiven {
+    background-color: #FFF4CC;
+    border: 2px solid #FFBB66;
+}
+
+.interestingGiven {
+    padding: 0 2px;
+}
+
+pre.test-failed, .test-failed {
+    background-color: #FFF6FF;
+    border: 2px solid #FDA8A8;
+}
+
+pre.test-passed, .test-passed {
+    background-color: #F2FFEE;
+    border: 2px solid #A5DDAD;
+}
+
+li.test-not-run, li.test-passed {
+    border: none;
+}
+
+ul.contents a {
+    text-transform: capitalize;
+}
+
+a, table a {
+    color: #660066;
+    text-decoration: none;
+}
+
+a:hover, table a:hover {
+    text-decoration: underline;
+}
+
+table {
+    background-color: #F5F9FD;
+    border: 1px solid #C3D9FF;
+    border-collapse: collapse;
+    empty-cells: show;
+}
+
+th {
+    background-color: #E8EEF7;
+    border: 1px solid #C3D9FF;
+}
+
+td {
+    border: 1px solid #C3D9FF;
+}
+
+div.contents, div.testmethod {
+    margin-bottom: 40px;
+}
+
+.scenarios td {
+    padding: 0 20px;
+    text-align: center;
+}
+
+.scenarios, .scenario {
+    margin-bottom: 20px;
+}
+
+.scenario {
+    background-color: #F5F9FD;
+    border: 1px solid #C3D9FF;
+    padding: 0 10px;
+}
+
+h2 {
+    margin-top: 10px;
+}
+
+pre {
+    margin-bottom: 32px;
+}
+
+div.example {
+    margin-bottom: 64px;
+}
+
+.hide {
+    display: none;
+}
+
+.logKey {
+    cursor: pointer;
+}
+
+.logKey:hover {
+    text-decoration: underline;
+}
+
+.interestingGivens th {
+    text-align: left;
+}
+
+.interestingGivens td {
+    text-align: right;
+    padding: 0 5px;
+    vertical-align: middle;
+}
+
+.logValue {
+    white-space: pre-wrap;
+    margin-bottom: 32px;
+}
+
+.package-name {
+    cursor: pointer;
+}
+
+.package-name:hover {
+    text-decoration: underline;
+}
+
+dt {
+    font-weight: bold;
+    margin: 0px;
+    padding: 2px;
+}
+
+dd {
+    font-weight: normal;
+    margin-top:  0px;
+    margin-bottom:  1px;
+    margin-left:  20px;
+    margin-right:  0px;
+    padding: 2px;
+    padding-right: 0px;
+}
+
+dl {
+    margin: 0px;
+}
+dl.index-result {
+    padding: 10px;
+}
+.index-result dt {
+    margin-bottom: 5px;
+}
+.index-result dd {
+    margin-left: 0px;
+    margin-right: 5px;
+}
+
+.section div {
+    width:100%;
+}
+.section .section-header {
+    padding: 2px;
+    cursor: pointer;
+}
+
+.section .section-body {
+    display: block;
+    padding : 5px;
+}
+
+                /* ]]> */
+            </style>
+
+</head>
+<body>
+
+<h1>Sequence diagraming example</h1>
+
+
+<div class="contents">
+    <h2>Contents</h2>
+
+    <ul class="contents">
+        <li class='test-passed'><a href="#bambamGetsFoodForHisDad">Bambam gets food for his dad</a></li>
+        <li class='test-passed'><a href="#bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleSequenceDiagramsOnOnePage">Bambam gets food for his dad repeated so we can check multiple sequence diagrams on one page</a></li>
+        <li class='test-passed'><a href="#bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod">Bambam gets food for his dad repeated so we can check multiple scenarios per test method</a></li>
+
+    </ul>
+</div>
+
+<div class="testmethod section">
+    <a id="bambamGetsFoodForHisDad"></a>
+    <h2 class="section-header">Bambam gets food for his dad</h2>
+    <div class="section-body">
+
+
+        <div class="scenario" id="-1030922301_0_-1703967708">
+            <a id=""></a>
+            <h2>Specification</h2>
+            <pre class="highlight specification">
+Given mr flintstone is &quot;very hungry&quot;
+When he demands food from bambam
+Then bambam places a burger order with barney &quot;a burger&quot;
+
+When barney gives to bambam &quot;2 burgers&quot;
+Then bambam gives to mr flintstone &quot;2 burgers&quot;
+Then mr flintstone shares his food with barney because he likes him</pre>
+            <h3 class="logKey">Test results:</h3>
+            <pre class='highlight results test-passed'>
+Test passed</pre>
+
+            <h3 class="logKey">Interesting Givens</h3>
+
+            <table class="interestingGivens logValue">
+                <tr>
+                    <th class="key">String</th>
+                    <td class="interestingGiven">Flintstone is very hungry</td>
+                </tr>
+
+            </table>
+
+            <h3 class="logKey" logkey="food_demand_from_mrflintstone_to_bambam">food demand from mrflintstone to bambam</h3>
+            <div class="logValue highlight String" >I want a burger</div>
+            <h3 class="logKey" logkey="food_order_from_bambam_to_barney">food order from bambam to barney</h3>
+            <div class="logValue highlight String" >Get me a burger</div>
+            <h3 class="logKey" logkey="_kindness__food_response_from_barney_to_bambam">(kindness) food response from barney to bambam</h3>
+            <div class="logValue highlight String" >2 burgers here u go</div>
+            <h3 class="logKey" logkey="_kindness__response_from_bambam_to_mrflintstone">(kindness) response from bambam to mrflintstone</h3>
+            <div class="logValue highlight String" >here is your 2 burgers</div>
+            <h3 class="logKey" logkey="_kindness__bite_of_burger_from_mrflintstone_to_barney">(kindness) bite of burger from mrflintstone to barney</h3>
+            <div class="logValue highlight String" >have some of my burger because I like you</div>
+            <h3 class="logKey" logkey="Sequence_Diagram">Sequence Diagram</h3>
+            <div class="logValue highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="344px" preserveAspectRatio="none" style="width:490px;height:344px;" version="1.1" viewBox="0 0 490 344" width="490px" zoomAndPan="magnify">
+                    <defs>
+                        <linearGradient id="gpbn5bs1hej9q0" x1="0%" x2="100%" y1="100%" y2="0%">
+                            <stop offset="0%" stop-color="#C0C0C0" />
+                            <stop offset="100%" stop-color="#808080" />
+                        </linearGradient>
+                        <linearGradient id="gpbn5bs1hej9q1" x1="0%" x2="100%" y1="100%" y2="0%">
+                            <stop offset="0%" stop-color="#527BC6" />
+                            <stop offset="100%" stop-color="#D1DBEF" />
+                        </linearGradient>
+                    </defs>
+                    <g>
+                        <rect fill="#D7E0F2" height="141.2422" style="stroke: #BBBBBB; stroke-width: 2.0;" width="465.5" x="13" y="139.6426" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="80" y="40.0215" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="240.5" y="40.0215" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="433.5" y="40.0215" />
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="26" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="23" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="101" x="30" y="26.4355">mrflintstone</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="26" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="23" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="101" x="30" y="320.3203">mrflintstone</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="200.5" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="197.5" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="72" x="204.5" y="26.4355">bambam</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="200.5" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="197.5" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="72" x="204.5" y="320.3203">bambam</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="401.5" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="398.5" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="56" x="405.5" y="26.4355">barney</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="401.5" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="398.5" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="56" x="405.5" y="320.3203">barney</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="82.5" x2="238.5" y1="75.0215" y2="75.0215" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="230.5" x2="240.5" y1="70.0215" y2="75.0215" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="230.5" x2="240.5" y1="80.0215" y2="75.0215" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="food_demand_from_mrflintstone_to_bambam" textLength="83" x="97.5" y="68.5898">food demand</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="242.5" x2="431.5" y1="116.332" y2="116.332" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="111.332" y2="116.332" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="121.332" y2="116.332" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="food_order_from_bambam_to_barney" textLength="66" x="257.5" y="109.9004">food order</text>
+                        <rect fill="none" height="141.2422" style="stroke: #BBBBBB; stroke-width: 2.0;" width="465.5" x="13" y="139.6426" />
+                        <polygon fill="#527BC6" points="13,139.6426,115,139.6426,115,146.6426,105,156.6426,13,156.6426,13,139.6426" style="stroke: #BBBBBB; stroke-width: 2.0;" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="13" x2="478.5" y1="139.6426" y2="139.6426" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="478.5" x2="478.5" y1="139.6426" y2="280.8848" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="13" x2="13" y1="156.6426" y2="280.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="57" x="28" y="153.2109">kindness</text>
+                        <line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 5.0,2.0;" x1="242.5" x2="431.5" y1="181.9531" y2="181.9531" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="250.5" x2="240.5" y1="176.9531" y2="181.9531" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="250.5" x2="240.5" y1="186.9531" y2="181.9531" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__food_response_from_barney_to_bambam" textLength="159" x="257.5" y="175.5215">(kindness) food response</text>
+                        <line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 5.0,2.0;" x1="82.5" x2="238.5" y1="223.2637" y2="223.2637" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="90.5" x2="80.5" y1="218.2637" y2="223.2637" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="90.5" x2="80.5" y1="228.2637" y2="223.2637" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__response_from_bambam_to_mrflintstone" textLength="126" x="97.5" y="216.832">(kindness) response</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="82.5" x2="431.5" y1="264.5742" y2="264.5742" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="259.5742" y2="264.5742" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="269.5742" y2="264.5742" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__bite_of_burger_from_mrflintstone_to_barney" textLength="155" x="97.5" y="258.1426">(kindness) bite of burger</text>
+                        <!--
+                    @startuml
+                    skin BlueModern
+                    mrflintstone ->> bambam:<text class=sequence_diagram_clickable sequence_diagram_message_id=food_demand_from_mrflintstone_to_bambam>food demand</text>
+                    bambam ->> barney:<text class=sequence_diagram_clickable sequence_diagram_message_id=food_order_from_bambam_to_barney>food order</text>
+                    group kindness
+                    barney - ->> bambam:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__food_response_from_barney_to_bambam>(kindness) food response</text>
+                    bambam - ->> mrflintstone:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__response_from_bambam_to_mrflintstone>(kindness) response</text>
+                    mrflintstone ->> barney:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__bite_of_burger_from_mrflintstone_to_barney>(kindness) bite of burger</text>
+                    end
+                    @enduml
+
+                    PlantUML version 1.2018.14(Fri Dec 21 16:33:16 GMT 2018)
+                    (GPL source distribution)
+                    Java Runtime: OpenJDK Runtime Environment
+                    JVM: OpenJDK 64-Bit Server VM
+                    Java Version: 11.0.2+9
+                    Operating System: Mac OS X
+                    OS Version: 10.14.4
+                    Default Encoding: UTF-8
+                    Language: en
+                    Country: GB
+                    -->
+                    </g>
+                </svg>
+
+            </div></div>
+
+        </div>
+
+    </div>
+</div>
+<div class="testmethod section">
+    <a id="bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleSequenceDiagramsOnOnePage"></a>
+    <h2 class="section-header">Bambam gets food for his dad repeated so we can check multiple sequence diagrams on one page</h2>
+    <div class="section-body">
+
+
+        <div class="scenario" id="-930009498_0_-1546608972">
+            <a id=""></a>
+            <h2>Specification</h2>
+            <pre class="highlight specification">
+Given mr flintstone is &quot;hungry&quot;
+When he demands food from bambam
+Then bambam places a burger order with barney &quot;a burger&quot;
+
+When barney gives to bambam &quot;1 burger&quot;
+Then bambam gives to mr flintstone &quot;1 burger&quot;
+Then mr flintstone shares his food with barney because he likes him</pre>
+            <h3 class="logKey">Test results:</h3>
+            <pre class='highlight results test-passed'>
+Test passed</pre>
+
+            <h3 class="logKey">Interesting Givens</h3>
+
+            <table class="interestingGivens logValue">
+                <tr>
+                    <th class="key">String</th>
+                    <td class="interestingGiven">Flintstone is hungry</td>
+                </tr>
+
+            </table>
+
+            <h3 class="logKey" logkey="food_demand_from_mrflintstone_to_bambam">food demand from mrflintstone to bambam</h3>
+            <div class="logValue highlight String" >I want a burger</div>
+            <h3 class="logKey" logkey="food_order_from_bambam_to_barney">food order from bambam to barney</h3>
+            <div class="logValue highlight String" >Get me a burger</div>
+            <h3 class="logKey" logkey="_kindness__food_response_from_barney_to_bambam">(kindness) food response from barney to bambam</h3>
+            <div class="logValue highlight String" >1 burger here u go</div>
+            <h3 class="logKey" logkey="_kindness__response_from_bambam_to_mrflintstone">(kindness) response from bambam to mrflintstone</h3>
+            <div class="logValue highlight String" >here is your 1 burger</div>
+            <h3 class="logKey" logkey="_kindness__bite_of_burger_from_mrflintstone_to_barney">(kindness) bite of burger from mrflintstone to barney</h3>
+            <div class="logValue highlight String" >have some of my burger because I like you</div>
+            <h3 class="logKey" logkey="Sequence_Diagram">Sequence Diagram</h3>
+            <div class="logValue highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="344px" preserveAspectRatio="none" style="width:490px;height:344px;" version="1.1" viewBox="0 0 490 344" width="490px" zoomAndPan="magnify">
+                    <defs>
+                        <linearGradient id="gpbn5bs1hej9q0" x1="0%" x2="100%" y1="100%" y2="0%">
+                            <stop offset="0%" stop-color="#C0C0C0" />
+                            <stop offset="100%" stop-color="#808080" />
+                        </linearGradient>
+                        <linearGradient id="gpbn5bs1hej9q1" x1="0%" x2="100%" y1="100%" y2="0%">
+                            <stop offset="0%" stop-color="#527BC6" />
+                            <stop offset="100%" stop-color="#D1DBEF" />
+                        </linearGradient>
+                    </defs>
+                    <g>
+                        <rect fill="#D7E0F2" height="141.2422" style="stroke: #BBBBBB; stroke-width: 2.0;" width="465.5" x="13" y="139.6426" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="80" y="40.0215" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="240.5" y="40.0215" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="433.5" y="40.0215" />
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="26" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="23" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="101" x="30" y="26.4355">mrflintstone</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="26" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="23" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="101" x="30" y="320.3203">mrflintstone</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="200.5" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="197.5" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="72" x="204.5" y="26.4355">bambam</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="200.5" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="197.5" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="72" x="204.5" y="320.3203">bambam</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="401.5" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="398.5" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="56" x="405.5" y="26.4355">barney</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="401.5" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="398.5" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="56" x="405.5" y="320.3203">barney</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="82.5" x2="238.5" y1="75.0215" y2="75.0215" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="230.5" x2="240.5" y1="70.0215" y2="75.0215" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="230.5" x2="240.5" y1="80.0215" y2="75.0215" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="food_demand_from_mrflintstone_to_bambam" textLength="83" x="97.5" y="68.5898">food demand</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="242.5" x2="431.5" y1="116.332" y2="116.332" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="111.332" y2="116.332" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="121.332" y2="116.332" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="food_order_from_bambam_to_barney" textLength="66" x="257.5" y="109.9004">food order</text>
+                        <rect fill="none" height="141.2422" style="stroke: #BBBBBB; stroke-width: 2.0;" width="465.5" x="13" y="139.6426" />
+                        <polygon fill="#527BC6" points="13,139.6426,115,139.6426,115,146.6426,105,156.6426,13,156.6426,13,139.6426" style="stroke: #BBBBBB; stroke-width: 2.0;" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="13" x2="478.5" y1="139.6426" y2="139.6426" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="478.5" x2="478.5" y1="139.6426" y2="280.8848" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="13" x2="13" y1="156.6426" y2="280.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="57" x="28" y="153.2109">kindness</text>
+                        <line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 5.0,2.0;" x1="242.5" x2="431.5" y1="181.9531" y2="181.9531" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="250.5" x2="240.5" y1="176.9531" y2="181.9531" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="250.5" x2="240.5" y1="186.9531" y2="181.9531" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__food_response_from_barney_to_bambam" textLength="159" x="257.5" y="175.5215">(kindness) food response</text>
+                        <line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 5.0,2.0;" x1="82.5" x2="238.5" y1="223.2637" y2="223.2637" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="90.5" x2="80.5" y1="218.2637" y2="223.2637" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="90.5" x2="80.5" y1="228.2637" y2="223.2637" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__response_from_bambam_to_mrflintstone" textLength="126" x="97.5" y="216.832">(kindness) response</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="82.5" x2="431.5" y1="264.5742" y2="264.5742" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="259.5742" y2="264.5742" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="269.5742" y2="264.5742" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__bite_of_burger_from_mrflintstone_to_barney" textLength="155" x="97.5" y="258.1426">(kindness) bite of burger</text>
+                        <!--
+                    @startuml
+                    skin BlueModern
+                    mrflintstone ->> bambam:<text class=sequence_diagram_clickable sequence_diagram_message_id=food_demand_from_mrflintstone_to_bambam>food demand</text>
+                    bambam ->> barney:<text class=sequence_diagram_clickable sequence_diagram_message_id=food_order_from_bambam_to_barney>food order</text>
+                    group kindness
+                    barney - ->> bambam:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__food_response_from_barney_to_bambam>(kindness) food response</text>
+                    bambam - ->> mrflintstone:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__response_from_bambam_to_mrflintstone>(kindness) response</text>
+                    mrflintstone ->> barney:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__bite_of_burger_from_mrflintstone_to_barney>(kindness) bite of burger</text>
+                    end
+                    @enduml
+
+                    PlantUML version 1.2018.14(Fri Dec 21 16:33:16 GMT 2018)
+                    (GPL source distribution)
+                    Java Runtime: OpenJDK Runtime Environment
+                    JVM: OpenJDK 64-Bit Server VM
+                    Java Version: 11.0.2+9
+                    Operating System: Mac OS X
+                    OS Version: 10.14.4
+                    Default Encoding: UTF-8
+                    Language: en
+                    Country: GB
+                    -->
+                    </g>
+                </svg>
+
+            </div></div>
+
+        </div>
+
+    </div>
+</div>
+<div class="testmethod section">
+    <a id="bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod"></a>
+    <h2 class="section-header">Bambam gets food for his dad repeated so we can check multiple scenarios per test method</h2>
+    <div class="section-body">
+
+        <h3>Scenarios</h3>
+
+        <table class="scenarios">
+            <thead>
+            <tr>
+                <th>Feeling</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class='test-passed'><a href="#bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(starving)">
+                    starving
+                </a></td>
+            </tr>
+            <tr>
+                <td class='test-passed'><a href="#bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(peckish)">
+                    peckish
+                </a></td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <div class="scenario" id="1899422076_-1303561665_1168937711">
+            <a id="bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(starving)"></a>
+            <h2>Specification</h2>
+            <pre class="highlight specification">
+Given mr flintstone is &quot;starving&quot;
+When he demands food from bambam
+Then bambam places a burger order with barney &quot;a burger&quot;
+
+When barney gives to bambam &quot;1 burger&quot;
+Then bambam gives to mr flintstone &quot;1 burger&quot;
+
+Then mr flintstone shares his food with barney because he likes him</pre>
+            <h3 class="logKey">Test results:</h3>
+            <pre class='highlight results test-passed'>
+Test passed</pre>
+
+            <h3 class="logKey">Interesting Givens</h3>
+
+            <table class="interestingGivens logValue">
+                <tr>
+                    <th class="key">String</th>
+                    <td class="interestingGiven">Flintstone is starving</td>
+                </tr>
+
+            </table>
+
+            <h3 class="logKey" logkey="food_demand_from_mrflintstone_to_bambam">food demand from mrflintstone to bambam</h3>
+            <div class="logValue highlight String" >I want a burger</div>
+            <h3 class="logKey" logkey="food_order_from_bambam_to_barney">food order from bambam to barney</h3>
+            <div class="logValue highlight String" >Get me a burger</div>
+            <h3 class="logKey" logkey="_kindness__food_response_from_barney_to_bambam">(kindness) food response from barney to bambam</h3>
+            <div class="logValue highlight String" >1 burger here u go</div>
+            <h3 class="logKey" logkey="_kindness__response_from_bambam_to_mrflintstone">(kindness) response from bambam to mrflintstone</h3>
+            <div class="logValue highlight String" >here is your 1 burger</div>
+            <h3 class="logKey" logkey="_kindness__bite_of_burger_from_mrflintstone_to_barney">(kindness) bite of burger from mrflintstone to barney</h3>
+            <div class="logValue highlight String" >have some of my burger because I like you</div>
+            <h3 class="logKey" logkey="Sequence_Diagram">Sequence Diagram</h3>
+            <div class="logValue highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="344px" preserveAspectRatio="none" style="width:490px;height:344px;" version="1.1" viewBox="0 0 490 344" width="490px" zoomAndPan="magnify">
+                    <defs>
+                        <linearGradient id="gpbn5bs1hej9q0" x1="0%" x2="100%" y1="100%" y2="0%">
+                            <stop offset="0%" stop-color="#C0C0C0" />
+                            <stop offset="100%" stop-color="#808080" />
+                        </linearGradient>
+                        <linearGradient id="gpbn5bs1hej9q1" x1="0%" x2="100%" y1="100%" y2="0%">
+                            <stop offset="0%" stop-color="#527BC6" />
+                            <stop offset="100%" stop-color="#D1DBEF" />
+                        </linearGradient>
+                    </defs>
+                    <g>
+                        <rect fill="#D7E0F2" height="141.2422" style="stroke: #BBBBBB; stroke-width: 2.0;" width="465.5" x="13" y="139.6426" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="80" y="40.0215" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="240.5" y="40.0215" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="433.5" y="40.0215" />
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="26" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="23" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="101" x="30" y="26.4355">mrflintstone</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="26" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="23" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="101" x="30" y="320.3203">mrflintstone</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="200.5" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="197.5" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="72" x="204.5" y="26.4355">bambam</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="200.5" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="197.5" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="72" x="204.5" y="320.3203">bambam</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="401.5" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="398.5" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="56" x="405.5" y="26.4355">barney</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="401.5" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="398.5" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="56" x="405.5" y="320.3203">barney</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="82.5" x2="238.5" y1="75.0215" y2="75.0215" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="230.5" x2="240.5" y1="70.0215" y2="75.0215" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="230.5" x2="240.5" y1="80.0215" y2="75.0215" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="food_demand_from_mrflintstone_to_bambam" textLength="83" x="97.5" y="68.5898">food demand</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="242.5" x2="431.5" y1="116.332" y2="116.332" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="111.332" y2="116.332" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="121.332" y2="116.332" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="food_order_from_bambam_to_barney" textLength="66" x="257.5" y="109.9004">food order</text>
+                        <rect fill="none" height="141.2422" style="stroke: #BBBBBB; stroke-width: 2.0;" width="465.5" x="13" y="139.6426" />
+                        <polygon fill="#527BC6" points="13,139.6426,115,139.6426,115,146.6426,105,156.6426,13,156.6426,13,139.6426" style="stroke: #BBBBBB; stroke-width: 2.0;" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="13" x2="478.5" y1="139.6426" y2="139.6426" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="478.5" x2="478.5" y1="139.6426" y2="280.8848" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="13" x2="13" y1="156.6426" y2="280.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="57" x="28" y="153.2109">kindness</text>
+                        <line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 5.0,2.0;" x1="242.5" x2="431.5" y1="181.9531" y2="181.9531" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="250.5" x2="240.5" y1="176.9531" y2="181.9531" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="250.5" x2="240.5" y1="186.9531" y2="181.9531" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__food_response_from_barney_to_bambam" textLength="159" x="257.5" y="175.5215">(kindness) food response</text>
+                        <line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 5.0,2.0;" x1="82.5" x2="238.5" y1="223.2637" y2="223.2637" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="90.5" x2="80.5" y1="218.2637" y2="223.2637" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="90.5" x2="80.5" y1="228.2637" y2="223.2637" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__response_from_bambam_to_mrflintstone" textLength="126" x="97.5" y="216.832">(kindness) response</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="82.5" x2="431.5" y1="264.5742" y2="264.5742" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="259.5742" y2="264.5742" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="269.5742" y2="264.5742" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__bite_of_burger_from_mrflintstone_to_barney" textLength="155" x="97.5" y="258.1426">(kindness) bite of burger</text>
+                        <!--
+                    @startuml
+                    skin BlueModern
+                    mrflintstone ->> bambam:<text class=sequence_diagram_clickable sequence_diagram_message_id=food_demand_from_mrflintstone_to_bambam>food demand</text>
+                    bambam ->> barney:<text class=sequence_diagram_clickable sequence_diagram_message_id=food_order_from_bambam_to_barney>food order</text>
+                    group kindness
+                    barney - ->> bambam:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__food_response_from_barney_to_bambam>(kindness) food response</text>
+                    bambam - ->> mrflintstone:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__response_from_bambam_to_mrflintstone>(kindness) response</text>
+                    mrflintstone ->> barney:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__bite_of_burger_from_mrflintstone_to_barney>(kindness) bite of burger</text>
+                    end
+                    @enduml
+
+                    PlantUML version 1.2018.14(Fri Dec 21 16:33:16 GMT 2018)
+                    (GPL source distribution)
+                    Java Runtime: OpenJDK Runtime Environment
+                    JVM: OpenJDK 64-Bit Server VM
+                    Java Version: 11.0.2+9
+                    Operating System: Mac OS X
+                    OS Version: 10.14.4
+                    Default Encoding: UTF-8
+                    Language: en
+                    Country: GB
+                    -->
+                    </g>
+                </svg>
+
+            </div></div>
+
+        </div>
+        <div class="scenario" id="1899422076_-1768393676_1837746044">
+            <a id="bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(peckish)"></a>
+            <h2>Specification</h2>
+            <pre class="highlight specification">
+Given mr flintstone is &quot;peckish&quot;
+When he demands food from bambam
+Then bambam places a burger order with barney &quot;a burger&quot;
+
+When barney gives to bambam &quot;1 burger&quot;
+Then bambam gives to mr flintstone &quot;1 burger&quot;
+
+Then mr flintstone shares his food with barney because he likes him</pre>
+            <h3 class="logKey">Test results:</h3>
+            <pre class='highlight results test-passed'>
+Test passed</pre>
+
+            <h3 class="logKey">Interesting Givens</h3>
+
+            <table class="interestingGivens logValue">
+                <tr>
+                    <th class="key">String</th>
+                    <td class="interestingGiven">Flintstone is peckish</td>
+                </tr>
+
+            </table>
+
+            <h3 class="logKey" logkey="food_demand_from_mrflintstone_to_bambam">food demand from mrflintstone to bambam</h3>
+            <div class="logValue highlight String" >I want a burger</div>
+            <h3 class="logKey" logkey="food_order_from_bambam_to_barney">food order from bambam to barney</h3>
+            <div class="logValue highlight String" >Get me a burger</div>
+            <h3 class="logKey" logkey="_kindness__food_response_from_barney_to_bambam">(kindness) food response from barney to bambam</h3>
+            <div class="logValue highlight String" >1 burger here u go</div>
+            <h3 class="logKey" logkey="_kindness__response_from_bambam_to_mrflintstone">(kindness) response from bambam to mrflintstone</h3>
+            <div class="logValue highlight String" >here is your 1 burger</div>
+            <h3 class="logKey" logkey="_kindness__bite_of_burger_from_mrflintstone_to_barney">(kindness) bite of burger from mrflintstone to barney</h3>
+            <div class="logValue highlight String" >have some of my burger because I like you</div>
+            <h3 class="logKey" logkey="Sequence_Diagram">Sequence Diagram</h3>
+            <div class="logValue highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="344px" preserveAspectRatio="none" style="width:490px;height:344px;" version="1.1" viewBox="0 0 490 344" width="490px" zoomAndPan="magnify">
+                    <defs>
+                        <linearGradient id="gpbn5bs1hej9q0" x1="0%" x2="100%" y1="100%" y2="0%">
+                            <stop offset="0%" stop-color="#C0C0C0" />
+                            <stop offset="100%" stop-color="#808080" />
+                        </linearGradient>
+                        <linearGradient id="gpbn5bs1hej9q1" x1="0%" x2="100%" y1="100%" y2="0%">
+                            <stop offset="0%" stop-color="#527BC6" />
+                            <stop offset="100%" stop-color="#D1DBEF" />
+                        </linearGradient>
+                    </defs>
+                    <g>
+                        <rect fill="#D7E0F2" height="141.2422" style="stroke: #BBBBBB; stroke-width: 2.0;" width="465.5" x="13" y="139.6426" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="80" y="40.0215" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="240.5" y="40.0215" />
+                        <rect fill="#989898" height="257.8633" style="stroke: #989898; stroke-width: 1.0;" width="2" x="433.5" y="40.0215" />
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="26" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="23" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="101" x="30" y="26.4355">mrflintstone</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="26" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="115" x="23" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="101" x="30" y="320.3203">mrflintstone</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="200.5" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="197.5" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="72" x="204.5" y="26.4355">bambam</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="200.5" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="86" x="197.5" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="72" x="204.5" y="320.3203">bambam</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="401.5" y="6" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="398.5" y="3" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="56" x="405.5" y="26.4355">barney</text>
+                        <rect fill="url(#gpbn5bs1hej9q0)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="401.5" y="299.8848" />
+                        <rect fill="url(#gpbn5bs1hej9q1)" height="34.0215" rx="10" ry="10" style="stroke: none; stroke-width: 1.0;" width="70" x="398.5" y="296.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="17" lengthAdjust="spacingAndGlyphs" textLength="56" x="405.5" y="320.3203">barney</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="82.5" x2="238.5" y1="75.0215" y2="75.0215" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="230.5" x2="240.5" y1="70.0215" y2="75.0215" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="230.5" x2="240.5" y1="80.0215" y2="75.0215" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="food_demand_from_mrflintstone_to_bambam" textLength="83" x="97.5" y="68.5898">food demand</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="242.5" x2="431.5" y1="116.332" y2="116.332" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="111.332" y2="116.332" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="121.332" y2="116.332" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="food_order_from_bambam_to_barney" textLength="66" x="257.5" y="109.9004">food order</text>
+                        <rect fill="none" height="141.2422" style="stroke: #BBBBBB; stroke-width: 2.0;" width="465.5" x="13" y="139.6426" />
+                        <polygon fill="#527BC6" points="13,139.6426,115,139.6426,115,146.6426,105,156.6426,13,156.6426,13,139.6426" style="stroke: #BBBBBB; stroke-width: 2.0;" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="13" x2="478.5" y1="139.6426" y2="139.6426" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="478.5" x2="478.5" y1="139.6426" y2="280.8848" />
+                        <line style="stroke: #BBBBBB; stroke-width: 2.0;" x1="13" x2="13" y1="156.6426" y2="280.8848" />
+                        <text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="57" x="28" y="153.2109">kindness</text>
+                        <line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 5.0,2.0;" x1="242.5" x2="431.5" y1="181.9531" y2="181.9531" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="250.5" x2="240.5" y1="176.9531" y2="181.9531" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="250.5" x2="240.5" y1="186.9531" y2="181.9531" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__food_response_from_barney_to_bambam" textLength="159" x="257.5" y="175.5215">(kindness) food response</text>
+                        <line style="stroke: #000000; stroke-width: 1.0; stroke-dasharray: 5.0,2.0;" x1="82.5" x2="238.5" y1="223.2637" y2="223.2637" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="90.5" x2="80.5" y1="218.2637" y2="223.2637" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="90.5" x2="80.5" y1="228.2637" y2="223.2637" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__response_from_bambam_to_mrflintstone" textLength="126" x="97.5" y="216.832">(kindness) response</text>
+                        <line style="stroke: #000000; stroke-width: 2.0;" x1="82.5" x2="431.5" y1="264.5742" y2="264.5742" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="259.5742" y2="264.5742" />
+                        <line style="stroke: #000000; stroke-width: 1.5;" x1="423.5" x2="433.5" y1="269.5742" y2="264.5742" />
+                        <polygon fill="#000000" points="" style="stroke: #000000; stroke-width: 1.0;" />
+                        <text class="sequence_diagram_clickable" fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" sequence_diagram_message_id="_kindness__bite_of_burger_from_mrflintstone_to_barney" textLength="155" x="97.5" y="258.1426">(kindness) bite of burger</text>
+                        <!--
+                    @startuml
+                    skin BlueModern
+                    mrflintstone ->> bambam:<text class=sequence_diagram_clickable sequence_diagram_message_id=food_demand_from_mrflintstone_to_bambam>food demand</text>
+                    bambam ->> barney:<text class=sequence_diagram_clickable sequence_diagram_message_id=food_order_from_bambam_to_barney>food order</text>
+                    group kindness
+                    barney - ->> bambam:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__food_response_from_barney_to_bambam>(kindness) food response</text>
+                    bambam - ->> mrflintstone:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__response_from_bambam_to_mrflintstone>(kindness) response</text>
+                    mrflintstone ->> barney:<text class=sequence_diagram_clickable sequence_diagram_message_id=_kindness__bite_of_burger_from_mrflintstone_to_barney>(kindness) bite of burger</text>
+                    end
+                    @enduml
+
+                    PlantUML version 1.2018.14(Fri Dec 21 16:33:16 GMT 2018)
+                    (GPL source distribution)
+                    Java Runtime: OpenJDK Runtime Environment
+                    JVM: OpenJDK 64-Bit Server VM
+                    Java Version: 11.0.2+9
+                    Operating System: Mac OS X
+                    OS Version: 10.14.4
+                    Default Encoding: UTF-8
+                    Language: en
+                    Country: GB
+                    -->
+                    </g>
+                </svg>
+
+            </div></div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div class="footer">
+
+    <script type="text/javascript">
+            // <![CDATA[
+// XRegExp 1.5.0
+// (c) 2007-2010 Steven Levithan
+// MIT License
+// <http://xregexp.com>
+// Provides an augmented, extensible, cross-browser implementation of regular expressions,
+// including support for additional syntax, flags, and methods
+
+var XRegExp;
+
+if (XRegExp) {
+    // Avoid running twice, since that would break references to native globals
+    throw Error("can't load XRegExp twice in the same frame");
+}
+
+// Run within an anonymous function to protect variables and avoid new globals
+(function () {
+
+    //---------------------------------
+    //  Constructor
+    //---------------------------------
+
+    // Accepts a pattern and flags; returns a new, extended `RegExp` object. Differs from a native
+    // regular expression in that additional syntax and flags are supported and cross-browser
+    // syntax inconsistencies are ameliorated. `XRegExp(/regex/)` clones an existing regex and
+    // converts to type XRegExp
+    XRegExp = function (pattern, flags) {
+        var output = [],
+            currScope = XRegExp.OUTSIDE_CLASS,
+            pos = 0,
+            context, tokenResult, match, chr, regex;
+
+        if (XRegExp.isRegExp(pattern)) {
+            if (flags !== undefined)
+                throw TypeError("can't supply flags when constructing one RegExp from another");
+            return clone(pattern);
+        }
+        // Tokens become part of the regex construction process, so protect against infinite
+        // recursion when an XRegExp is constructed within a token handler or trigger
+        if (isInsideConstructor)
+            throw Error("can't call the XRegExp constructor within token definition functions");
+
+        flags = flags || "";
+        context = { // `this` object for custom tokens
+            hasNamedCapture: false,
+            captureNames: [],
+            hasFlag: function (flag) {return flags.indexOf(flag) > -1;},
+            setFlag: function (flag) {flags += flag;}
+        };
+
+        while (pos < pattern.length) {
+            // Check for custom tokens at the current position
+            tokenResult = runTokens(pattern, pos, currScope, context);
+
+            if (tokenResult) {
+                output.push(tokenResult.output);
+                pos += (tokenResult.match[0].length || 1);
+            } else {
+                // Check for native multicharacter metasequences (excluding character classes) at
+                // the current position
+                if (match = real.exec.call(nativeTokens[currScope], pattern.slice(pos))) {
+                    output.push(match[0]);
+                    pos += match[0].length;
+                } else {
+                    chr = pattern.charAt(pos);
+                    if (chr === "[")
+                        currScope = XRegExp.INSIDE_CLASS;
+                    else if (chr === "]")
+                        currScope = XRegExp.OUTSIDE_CLASS;
+                    // Advance position one character
+                    output.push(chr);
+                    pos++;
+                }
+            }
+        }
+
+        regex = RegExp(output.join(""), real.replace.call(flags, flagClip, ""));
+        regex._xregexp = {
+            source: pattern,
+            captureNames: context.hasNamedCapture ? context.captureNames : null
+        };
+        return regex;
+    };
+
+
+    //---------------------------------
+    //  Public properties
+    //---------------------------------
+
+    XRegExp.version = "1.5.0";
+
+    // Token scope bitflags
+    XRegExp.INSIDE_CLASS = 1;
+    XRegExp.OUTSIDE_CLASS = 2;
+
+
+    //---------------------------------
+    //  Private variables
+    //---------------------------------
+
+    var replacementToken = /\$(?:(\d\d?|[$&`'])|{([$\w]+)})/g,
+        flagClip = /[^gimy]+|([\s\S])(?=[\s\S]*\1)/g, // Nonnative and duplicate flags
+        quantifier = /^(?:[?*+]|{\d+(?:,\d*)?})\??/,
+        isInsideConstructor = false,
+        tokens = [],
+        // Copy native globals for reference ("native" is an ES3 reserved keyword)
+        real = {
+            exec: RegExp.prototype.exec,
+            test: RegExp.prototype.test,
+            match: String.prototype.match,
+            replace: String.prototype.replace,
+            split: String.prototype.split
+        },
+        compliantExecNpcg = real.exec.call(/()??/, "")[1] === undefined, // check `exec` handling of nonparticipating capturing groups
+        compliantLastIndexIncrement = function () {
+            var x = /^/g;
+            real.test.call(x, "");
+            return !x.lastIndex;
+        }(),
+        compliantLastIndexReset = function () {
+            var x = /x/g;
+            real.replace.call("x", x, "");
+            return !x.lastIndex;
+        }(),
+        hasNativeY = RegExp.prototype.sticky !== undefined,
+        nativeTokens = {};
+
+    // `nativeTokens` match native multicharacter metasequences only (including deprecated octals,
+    // excluding character classes)
+    nativeTokens[XRegExp.INSIDE_CLASS] = /^(?:\\(?:[0-3][0-7]{0,2}|[4-7][0-7]?|x[\dA-Fa-f]{2}|u[\dA-Fa-f]{4}|c[A-Za-z]|[\s\S]))/;
+    nativeTokens[XRegExp.OUTSIDE_CLASS] = /^(?:\\(?:0(?:[0-3][0-7]{0,2}|[4-7][0-7]?)?|[1-9]\d*|x[\dA-Fa-f]{2}|u[\dA-Fa-f]{4}|c[A-Za-z]|[\s\S])|\(\?[:=!]|[?*+]\?|{\d+(?:,\d*)?}\??)/;
+
+
+    //---------------------------------
+    //  Public methods
+    //---------------------------------
+
+    // Lets you extend or change XRegExp syntax and create custom flags. This is used internally by
+    // the XRegExp library and can be used to create XRegExp plugins. This function is intended for
+    // users with advanced knowledge of JavaScript's regular expression syntax and behavior. It can
+    // be disabled by `XRegExp.freezeTokens`
+    XRegExp.addToken = function (regex, handler, scope, trigger) {
+        tokens.push({
+            pattern: clone(regex, "g" + (hasNativeY ? "y" : "")),
+            handler: handler,
+            scope: scope || XRegExp.OUTSIDE_CLASS,
+            trigger: trigger || null
+        });
+    };
+
+    // Accepts a pattern and flags; returns an extended `RegExp` object. If the pattern and flag
+    // combination has previously been cached, the cached copy is returned; otherwise the newly
+    // created regex is cached
+    XRegExp.cache = function (pattern, flags) {
+        var key = pattern + "/" + (flags || "");
+        return XRegExp.cache[key] || (XRegExp.cache[key] = XRegExp(pattern, flags));
+    };
+
+    // Accepts a `RegExp` instance; returns a copy with the `/g` flag set. The copy has a fresh
+    // `lastIndex` (set to zero). If you want to copy a regex without forcing the `global`
+    // property, use `XRegExp(regex)`. Do not use `RegExp(regex)` because it will not preserve
+    // special properties required for named capture
+    XRegExp.copyAsGlobal = function (regex) {
+        return clone(regex, "g");
+    };
+
+    // Accepts a string; returns the string with regex metacharacters escaped. The returned string
+    // can safely be used at any point within a regex to match the provided literal string. Escaped
+    // characters are [ ] { } ( ) * + ? - . , \ ^ $ | # and whitespace
+    XRegExp.escape = function (str) {
+        return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    };
+
+    // Accepts a string to search, regex to search with, position to start the search within the
+    // string (default: 0), and an optional Boolean indicating whether matches must start at-or-
+    // after the position or at the specified position only. This function ignores the `lastIndex`
+    // property of the provided regex
+    XRegExp.execAt = function (str, regex, pos, anchored) {
+        regex = clone(regex, "g" + ((anchored && hasNativeY) ? "y" : ""));
+        regex.lastIndex = pos = pos || 0;
+        var match = regex.exec(str);
+        if (anchored)
+            return (match && match.index === pos) ? match : null;
+        else
+            return match;
+    };
+
+    // Breaks the unrestorable link to XRegExp's private list of tokens, thereby preventing
+    // syntax and flag changes. Should be run after XRegExp and any plugins are loaded
+    XRegExp.freezeTokens = function () {
+        XRegExp.addToken = function () {
+            throw Error("can't run addToken after freezeTokens");
+        };
+    };
+
+    // Accepts any value; returns a Boolean indicating whether the argument is a `RegExp` object.
+    // Note that this is also `true` for regex literals and regexes created by the `XRegExp`
+    // constructor. This works correctly for variables created in another frame, when `instanceof`
+    // and `constructor` checks would fail to work as intended
+    XRegExp.isRegExp = function (o) {
+        return Object.prototype.toString.call(o) === "[object RegExp]";
+    };
+
+    // Executes `callback` once per match within `str`. Provides a simpler and cleaner way to
+    // iterate over regex matches compared to the traditional approaches of subverting
+    // `String.prototype.replace` or repeatedly calling `exec` within a `while` loop
+    XRegExp.iterate = function (str, origRegex, callback, context) {
+        var regex = clone(origRegex, "g"),
+            i = -1, match;
+        while (match = regex.exec(str)) {
+            callback.call(context, match, ++i, str, regex);
+            if (regex.lastIndex === match.index)
+                regex.lastIndex++;
+        }
+        if (origRegex.global)
+            origRegex.lastIndex = 0;
+    };
+
+    // Accepts a string and an array of regexes; returns the result of using each successive regex
+    // to search within the matches of the previous regex. The array of regexes can also contain
+    // objects with `regex` and `backref` properties, in which case the named or numbered back-
+    // references specified are passed forward to the next regex or returned. E.g.:
+    // var xregexpImgFileNames = XRegExp.matchChain(html, [
+    //     {regex: /<img\b([^>]+)>/i, backref: 1}, // <img> tag attributes
+    //     {regex: XRegExp('(?ix) \\s src=" (?<src> [^"]+ )'), backref: "src"}, // src attribute values
+    //     {regex: XRegExp("^http://xregexp\\.com(/[^#?]+)", "i"), backref: 1}, // xregexp.com paths
+    //     /[^\/]+$/ // filenames (strip directory paths)
+    // ]);
+    XRegExp.matchChain = function (str, chain) {
+        return function recurseChain (values, level) {
+            var item = chain[level].regex ? chain[level] : {regex: chain[level]},
+                regex = clone(item.regex, "g"),
+                matches = [], i;
+            for (i = 0; i < values.length; i++) {
+                XRegExp.iterate(values[i], regex, function (match) {
+                    matches.push(item.backref ? (match[item.backref] || "") : match[0]);
+                });
+            }
+            return ((level === chain.length - 1) || !matches.length) ?
+                matches : recurseChain(matches, level + 1);
+        }([str], 0);
+    };
+
+
+    //---------------------------------
+    //  New RegExp prototype methods
+    //---------------------------------
+
+    // Accepts a context object and arguments array; returns the result of calling `exec` with the
+    // first value in the arguments array. the context is ignored but is accepted for congruity
+    // with `Function.prototype.apply`
+    RegExp.prototype.apply = function (context, args) {
+        return this.exec(args[0]);
+    };
+
+    // Accepts a context object and string; returns the result of calling `exec` with the provided
+    // string. the context is ignored but is accepted for congruity with `Function.prototype.call`
+    RegExp.prototype.call = function (context, str) {
+        return this.exec(str);
+    };
+
+
+    //---------------------------------
+    //  Overriden native methods
+    //---------------------------------
+
+    // Adds named capture support (with backreferences returned as `result.name`), and fixes two
+    // cross-browser issues per ES3:
+    // - Captured values for nonparticipating capturing groups should be returned as `undefined`,
+    //   rather than the empty string.
+    // - `lastIndex` should not be incremented after zero-length matches.
+    RegExp.prototype.exec = function (str) {
+        var match = real.exec.apply(this, arguments),
+            name, r2;
+        if (match) {
+            // Fix browsers whose `exec` methods don't consistently return `undefined` for
+            // nonparticipating capturing groups
+            if (!compliantExecNpcg && match.length > 1 && indexOf(match, "") > -1) {
+                r2 = RegExp(this.source, real.replace.call(getNativeFlags(this), "g", ""));
+                // Using `str.slice(match.index)` rather than `match[0]` in case lookahead allowed
+                // matching due to characters outside the match
+                real.replace.call(str.slice(match.index), r2, function () {
+                    for (var i = 1; i < arguments.length - 2; i++) {
+                        if (arguments[i] === undefined)
+                            match[i] = undefined;
+                    }
+                });
+            }
+            // Attach named capture properties
+            if (this._xregexp && this._xregexp.captureNames) {
+                for (var i = 1; i < match.length; i++) {
+                    name = this._xregexp.captureNames[i - 1];
+                    if (name)
+                       match[name] = match[i];
+                }
+            }
+            // Fix browsers that increment `lastIndex` after zero-length matches
+            if (!compliantLastIndexIncrement && this.global && !match[0].length && (this.lastIndex > match.index))
+                this.lastIndex--;
+        }
+        return match;
+    };
+
+    // Don't override `test` if it won't change anything
+    if (!compliantLastIndexIncrement) {
+        // Fix browser bug in native method
+        RegExp.prototype.test = function (str) {
+            // Use the native `exec` to skip some processing overhead, even though the overriden
+            // `exec` would take care of the `lastIndex` fix
+            var match = real.exec.call(this, str);
+            // Fix browsers that increment `lastIndex` after zero-length matches
+            if (match && this.global && !match[0].length && (this.lastIndex > match.index))
+                this.lastIndex--;
+            return !!match;
+        };
+    }
+
+    // Adds named capture support and fixes browser bugs in native method
+    String.prototype.match = function (regex) {
+        if (!XRegExp.isRegExp(regex))
+            regex = RegExp(regex); // Native `RegExp`
+        if (regex.global) {
+            var result = real.match.apply(this, arguments);
+            regex.lastIndex = 0; // Fix IE bug
+            return result;
+        }
+        return regex.exec(this); // Run the altered `exec`
+    };
+
+    // Adds support for `${n}` tokens for named and numbered backreferences in replacement text,
+    // and provides named backreferences to replacement functions as `arguments[0].name`. Also
+    // fixes cross-browser differences in replacement text syntax when performing a replacement
+    // using a nonregex search value, and the value of replacement regexes' `lastIndex` property
+    // during replacement iterations. Note that this doesn't support SpiderMonkey's proprietary
+    // third (`flags`) parameter
+    String.prototype.replace = function (search, replacement) {
+        var isRegex = XRegExp.isRegExp(search),
+            captureNames, result, str;
+
+        // There are many combinations of search/replacement types/values and browser bugs that
+        // preclude passing to native `replace`, so just keep this check relatively simple
+        if (isRegex && typeof replacement.valueOf() === "string" && replacement.indexOf("${") === -1 && compliantLastIndexReset)
+            return real.replace.apply(this, arguments);
+
+        if (!isRegex)
+            search = search + ""; // Type conversion
+        else if (search._xregexp)
+            captureNames = search._xregexp.captureNames; // Array or `null`
+
+        if (typeof replacement === "function") {
+            result = real.replace.call(this, search, function () {
+                if (captureNames) {
+                    // Change the `arguments[0]` string primitive to a String object which can store properties
+                    arguments[0] = new String(arguments[0]);
+                    // Store named backreferences on `arguments[0]`
+                    for (var i = 0; i < captureNames.length; i++) {
+                        if (captureNames[i])
+                            arguments[0][captureNames[i]] = arguments[i + 1];
+                    }
+                }
+                // Update `lastIndex` before calling `replacement`
+                if (isRegex && search.global)
+                    search.lastIndex = arguments[arguments.length - 2] + arguments[0].length;
+                return replacement.apply(null, arguments);
+            });
+        } else {
+            str = this + ""; // Type conversion, so `args[args.length - 1]` will be a string (given nonstring `this`)
+            result = real.replace.call(str, search, function () {
+                var args = arguments; // Keep this function's `arguments` available through closure
+                return real.replace.call(replacement, replacementToken, function ($0, $1, $2) {
+                    // Numbered backreference (without delimiters) or special variable
+                    if ($1) {
+                        switch ($1) {
+                            case "$": return "$";
+                            case "&": return args[0];
+                            case "`": return args[args.length - 1].slice(0, args[args.length - 2]);
+                            case "'": return args[args.length - 1].slice(args[args.length - 2] + args[0].length);
+                            // Numbered backreference
+                            default:
+                                // What does "$10" mean?
+                                // - Backreference 10, if 10 or more capturing groups exist
+                                // - Backreference 1 followed by "0", if 1-9 capturing groups exist
+                                // - Otherwise, it's the string "$10"
+                                // Also note:
+                                // - Backreferences cannot be more than two digits (enforced by `replacementToken`)
+                                // - "$01" is equivalent to "$1" if a capturing group exists, otherwise it's the string "$01"
+                                // - There is no "$0" token ("$&" is the entire match)
+                                var literalNumbers = "";
+                                $1 = +$1; // Type conversion; drop leading zero
+                                if (!$1) // `$1` was "0" or "00"
+                                    return $0;
+                                while ($1 > args.length - 3) {
+                                    literalNumbers = String.prototype.slice.call($1, -1) + literalNumbers;
+                                    $1 = Math.floor($1 / 10); // Drop the last digit
+                                }
+                                return ($1 ? args[$1] || "" : "$") + literalNumbers;
+                        }
+                    // Named backreference or delimited numbered backreference
+                    } else {
+                        // What does "${n}" mean?
+                        // - Backreference to numbered capture n. Two differences from "$n":
+                        //   - n can be more than two digits
+                        //   - Backreference 0 is allowed, and is the entire match
+                        // - Backreference to named capture n, if it exists and is not a number overridden by numbered capture
+                        // - Otherwise, it's the string "${n}"
+                        var n = +$2; // Type conversion; drop leading zeros
+                        if (n <= args.length - 3)
+                            return args[n];
+                        n = captureNames ? indexOf(captureNames, $2) : -1;
+                        return n > -1 ? args[n + 1] : $0;
+                    }
+                });
+            });
+        }
+
+        if (isRegex && search.global)
+            search.lastIndex = 0; // Fix IE bug
+
+        return result;
+    };
+
+    // A consistent cross-browser, ES3 compliant `split`
+    String.prototype.split = function (s /* separator */, limit) {
+        // If separator `s` is not a regex, use the native `split`
+        if (!XRegExp.isRegExp(s))
+            return real.split.apply(this, arguments);
+
+        var str = this + "", // Type conversion
+            output = [],
+            lastLastIndex = 0,
+            match, lastLength;
+
+        // Behavior for `limit`: if it's...
+        // - `undefined`: No limit
+        // - `NaN` or zero: Return an empty array
+        // - A positive number: Use `Math.floor(limit)`
+        // - A negative number: No limit
+        // - Other: Type-convert, then use the above rules
+        if (limit === undefined || +limit < 0) {
+            limit = Infinity;
+        } else {
+            limit = Math.floor(+limit);
+            if (!limit)
+                return [];
+        }
+
+        // This is required if not `s.global`, and it avoids needing to set `s.lastIndex` to zero
+        // and restore it to its original value when we're done using the regex
+        s = XRegExp.copyAsGlobal(s);
+
+        while (match = s.exec(str)) { // Run the altered `exec` (required for `lastIndex` fix, etc.)
+            if (s.lastIndex > lastLastIndex) {
+                output.push(str.slice(lastLastIndex, match.index));
+
+                if (match.length > 1 && match.index < str.length)
+                    Array.prototype.push.apply(output, match.slice(1));
+
+                lastLength = match[0].length;
+                lastLastIndex = s.lastIndex;
+
+                if (output.length >= limit)
+                    break;
+            }
+
+            if (s.lastIndex === match.index)
+                s.lastIndex++;
+        }
+
+        if (lastLastIndex === str.length) {
+            if (!real.test.call(s, "") || lastLength)
+                output.push("");
+        } else {
+            output.push(str.slice(lastLastIndex));
+        }
+
+        return output.length > limit ? output.slice(0, limit) : output;
+    };
+
+
+    //---------------------------------
+    //  Private helper functions
+    //---------------------------------
+
+    // Supporting function for `XRegExp`, `XRegExp.copyAsGlobal`, etc. Returns a copy of a `RegExp`
+    // instance with a fresh `lastIndex` (set to zero), preserving properties required for named
+    // capture. Also allows adding new flags in the process of copying the regex
+    function clone (regex, additionalFlags) {
+        if (!XRegExp.isRegExp(regex))
+            throw TypeError("type RegExp expected");
+        var x = regex._xregexp;
+        regex = XRegExp(regex.source, getNativeFlags(regex) + (additionalFlags || ""));
+        if (x) {
+            regex._xregexp = {
+                source: x.source,
+                captureNames: x.captureNames ? x.captureNames.slice(0) : null
+            };
+        }
+        return regex;
+    };
+
+    function getNativeFlags (regex) {
+        return (regex.global     ? "g" : "") +
+               (regex.ignoreCase ? "i" : "") +
+               (regex.multiline  ? "m" : "") +
+               (regex.extended   ? "x" : "") + // Proposed for ES4; included in AS3
+               (regex.sticky     ? "y" : "");
+    };
+
+    function runTokens (pattern, index, scope, context) {
+        var i = tokens.length,
+            result, match, t;
+        // Protect against constructing XRegExps within token handler and trigger functions
+        isInsideConstructor = true;
+        // Must reset `isInsideConstructor`, even if a `trigger` or `handler` throws
+        try {
+            while (i--) { // Run in reverse order
+                t = tokens[i];
+                if ((scope & t.scope) && (!t.trigger || t.trigger.call(context))) {
+                    t.pattern.lastIndex = index;
+                    match = t.pattern.exec(pattern); // Running the altered `exec` here allows use of named backreferences, etc.
+                    if (match && match.index === index) {
+                        result = {
+                            output: t.handler.call(context, match, scope),
+                            match: match
+                        };
+                        break;
+                    }
+                }
+            }
+        } catch (err) {
+            throw err;
+        } finally {
+            isInsideConstructor = false;
+        }
+        return result;
+    };
+
+    function indexOf (array, item, from) {
+        if (Array.prototype.indexOf) // Use the native array method if available
+            return array.indexOf(item, from);
+        for (var i = from || 0; i < array.length; i++) {
+            if (array[i] === item)
+                return i;
+        }
+        return -1;
+    };
+
+
+    //---------------------------------
+    //  Built-in tokens
+    //---------------------------------
+
+    // Augment XRegExp's regular expression syntax and flags. Note that when adding tokens, the
+    // third (`scope`) argument defaults to `XRegExp.OUTSIDE_CLASS`
+
+    // Comment pattern: (?# )
+    XRegExp.addToken(
+        /\(\?#[^)]*\)/,
+        function (match) {
+            // Keep tokens separated unless the following token is a quantifier
+            return real.test.call(quantifier, match.input.slice(match.index + match[0].length)) ? "" : "(?:)";
+        }
+    );
+
+    // Capturing group (match the opening parenthesis only).
+    // Required for support of named capturing groups
+    XRegExp.addToken(
+        /\((?!\?)/,
+        function () {
+            this.captureNames.push(null);
+            return "(";
+        }
+    );
+
+    // Named capturing group (match the opening delimiter only): (?<name>
+    XRegExp.addToken(
+        /\(\?<([$\w]+)>/,
+        function (match) {
+            this.captureNames.push(match[1]);
+            this.hasNamedCapture = true;
+            return "(";
+        }
+    );
+
+    // Named backreference: \k<name>
+    XRegExp.addToken(
+        /\\k<([\w$]+)>/,
+        function (match) {
+            var index = indexOf(this.captureNames, match[1]);
+            // Keep backreferences separate from subsequent literal numbers. Preserve back-
+            // references to named groups that are undefined at this point as literal strings
+            return index > -1 ?
+                "\\" + (index + 1) + (isNaN(match.input.charAt(match.index + match[0].length)) ? "" : "(?:)") :
+                match[0];
+        }
+    );
+
+    // Empty character class: [] or [^]
+    XRegExp.addToken(
+        /\[\^?]/,
+        function (match) {
+            // For cross-browser compatibility with ES3, convert [] to \b\B and [^] to [\s\S].
+            // (?!) should work like \b\B, but is unreliable in Firefox
+            return match[0] === "[]" ? "\\b\\B" : "[\\s\\S]";
+        }
+    );
+
+    // Mode modifier at the start of the pattern only, with any combination of flags imsx: (?imsx)
+    // Does not support x(?i), (?-i), (?i-m), (?i: ), (?i)(?m), etc.
+    XRegExp.addToken(
+        /^\(\?([imsx]+)\)/,
+        function (match) {
+            this.setFlag(match[1]);
+            return "";
+        }
+    );
+
+    // Whitespace and comments, in free-spacing (aka extended) mode only
+    XRegExp.addToken(
+        /(?:\s+|#.*)+/,
+        function (match) {
+            // Keep tokens separated unless the following token is a quantifier
+            return real.test.call(quantifier, match.input.slice(match.index + match[0].length)) ? "" : "(?:)";
+        },
+        XRegExp.OUTSIDE_CLASS,
+        function () {return this.hasFlag("x");}
+    );
+
+    // Dot, in dotall (aka singleline) mode only
+    XRegExp.addToken(
+        /\./,
+        function () {return "[\\s\\S]";},
+        XRegExp.OUTSIDE_CLASS,
+        function () {return this.hasFlag("s");}
+    );
+
+
+    //---------------------------------
+    //  Backward compatibility
+    //---------------------------------
+
+    // Uncomment the following block for compatibility with XRegExp 1.0-1.2:
+    /*
+    XRegExp.matchWithinChain = XRegExp.matchChain;
+    RegExp.prototype.addFlags = function (s) {return clone(this, s);};
+    RegExp.prototype.execAll = function (s) {var r = []; XRegExp.iterate(s, this, function (m) {r.push(m);}); return r;};
+    RegExp.prototype.forEachExec = function (s, f, c) {return XRegExp.iterate(s, this, f, c);};
+    RegExp.prototype.validate = function (s) {var r = RegExp("^(?:" + this.source + ")$(?!\\s)", getNativeFlags(this)); if (this.global) this.lastIndex = 0; return s.search(r) === 0;};
+    */
+
+})();
+
+            // ]]>
+        </script>
+
+    <script type="text/javascript">
+            // <![CDATA[
+// Add support for escape sequences: \Q⋯\E and \Q⋯
+XRegExp.addToken(
+    /\\Q([\s\S]*?)(?:\\E|$)/,
+    function (match) {return XRegExp.escape(match[1])},
+    XRegExp.INSIDE_CLASS | XRegExp.OUTSIDE_CLASS
+);
+
+RegExp.prototype.replace = function(str, replacer, nonMatchedReplacer) {
+    nonMatchedReplacer = nonMatchedReplacer || function(value) {
+        return value;
+    };
+    var result = [];
+
+    var position = 0;
+    var match;
+    while (( match = this.exec(str)) != null) {
+        result.push(nonMatchedReplacer(str.substring(position, match.index)));
+        result.push(replacer(match));
+        position = this.lastIndex;
+    }
+    result.push(nonMatchedReplacer(str.substring(position)));
+
+    return result.join("");
+}
+
+function yatspec() {
+}
+
+yatspec.regex = function(expression, flags) {
+    var result =  new XRegExp(expression, flags);
+    result.replace = RegExp.prototype.replace;
+    return result;
+}
+
+yatspec.processed = 'highlighted';
+
+yatspec.highlight = function(element, pairs) {
+    if (pairs.length == 0) {
+        return;
+    }
+
+    if ($(element).children(".nohighlight").length > 0) {
+        return;
+    }
+
+    if ($(element).hasClass(yatspec.processed)) {
+        return;
+    }
+
+    var classes = [];
+    var matchGroups = [];
+    $.each(pairs, function() {
+        matchGroups.push("(", this.pattern, ")", "|");
+        classes.push(this.cssClass);
+    });
+    matchGroups.pop();
+    var regex = yatspec.regex(matchGroups.join(""), "g");
+
+    $(element).html(regex.replace($(element).html(), function(match) {
+        var matches = match.slice(1);
+        for (var i = 0; i < matches.length; i++) {
+            if (matches[i]) {
+                return '<span class="' + classes[i] + '">' + matches[i] + '</span>'
+            }
+        }
+    }));
+
+    $(element).addClass(yatspec.processed);
+}
+
+$(document).ready(function () {
+    var specificationHighlights = [
+        {pattern: '"[^"]*"',     cssClass: "quote" },
+        {pattern: "Given",       cssClass: "keyword" },
+        {pattern: "And",         cssClass: "keyword" },
+        {pattern: "When",        cssClass: "keyword" },
+        {pattern: "Then",        cssClass: "keyword" },
+        {pattern: "[A-Z_]{2,}" , cssClass: "constant" },
+        {pattern: "[\\d]+" ,     cssClass: "literal" }
+    ];
+
+    if (yatspec.additionalSpecificationHighlights) {
+        $.merge(specificationHighlights, yatspec.additionalSpecificationHighlights);
+    }
+
+    $('.highlight.specification').each(function() {
+        yatspec.highlight(this, specificationHighlights);
+    })
+
+    $('.highlight.results').each(function() {
+        yatspec.highlight(this, [
+            {pattern: '"[^"]*"',     cssClass: "quote" },
+            {pattern: "Expected",    cssClass: "keyword" },
+            {pattern: "got",         cssClass: "keyword" },
+            {pattern: "[A-Z_]{2,}" , cssClass: "constant" },
+            {pattern: "[\\d]+" ,     cssClass: "literal" }
+        ]);
+    })
+
+    $('.scenario').each(function() {
+        var escapeRegExp = function(str) {
+            return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+        };
+
+        var interestingGivens = $('.interestingGiven', this).filter(':not(:empty)').map(
+            function() {
+                return [
+                    {pattern: '\\Q"' + $(this).text() + '"\\E',     cssClass: "interestingGiven" },
+                    {pattern: '\\Q' + $(this).text() + "\\E", cssClass: "interestingGiven" },
+                ];
+            }).get();
+
+        $('.logKey', this).click(function() {
+            $(this).next(".logValue").toggleClass("hide");
+        });
+
+        $('.logKey', this).each(function() {
+            $(this).next('.logValue.highlight').each(function() {
+                yatspec.highlight(this, interestingGivens.concat([
+                    {pattern: '"[^"]*"',      cssClass: "quote" },
+                    {pattern: "&lt;[^\\s&]+", cssClass: "keyword" },
+                    {pattern: "\\??&gt;",     cssClass: "keyword" },
+                    {pattern: "\\s[\\w:-]+=", cssClass: "constant" }
+                ]));
+            })
+        });
+
+        $('.logKey', this).next(".logValue").toggleClass("hide");
+    })
+
+}, false);
+
+$(".section-header").click(function () {
+    $sheader = $(this);
+    $sbody = $sheader.siblings(".section-body");
+    $sbody.slideToggle(150);
+});
+
+$('ul.contents > li > a').click(function () {
+    $link = $(this);
+    $('div.testmethod > ' + $link.attr('href')).siblings('.section-body').slideDown(150);
+});
+
+
+            // ]]>
+        </script>
+
+</div>
+
+</body>
+</html>

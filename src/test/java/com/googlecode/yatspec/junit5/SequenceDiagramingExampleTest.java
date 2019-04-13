@@ -12,16 +12,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static com.googlecode.yatspec.junit.WithCustomResultListeners.DEFAULT_DIR_PROPERTY;
 import static com.googlecode.yatspec.junit.WithCustomResultListeners.OUTPUT_DIR_PROPERTY;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultRelativePath;
 import static java.lang.System.getProperty;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
@@ -102,14 +103,14 @@ class SequenceDiagramingExampleTest implements WithTestState {
     public static void verifySequenceHtml() throws IOException {
         String expectedHtml = loadResource("SequenceDiagramingExampleTest.html");
 
-        File outputFile = new File(getProperty(OUTPUT_DIR_PROPERTY, getProperty(DEFAULT_DIR_PROPERTY)),
-                "com/googlecode/yatspec/junit5/SequenceDiagramingExampleTest.html");
-
-        byte[] encoded = Files.readAllBytes(Paths.get(outputFile.getPath()));
-
-        String generatedHtml = new String(encoded, Charset.defaultCharset());
+        String generatedHtml = Files.readString(getHtmlPathFor(SequenceDiagramingExampleTest.class), UTF_8);
 
         assertThat(generatedHtml).isEqualToIgnoringWhitespace(expectedHtml);
+    }
+
+    static Path getHtmlPathFor(Class aClass) {
+        String basePath = getProperty(OUTPUT_DIR_PROPERTY, getProperty(DEFAULT_DIR_PROPERTY));
+        return Paths.get(basePath, htmlResultRelativePath(aClass));
     }
 
     static String loadResource(String name) throws IOException {
