@@ -1,5 +1,8 @@
 package com.googlecode.yatspec.state;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,5 +36,15 @@ public class ScenarioTable {
 
     public boolean isEmpty() {
         return headers.size() == 0 && rows.size() == 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

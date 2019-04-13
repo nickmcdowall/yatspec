@@ -7,6 +7,8 @@ import com.googlecode.totallylazy.Value;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.parsing.Text;
 import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -104,6 +106,7 @@ public class TestMethod {
         return getName() + lineSeparator() + getSpecification();
     }
 
+
     public ScenarioTable getScenarioTable() {
         return scenarioTable;
     }
@@ -125,7 +128,7 @@ public class TestMethod {
     }
 
     public String getUid() {
-        return Integer.toString(hashCode());
+        return Integer.toString(methodName.hashCode());
     }
 
     public String getPackageName() {
@@ -134,5 +137,15 @@ public class TestMethod {
 
     public Class getTestClass() {
         return testClass;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

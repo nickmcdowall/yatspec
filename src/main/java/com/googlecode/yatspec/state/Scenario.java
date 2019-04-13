@@ -2,6 +2,8 @@ package com.googlecode.yatspec.state;
 
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,19 +31,19 @@ public class Scenario {
     }
 
     public Map<LogKey, Object> getLogs() {
-        Map<LogKey, Object> result = new LinkedHashMap<LogKey, Object>();
+        Map<LogKey, Object> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : getCapturedInputAndOutputs().entrySet()) {
-            result.put(new LogKey(entry.getKey()), entry.getValue());       
+            result.put(new LogKey(entry.getKey()), entry.getValue());
         }
         return result;
     }
 
     public Map<String, Object> getCapturedInputAndOutputs() {
-        return testState.capturedInputAndOutputs.getTypes();
+        return testState.getCapturedTypes();
     }
 
     public Map<String, Object> getInterestingGivens() {
-        return testState.interestingGivens.getTypes();
+        return testState.getInterestingTypes();
     }
 
     public void setException(Throwable exception) {
@@ -90,6 +92,16 @@ public class Scenario {
     }
 
     public String getUid() {
-        return Integer.toString(hashCode());
+        return name.hashCode() + "_" + specification.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.rendering.html;
 
-import com.googlecode.totallylazy.Strings;
 import com.googlecode.yatspec.rendering.ContentAtUrl;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.state.Scenario;
@@ -8,6 +7,7 @@ import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -55,7 +55,7 @@ class HtmlResultRendererTest {
                 withCustomHeaderContent(new ContentAtUrl(getClass().getResource("CustomHeaderContent.html"))).
                 render(result);
 
-        assertThat(html, containsString(Strings.toString(getClass().getResource("CustomHeaderContent.html").openStream())));
+        assertThat(html, containsString(readFile("CustomHeaderContent.html")));
     }
 
     @Test
@@ -66,7 +66,11 @@ class HtmlResultRendererTest {
                 withCustomScripts(new ContentAtUrl(getClass().getResource("customJavaScript.js"))).
                 render(result);
 
-        assertThat(html, containsString(Strings.toString(getClass().getResource("customJavaScript.js").openStream())));
+        assertThat(html, containsString(readFile("customJavaScript.js")));
+    }
+
+    private String readFile(String fileName) throws IOException {
+        return new String(getClass().getResourceAsStream(fileName).readAllBytes());
     }
 
     private TestResult aTestResultWithCustomRenderTypeAddedToScenarioLogs() throws Exception {
@@ -78,7 +82,7 @@ class HtmlResultRendererTest {
     private void addToCapturedInputsAndOutputs(TestResult result, Object thingToBeCustomRendered) throws Exception {
         Scenario scenario = result.getTestMethods().get(0).getScenarios().get(0);
         TestState testState = new TestState();
-        testState.capturedInputAndOutputs.add("custom rendered thing", thingToBeCustomRendered);
+        testState.log("custom rendered thing", thingToBeCustomRendered);
         scenario.setTestState(testState);
     }
 

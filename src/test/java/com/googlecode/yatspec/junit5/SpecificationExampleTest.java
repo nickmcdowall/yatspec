@@ -32,9 +32,9 @@ public class SpecificationExampleTest implements WithTestState, WithCustomResult
     private static final String REGEX_PATTERN = "(?:#)([^\\s]+)";
     private static final String REPLACEMENT_PATTERN = "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>";
 
-    private final TestState testState = new TestState();
-    private final CapturedInputAndOutputs capturedInputAndOutputs = testState.capturedInputAndOutputs;
-    private final InterestingGivens interestingGivens = testState.interestingGivens;
+    private final TestState interactions = new TestState();
+//    private final CapturedInputAndOutputs capturedInputAndOutputs = interactions.capturedInputAndOutputs();
+    private final InterestingGivens interestingGivens = interactions.interestingGivens();
 
     @Test
     @Notes("#tag-one")
@@ -79,12 +79,12 @@ public class SpecificationExampleTest implements WithTestState, WithCustomResult
     private Action weTakeTheSquareRoot() {
         return () -> {
             int number = interestingGivens.getType(RADICAND, Integer.class);
-            capturedInputAndOutputs.add(RESULT, sqrt(number));
+            interactions.log(RESULT, sqrt(number));
         };
     }
 
     private Supplier<Double> theResult() {
-        return () -> capturedInputAndOutputs.getType(RESULT, Double.class);
+        return () -> interactions.getType(RESULT, Double.class);
     }
 
     private void then(Supplier<Double> extractor, Matcher<Double> matcher) {
@@ -110,6 +110,6 @@ public class SpecificationExampleTest implements WithTestState, WithCustomResult
 
     @Override
     public TestState testState() {
-        return testState;
+        return interactions;
     }
 }

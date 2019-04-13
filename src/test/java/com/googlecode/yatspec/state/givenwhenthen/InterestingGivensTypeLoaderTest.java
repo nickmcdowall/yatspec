@@ -1,10 +1,10 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InterestingGivensTypeLoaderTest {
@@ -24,7 +24,7 @@ class InterestingGivensTypeLoaderTest {
 
     @Test
     void shouldGetTypeByClass() throws Exception {
-        MatcherAssert.assertThat(InterestingGivensTypeLoader.interestingGivensType(interestingGivens, CLASS).call(), is(VALUE));
+        assertThat(InterestingGivensTypeLoader.interestingGivensType(interestingGivens, CLASS).call(), is(VALUE));
     }
 
     @Test
@@ -37,7 +37,7 @@ class InterestingGivensTypeLoaderTest {
 
     @Test
     void shouldGetTypeByKeyAndClass() throws Exception {
-        MatcherAssert.assertThat(InterestingGivensTypeLoader.interestingGivensType(interestingGivens, KEY, CLASS).call(), is(VALUE));
+        assertThat(InterestingGivensTypeLoader.interestingGivensType(interestingGivens, KEY, CLASS).call(), is(VALUE));
     }
 
     @Test

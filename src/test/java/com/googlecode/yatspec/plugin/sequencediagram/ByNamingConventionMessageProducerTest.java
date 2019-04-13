@@ -1,12 +1,12 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
-import com.googlecode.totallylazy.Arrays;
 import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
+
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 class ByNamingConventionMessageProducerTest {
 
@@ -16,9 +16,10 @@ class ByNamingConventionMessageProducerTest {
     @Test
     void ignoresValuesWithoutNamingConvention() {
         CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add("Shopping Basket", new Object());
-        Object[] messages = new ByNamingConventionMessageProducer().messages(inputAndOutputs).toArray();
 
-        assertThat(Arrays.isEmpty(messages), is(true));
+        Collection<SequenceDiagramMessage> messages = new ByNamingConventionMessageProducer().messages(inputAndOutputs);
+
+        assertThat(messages, is(empty()));
     }
 
     @Test

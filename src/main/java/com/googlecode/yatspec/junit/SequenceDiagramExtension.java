@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.yatspec.plugin.sequencediagram.ByNamingConventionMessageProducer;
 import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
@@ -13,6 +12,7 @@ import java.util.Optional;
 
 public class SequenceDiagramExtension implements TestInstancePostProcessor, BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
+    private static final String SEQUENCE_DIAGRAM = "Sequence Diagram";
     private SequenceDiagramGenerator sequenceDiagramGenerator;
     private Optional<TestState> interactions = Optional.empty();
 
@@ -32,11 +32,8 @@ public class SequenceDiagramExtension implements TestInstancePostProcessor, Befo
 
     @Override
     public void afterTestExecution(ExtensionContext extensionContext) {
-        interactions.ifPresent(testState -> {
-            var messages = new ByNamingConventionMessageProducer().messages(testState.capturedInputAndOutputs);
-            testState.capturedInputAndOutputs.add(
-                    "Sequence Diagram", sequenceDiagramGenerator.generateSequenceDiagram(messages));
-        });
+        interactions.ifPresent(interactions ->
+                interactions.log(SEQUENCE_DIAGRAM, sequenceDiagramGenerator.generateSequenceDiagram(interactions.sequenceMessages())));
     }
 
 }

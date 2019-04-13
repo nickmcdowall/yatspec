@@ -1,6 +1,8 @@
 package com.googlecode.yatspec.parsing;
 
 import com.googlecode.totallylazy.Value;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
@@ -38,5 +40,15 @@ public class JavaSource implements Value<String> {
     @Override
     public String toString() {
         return value();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

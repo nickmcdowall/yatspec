@@ -7,15 +7,29 @@ import com.googlecode.yatspec.junit.Table;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import static com.googlecode.yatspec.junit.WithCustomResultListeners.DEFAULT_DIR_PROPERTY;
+import static com.googlecode.yatspec.junit.WithCustomResultListeners.OUTPUT_DIR_PROPERTY;
+import static java.lang.System.getProperty;
+import static org.assertj.core.api.Assertions.assertThat;
+
 @ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
 class SequenceDiagramingExampleTest implements WithTestState {
 
-    private TestState interactions = new TestState();
-    private InterestingGivens interestingGivens = interactions.interestingGivens;
+    private final TestState interactions = new TestState();
+    private final InterestingGivens interestingGivens = interactions.interestingGivens();
+
 
     @Test
     void bambamGetsFoodForHisDad() {
@@ -64,7 +78,7 @@ class SequenceDiagramingExampleTest implements WithTestState {
     }
 
     private void whenBarneyGivesToBambam(String foodItem) {
-        interactions.log( "(kindness) food response from barney to bambam", foodItem + " here u go");
+        interactions.log("(kindness) food response from barney to bambam", foodItem + " here u go");
     }
 
     private void thenBambamPlacesABurgerOrderWithBarney(String foodItem) {
@@ -82,5 +96,24 @@ class SequenceDiagramingExampleTest implements WithTestState {
     @Override
     public TestState testState() {
         return interactions;
+    }
+
+    @AfterAll
+    public static void verifySequenceHtml() throws IOException {
+        String expectedHtml = loadResource("SequenceDiagramingExampleTest.html");
+
+        File outputFile = new File(getProperty(OUTPUT_DIR_PROPERTY, getProperty(DEFAULT_DIR_PROPERTY)),
+                "com/googlecode/yatspec/junit5/SequenceDiagramingExampleTest.html");
+
+        byte[] encoded = Files.readAllBytes(Paths.get(outputFile.getPath()));
+
+        String generatedHtml = new String(encoded, Charset.defaultCharset());
+
+        assertThat(generatedHtml).isEqualToIgnoringWhitespace(expectedHtml);
+    }
+
+    static String loadResource(String name) throws IOException {
+        InputStream resource = SequenceDiagramingExampleTest.class.getResourceAsStream(name);
+        return new String(resource.readAllBytes());
     }
 }

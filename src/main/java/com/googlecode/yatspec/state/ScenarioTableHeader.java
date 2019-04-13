@@ -1,7 +1,8 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Value;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class ScenarioTableHeader implements Value<String> {
     private final String header;
@@ -15,5 +16,13 @@ public class ScenarioTableHeader implements Value<String> {
         return header;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
 
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
 }

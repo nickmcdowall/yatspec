@@ -1,37 +1,18 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
-import org.hamcrest.Matcher;
+import com.googlecode.yatspec.plugin.sequencediagram.ByNamingConventionMessageProducer;
+import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramMessage;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import java.util.Collection;
+import java.util.Map;
 
-@SuppressWarnings("unused")
-public class TestState implements TestLogger {
+public class TestState {
 
-    public InterestingGivens interestingGivens = new InterestingGivens();
-    public CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
-
-    @Deprecated(forRemoval = true)
-    public TestState given(GivensBuilder builder) throws Exception {
-        interestingGivens = builder.build(interestingGivens);
-        return this;
-    }
-
-    @Deprecated(forRemoval = true)
-    public TestState and(GivensBuilder builder) throws Exception {
-        return given(builder);
-    }
-
-    @Deprecated(forRemoval = true)
-    public TestState when(ActionUnderTest actionUndertest) throws Exception {
-        capturedInputAndOutputs = actionUndertest.execute(interestingGivens, capturedInputAndOutputs);
-        return this;
-    }
-
-    @Deprecated(forRemoval = true)
-    public <ItemOfInterest> TestState then(StateExtractor<ItemOfInterest> extractor, Matcher<? super ItemOfInterest> matcher) throws Exception {
-        assertThat(extractor.execute(capturedInputAndOutputs), matcher);
-        return this;
-    }
+    private InterestingGivens interestingGivens = new InterestingGivens();
+    private CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
+    private ByNamingConventionMessageProducer byNamingConventionMessageProducer = new ByNamingConventionMessageProducer();
 
     public synchronized void log(String name, Object value) {
         int count = 1;
@@ -43,7 +24,33 @@ public class TestState implements TestLogger {
         capturedInputAndOutputs.add(keyName, value);
     }
 
-    public TestState testState() {
-        return this;
+    public InterestingGivens interestingGivens() {
+        return interestingGivens;
+    }
+
+    public <R> R getType(String key, Class<R> aClass) {
+        return capturedInputAndOutputs.getType(key, aClass);
+    }
+
+    public Collection<SequenceDiagramMessage> sequenceMessages() {
+        return byNamingConventionMessageProducer.messages(capturedInputAndOutputs);
+    }
+
+    public Map<String, Object> getCapturedTypes() {
+        return capturedInputAndOutputs.getTypes();
+    }
+
+    public Map<String, Object> getInterestingTypes() {
+        return interestingGivens.getTypes();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }
