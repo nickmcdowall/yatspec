@@ -29,7 +29,7 @@ public class SequenceDiagramMessage {
     }
 
     public String determineArrowType() {
-        return messageId.contains("response") ? ArrowType.RESPONSE.getMarkup() : ArrowType.REQUEST.getMarkup();
+        return messageId.contains("response") ? ArrowType.DOTTED.getMarkup() : ArrowType.SOLID.getMarkup();
     }
 
     @Override

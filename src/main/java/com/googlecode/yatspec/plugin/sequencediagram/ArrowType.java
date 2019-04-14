@@ -1,8 +1,8 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
 enum ArrowType {
-    REQUEST("->>"),
-    RESPONSE("-->>");
+    SOLID("->>"),
+    DOTTED("-->>");
 
     private String markup;
 

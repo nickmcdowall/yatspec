@@ -2,7 +2,6 @@ package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
 import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.yatspec.Creator;
@@ -21,18 +20,17 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
 import java.io.StringWriter;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
 
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Predicates.*;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
 import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
 import static java.lang.String.format;
 
-
 public class HtmlResultRenderer implements SpecResultListener {
-    private final List<Pair<Predicate, Renderer>> customRenderers = new ArrayList<>();
+    private final List<SimpleEntry<Predicate, Renderer>> customRenderers = new ArrayList<>();
 
     private List<Content> customScripts = Collections.emptyList();
     private List<Content> customHeaderContents = Collections.emptyList();
@@ -51,7 +49,8 @@ public class HtmlResultRenderer implements SpecResultListener {
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
         group.registerRenderer(instanceOf(LinkingNote.class), callable(new LinkingNoteRenderer(result.getTestClass())));
         group.registerRenderer(instanceOf(ContentAtUrl.class), asString());
-        sequence(customRenderers).fold(group, registerRenderer());
+        customRenderers.stream()
+                .forEach(predicateRendererPair -> registerRenderer().apply(group, predicateRendererPair));
         for (Class document : Creator.optionalClass("org.jdom.Document")) {
             group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
         }
@@ -78,7 +77,7 @@ public class HtmlResultRenderer implements SpecResultListener {
     }
 
     private <T> HtmlResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
-        customRenderers.add(Pair.pair(predicate, renderer));
+        customRenderers.add(new SimpleEntry(predicate, renderer));
         return this;
     }
 
