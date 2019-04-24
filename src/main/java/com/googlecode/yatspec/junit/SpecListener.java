@@ -37,7 +37,6 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
     private Result testResult;
     private MethodNameWithArguments methodNameWithArguments = new MethodNameWithArguments();
 
-
     @Override
     public void invokeAfterEachMethod(ExtensionContext extensionContext, ExtensionRegistry extensionRegistry) throws Throwable {
         testInstance = extensionContext.getRequiredTestInstance();

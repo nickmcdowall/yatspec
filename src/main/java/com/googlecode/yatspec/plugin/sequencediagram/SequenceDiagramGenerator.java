@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
+import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.rendering.ContentAtUrl;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -15,17 +16,14 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.List;
 
 import static net.sourceforge.plantuml.FileFormat.SVG;
 
 public class SequenceDiagramGenerator {
 
-    private StringBuffer optionalPlantUmlCollector;
-
-    public SvgWrapper generateSequenceDiagram(Collection<SequenceDiagramMessage> messages) {
-        String plantUmlMarkup = new PlantUmlMarkupGenerator().generateMarkup(messages);
-        makePlantUmlAvailableToAnyRegisteredCollector(plantUmlMarkup);
-
+    public SvgWrapper generateSequenceDiagram(Collection<SequenceDiagramMessage> messages, List<Participant> participants) {
+        String plantUmlMarkup = new PlantUmlMarkupGenerator().generateMarkup(messages, participants);
         return new SvgWrapper(prettyPrint(createSvg(plantUmlMarkup)));
     }
 
@@ -41,28 +39,14 @@ public class SequenceDiagramGenerator {
         }
     }
 
-
-    public void logPlantUmlMarkupTo(StringBuffer plantUmlCollector) {
-        this.optionalPlantUmlCollector = plantUmlCollector;
-    }
-
-    private void makePlantUmlAvailableToAnyRegisteredCollector(String plantUmlMarkup) {
-        if (optionalPlantUmlCollector != null) {
-            optionalPlantUmlCollector.append(plantUmlMarkup);
-        }
-    }
-
     private String createSvg(String plantUmlMarkup) {
         SourceStringReader reader = new SourceStringReader(plantUmlMarkup);
-        final ByteArrayOutputStream os = new ByteArrayOutputStream();
-        try {
-            reader.generateImage(os, new FileFormatOption(SVG));
-            os.close();
+        try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            reader.outputImage(os, new FileFormatOption(SVG));
+            return new String(os.toByteArray());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        return new String(os.toByteArray());
     }
 
     public static Content getHeaderContentForModalWindows() {

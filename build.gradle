@@ -49,6 +49,8 @@ dependencies {
     testCompile 'org.assertj:assertj-core:3.12.2'
 
     implementation "org.apache.commons:commons-lang3:3.8.1"
+    implementation "org.jtwig:jtwig-core:5.87.0.RELEASE"
+
 
 }
 

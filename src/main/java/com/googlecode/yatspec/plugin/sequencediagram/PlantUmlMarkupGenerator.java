@@ -1,39 +1,47 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
-import java.util.Collection;
-import java.util.function.Consumer;
+import com.googlecode.yatspec.sequence.Participant;
+import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 
-import static java.lang.String.format;
+import java.util.Collection;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class PlantUmlMarkupGenerator {
+
     public static final String DEFAULT_SKIN = "skin BlueModern";
 
-    public String generateMarkup(Collection<SequenceDiagramMessage> messages) {
-        Markup markup = new Markup();
-        messages.stream()
-                .map(SequenceDiagramMessage::toPlantUmlMarkup)
-                .forEach(addTo(markup));
-
+    public static String generateMarkup(Collection<SequenceDiagramMessage> messages, List<Participant> participants) {
+        PlantUmlMarkupGenerator markup = new PlantUmlMarkupGenerator();
+        markup.includeParticipants(participants);
+        markup.includeMessages(messages);
         return markup.build();
     }
 
-    private Consumer<String> addTo(final Markup markup) {
-        return s -> markup.addMessage(s);
+    private final JtwigTemplate template = JtwigTemplate.classpathTemplate("plantUmlMarkup.twig");
+    private final JtwigModel model = JtwigModel.newModel().with("skin", DEFAULT_SKIN);
+    private final GroupHelper groupHelper = new GroupHelper();
+
+    private void includeParticipants(List<Participant> participants) {
+        model.with("participants", participants.stream()
+                .map(Participant::toMarkup)
+                .distinct()
+                .collect(toList()));
     }
 
-    private class Markup {
-        private GroupHelper groupHelper = new GroupHelper();
-        StringBuffer plantUmlMarkup = new StringBuffer(format("@startuml%n" + DEFAULT_SKIN + "%n"));
-
-        private void addMessage(String messageLine) {
-            plantUmlMarkup.append(groupHelper.markupGroup(messageLine));
-            plantUmlMarkup.append(format("%s%n", messageLine));
-        }
-
-        public String build() {
-            plantUmlMarkup.append(groupHelper.cleanUpOpenGroups());
-            plantUmlMarkup.append(format("@enduml%n"));
-            return plantUmlMarkup.toString();
-        }
+    private void includeMessages(Collection<SequenceDiagramMessage> messages) {
+        List<String> interactions = messages.stream()
+                .map(SequenceDiagramMessage::toPlantUmlMarkup)
+                .flatMap(line -> List.of(groupHelper.markupGroup(line), line).stream())
+                .collect(toList());
+        interactions.add(groupHelper.cleanUpOpenGroups());
+        model.with("interactions", interactions);
     }
+
+    private String build() {
+        return template.render(model);
+    }
+
 }
