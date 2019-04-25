@@ -11,8 +11,6 @@ import static java.util.stream.Collectors.toList;
 
 public class PlantUmlMarkupGenerator {
 
-    public static final String DEFAULT_SKIN = "skin BlueModern";
-
     public static String generateMarkup(Collection<SequenceDiagramMessage> messages, List<Participant> participants) {
         PlantUmlMarkupGenerator markup = new PlantUmlMarkupGenerator();
         markup.includeParticipants(participants);
@@ -21,7 +19,7 @@ public class PlantUmlMarkupGenerator {
     }
 
     private final JtwigTemplate template = JtwigTemplate.classpathTemplate("plantUmlMarkup.twig");
-    private final JtwigModel model = JtwigModel.newModel().with("skin", DEFAULT_SKIN);
+    private final JtwigModel model = JtwigModel.newModel();
     private final GroupHelper groupHelper = new GroupHelper();
 
     private void includeParticipants(List<Participant> participants) {

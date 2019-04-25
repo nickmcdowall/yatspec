@@ -13,7 +13,7 @@ class PlantUmlMarkupGeneratorTest {
     @Test
     void generatesPlantUmlMarkup() {
         String markup = PlantUmlMarkupGenerator.generateMarkup(List.of(new SequenceDiagramMessage("Bob", "Alice", "How are you Alice?", "message_id")), emptyList());
-        assertThat(markup).isEqualToIgnoringWhitespace("@startuml skin BlueModern Bob ->> Alice:<text class=sequence_diagram_clickable sequence_diagram_message_id=message_id>How are you Alice?</text> @enduml");
+        assertThat(markup).isEqualToIgnoringWhitespace("@startuml Bob ->> Alice:<text class=sequence_diagram_clickable sequence_diagram_message_id=message_id>How are you Alice?</text> @enduml");
     }
 
     @Test
@@ -23,7 +23,7 @@ class PlantUmlMarkupGeneratorTest {
         String markup = PlantUmlMarkupGenerator.generateMarkup(
                 List.of(new SequenceDiagramMessage("here", "there", "(hello) a message", "message_id")),
                 emptyList());
-        assertThat(markup).isEqualToIgnoringWhitespace("@startuml skin BlueModern group hello here ->> there:<text class=sequence_diagram_clickable sequence_diagram_message_id=message_id>(hello) a message</text> end @enduml");
+        assertThat(markup).isEqualToIgnoringWhitespace("@startuml group hello here ->> there:<text class=sequence_diagram_clickable sequence_diagram_message_id=message_id>(hello) a message</text> end @enduml");
     }
 
 }

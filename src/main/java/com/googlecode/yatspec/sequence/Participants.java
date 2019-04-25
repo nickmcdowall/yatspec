@@ -4,6 +4,7 @@ package com.googlecode.yatspec.sequence;
 public enum Participants {
 
     COLLECTIONS("collections"),
+    PARTICIPANT("participant"),
     BOUNDARY("boundary"),
     CONTROL("control"),
     ENTITY("entity"),
