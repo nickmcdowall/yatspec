@@ -19,7 +19,7 @@ Add YatSpec to your project e.g. Gradle:
 
 ````
 dependencies {
-    testImplementation 'com.github.nickmcdowall:yatspec:release-2019.1.11'
+    testImplementation 'com.github.nickmcdowall:yatspec:release-2019.1.12'
     ...
 }
 ````
