@@ -91,6 +91,7 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
     }
 
     private boolean hasSequenceDiagramExtension(Object testInstance) {
+        if (null == testInstance) return false;
         ExtendWith annotation = testInstance.getClass().getAnnotation(ExtendWith.class);
         return asList(annotation.value()).contains(SequenceDiagramExtension.class);
     }

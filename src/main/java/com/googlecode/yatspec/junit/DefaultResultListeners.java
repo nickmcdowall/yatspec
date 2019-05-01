@@ -1,18 +1,17 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.totallylazy.Option;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-import static com.googlecode.totallylazy.Option.none;
-import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.Creator.create;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Class.forName;
 import static java.lang.System.getProperty;
+import static java.util.stream.Collectors.toList;
 
 public class DefaultResultListeners implements WithCustomResultListeners {
     public static final String RESULT_RENDER = "yatspec.result.renderer";
@@ -21,17 +20,20 @@ public class DefaultResultListeners implements WithCustomResultListeners {
 
     @Override
     public Collection<SpecResultListener> getResultListeners() throws Exception {
-        return sequence(resultListener()).join(indexListener());
+        return Stream.of(resultListener(), indexListener())
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toList());
     }
 
-    private SpecResultListener resultListener() throws Exception {
-        return create(forName(getProperty(RESULT_RENDER, HtmlResultRenderer.class.getName())));
+    private Optional<SpecResultListener> resultListener() throws Exception {
+        return Optional.of(create(forName(getProperty(RESULT_RENDER, HtmlResultRenderer.class.getName()))));
     }
 
-    private Option<SpecResultListener> indexListener() throws Exception {
+    private Optional<SpecResultListener> indexListener() throws Exception {
         if (!parseBoolean(getProperty(INDEX_ENABLE))) {
-            return none();
+            return Optional.empty();
         }
-        return some(create(forName(getProperty(INDEX_RENDER, HtmlIndexRenderer.class.getName()))));
+        return Optional.of(create(forName(getProperty(INDEX_RENDER, HtmlIndexRenderer.class.getName()))));
     }
 }
