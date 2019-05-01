@@ -1,13 +1,12 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.totallylazy.Predicate;
+
 import com.googlecode.yatspec.parsing.TestParser;
 import com.googlecode.yatspec.parsing.Text;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
 import static java.util.Arrays.asList;
 
@@ -60,15 +59,10 @@ public class TestResult implements Result {
     }
 
     private Scenario findScenario(final String name) throws Exception {
-        return sequence(getTestMethods()).filter(hasScenario(name)).head().getScenario(name);
-    }
-
-    private static Predicate<TestMethod> hasScenario(final String name) {
-        return new Predicate<TestMethod>() {
-            public boolean matches(TestMethod testMethod) {
-                return testMethod.hasScenario(name);
-            }
-        };
+        return getTestMethods().stream()
+                .filter(testMethod -> testMethod.hasScenario(name))
+                .findFirst().get()
+                .getScenario(name);
     }
 
     public List<Annotation> getAnnotations() {
