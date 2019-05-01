@@ -2,7 +2,6 @@ package com.googlecode.yatspec.state;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Sequences;
 import com.googlecode.totallylazy.Value;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.parsing.Text;
@@ -47,9 +46,13 @@ public class TestMethod {
             for (List<String> row : scenarioTable.getRows()) {
                 ScenarioName scenarioName = new ScenarioName(methodName, row);
                 String name = ScenarioNameRendererFactory.renderer().render(scenarioName);
-                final List<String> oldValues = Sequences.sequence(scenarioTable.getHeaders()).map(value(String.class)).toList();
-                scenarioResults.put(name, new Scenario(name,
-                        specification.replace(oldValues, createPossiblyVarargValueFrom(row, oldValues))));
+
+                final List<String> oldValues = scenarioTable.getHeaders().stream()
+                        .map(ScenarioTableHeader::value)
+                        .collect(toList());
+
+                Scenario scenario = new Scenario(name, specification.replace(oldValues, createPossiblyVarargValueFrom(row, oldValues)));
+                scenarioResults.put(name, scenario);
             }
         }
     }
