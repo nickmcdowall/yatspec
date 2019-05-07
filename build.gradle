@@ -62,6 +62,7 @@ install.repositories.mavenInstaller.pom.whenConfigured { pom ->
 }
 
 test {
+    systemProperty "yatspec.output.dir", "$buildDir/reports/yatspec"
     useJUnitPlatform()
 }
 

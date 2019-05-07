@@ -1,6 +1,8 @@
-<h1>YatSpec</h1>
+<h1>YatSpec</h1> 
 
-Latest: [![](https://jitpack.io/v/nickmcdowall/yatspec.svg)](https://jitpack.io/#nickmcdowall/yatspec)
+ [![Build Status](https://travis-ci.com/nickmcdowall/yatspec.svg?branch=master)](https://travis-ci.com/nickmcdowall/yatspec)
+ [![](https://jitpack.io/v/nickmcdowall/yatspec.svg)](https://jitpack.io/#nickmcdowall/yatspec)
+
 
 This project builds upon the excellent [Yatspec](https://github.com/bodar/yatspec) project.
 
