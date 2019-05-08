@@ -3,35 +3,30 @@ package com.googlecode.yatspec.junit5;
 import com.googlecode.yatspec.junit.Row;
 import com.googlecode.yatspec.junit.SequenceDiagramExtension;
 import com.googlecode.yatspec.junit.SpecListener;
+import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.Table;
+import com.googlecode.yatspec.junit.WithCustomResultListeners;
 import com.googlecode.yatspec.junit.WithParticipants;
+import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
+import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
+import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
+import com.googlecode.yatspec.rendering.html.HtmlValidatingResultRenderer;
 import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 
-import static com.googlecode.yatspec.junit.WithCustomResultListeners.DEFAULT_DIR_PROPERTY;
-import static com.googlecode.yatspec.junit.WithCustomResultListeners.OUTPUT_DIR_PROPERTY;
-import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultRelativePath;
 import static com.googlecode.yatspec.sequence.Participants.ACTOR;
-import static java.lang.System.getProperty;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
-class SequenceDiagramingExampleTest implements WithTestState, WithParticipants {
+class SequenceDiagramingExampleTest implements WithTestState, WithParticipants, WithCustomResultListeners {
 
     private final TestState interactions = new TestState();
     private final InterestingGivens interestingGivens = interactions.interestingGivens();
@@ -101,22 +96,13 @@ class SequenceDiagramingExampleTest implements WithTestState, WithParticipants {
         );
     }
 
-    static Path getHtmlPathFor(Class aClass) {
-        String basePath = getProperty(OUTPUT_DIR_PROPERTY, getProperty(DEFAULT_DIR_PROPERTY));
-        return Paths.get(basePath, htmlResultRelativePath(aClass));
+    @Override
+    public Collection<SpecResultListener> getResultListeners() throws Exception {
+        return List.of(
+                new HtmlValidatingResultRenderer("/expected/SequenceDiagramingExampleTest.html").
+                        withCustomHeaderContent(SequenceDiagramGenerator.getHeaderContentForModalWindows()).
+                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())
+        );
     }
 
-    static String loadResource(String name) throws IOException {
-        InputStream resource = SequenceDiagramingExampleTest.class.getResourceAsStream(name);
-        return new String(resource.readAllBytes());
-    }
-
-    @AfterAll
-    public static void verifySequenceHtml() throws IOException {
-        String expectedHtml = loadResource("SequenceDiagramingExampleTest.html");
-
-        String generatedHtml = Files.readString(getHtmlPathFor(SequenceDiagramingExampleTest.class), UTF_8);
-
-        assertThat(generatedHtml).isEqualToIgnoringWhitespace(expectedHtml);
-    }
 }
