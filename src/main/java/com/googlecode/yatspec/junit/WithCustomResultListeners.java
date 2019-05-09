@@ -18,8 +18,7 @@ public interface WithCustomResultListeners {
                 resultListener.complete(getYatspecOutputDir(), testResult);
             }
         } catch (Exception e) {
-            System.out.println("Error while writing yatspec output");
-            e.printStackTrace(System.out);
+            throw new RuntimeException("Error while writing yatspec output", e);
         }
     }
 
