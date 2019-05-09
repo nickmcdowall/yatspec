@@ -28,20 +28,25 @@ public class HtmlValidatingResultRenderer extends HtmlResultRenderer {
     public String render(Result result) throws Exception {
         String actualHtml = super.render(result);
         if (runningOn(MAC_OSX)) {
-            testExpectation(actualHtml);
+            testExpectationAgainst(actualHtml);
         }
         return actualHtml;
     }
 
-    public boolean runningOn(String operatingSystem) {
+    private boolean runningOn(String operatingSystem) {
         return operatingSystem.equalsIgnoreCase(System.getProperty(OS_NAME));
     }
 
-    public void testExpectation(String actualHtml) {
-        assertThat(actualHtml.replaceAll(HTML_COMMENTS, EMPTY)).isEqualToIgnoringWhitespace(expectedHtmlResult.replaceAll(HTML_COMMENTS, EMPTY));
+    private void testExpectationAgainst(String actualHtml) {
+        assertThat(withoutComments(actualHtml))
+                .isEqualToIgnoringWhitespace(withoutComments(expectedHtmlResult));
     }
 
-    String loadResource(String name) throws IOException {
+    private String withoutComments(String actualHtml) {
+        return actualHtml.replaceAll(HTML_COMMENTS, EMPTY);
+    }
+
+    private String loadResource(String name) throws IOException {
         InputStream resource = getClass().getResourceAsStream(name);
         return new String(resource.readAllBytes());
     }
