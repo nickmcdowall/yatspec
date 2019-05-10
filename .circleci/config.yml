@@ -5,8 +5,8 @@
 version: 2
 jobs:
   build:
-    macos:
-      xcode: "9.0"
+    docker:
+      - image: circleci/openjdk:11.0.2
 
     working_directory: ~/repo
 
