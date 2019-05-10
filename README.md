@@ -1,4 +1,4 @@
-<h1>YatSpec</h1> 
+# YatSpec <sup>[![CircleCI](https://circleci.com/gh/nickmcdowall/yatspec.svg?style=svg)](https://circleci.com/gh/nickmcdowall/yatspec)</sup>
 
  [![Build Status](https://travis-ci.com/nickmcdowall/yatspec.svg?branch=master)](https://travis-ci.com/nickmcdowall/yatspec)
  [![](https://jitpack.io/v/nickmcdowall/yatspec.svg)](https://jitpack.io/#nickmcdowall/yatspec)
