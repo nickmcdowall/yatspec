@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
+import static java.util.stream.Collectors.toList;
 
 @SuppressWarnings("unused")
 public class ScenarioTable {
@@ -20,9 +20,9 @@ public class ScenarioTable {
 
     public void setHeaders(List<String> headers) {
         if (headers != null)
-            this.headers = sequence(headers)
+            this.headers = headers.stream()
                     .map(ScenarioTableHeader::new)
-                    .toList();
+                    .collect(toList());
     }
 
     public void addRow(List<String> values) {
