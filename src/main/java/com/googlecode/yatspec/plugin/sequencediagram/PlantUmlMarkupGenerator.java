@@ -18,7 +18,7 @@ public class PlantUmlMarkupGenerator {
         return markup.build();
     }
 
-    private final JtwigTemplate template = JtwigTemplate.classpathTemplate("plantUmlMarkup.twig");
+    private final JtwigTemplate template = JtwigTemplate.classpathTemplate("/plantUmlMarkup.twig");
     private final JtwigModel model = JtwigModel.newModel();
     private final GroupHelper groupHelper = new GroupHelper();
 
