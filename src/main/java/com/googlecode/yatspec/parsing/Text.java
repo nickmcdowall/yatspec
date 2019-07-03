@@ -8,16 +8,21 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class Text {
 
-    private static final String CODE_SYNTAX = "[\\(\\)\\[\\]{}:;,]";
     private static final String SPACE = " ";
+    private static final String SPLIT_WITH_SPACE = "$1 $2";
+    private static final String CODE_SYNTAX = "[\\(\\)\\[\\]{}:;,]";
+    private static final String MULTI_SPACES = "(?<!^)[\\t\\x0B\\f ]+";
+    private static final String WORDS_SEPARATED_BY_DOTS = "([a-zA-Z])\\.([a-zA-Z])";
+    private static final String WORDS_SEPARATED_BY_CAMEL_CASE = "([a-z])([A-Z])";
+    private static final String WORDS_SEPARATED_BY_CAPITALS = "([A-Z])([A-Z][a-z])";
 
     public static String wordify(String value) {
-        final String wordified = value
+        String wordified = value
                 .replaceAll(CODE_SYNTAX, SPACE)
-                .replaceAll("([a-z])\\.([a-z])", "$1 $2")
-                .replaceAll("([a-z])([A-Z])", "$1 $2")
-                .replaceAll("([A-Z])([A-Z][a-z])", "$1 $2")
-                .replaceAll("(?<!^)[\\t\\x0B\\f ]+", SPACE)
+                .replaceAll(WORDS_SEPARATED_BY_DOTS, SPLIT_WITH_SPACE)
+                .replaceAll(WORDS_SEPARATED_BY_CAMEL_CASE, SPLIT_WITH_SPACE)
+                .replaceAll(WORDS_SEPARATED_BY_CAPITALS, SPLIT_WITH_SPACE)
+                .replaceAll(MULTI_SPACES, SPACE)
                 .toLowerCase()
                 .trim();
 
