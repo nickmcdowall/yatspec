@@ -1,12 +1,16 @@
 package com.googlecode.yatspec.rendering;
 
-import com.googlecode.totallylazy.Strings;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
+import java.util.Scanner;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class ContentAtUrl implements Content {
+
+    private static final String BEGINNING_OF_STREAM = "\\A";
+    private static final String BLANK = "";
+
     private final URL url;
 
     public ContentAtUrl(URL url) {
@@ -15,24 +19,12 @@ public class ContentAtUrl implements Content {
 
     @Override
     public String toString() {
-        InputStream inputStream = null;
-        try {
-            inputStream = url.openStream();
-            return Strings.toString(inputStream);
+        try (Scanner scanner = new Scanner(url.openStream(), UTF_8)) {
+            scanner.useDelimiter(BEGINNING_OF_STREAM);
+            return scanner.hasNext() ? scanner.next() : BLANK;
         } catch (IOException e) {
             return e.toString();
-        } finally {
-            closeQuietly(inputStream);
         }
     }
 
-    private static void closeQuietly(InputStream inputStream) {
-        if (inputStream != null) {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 }
