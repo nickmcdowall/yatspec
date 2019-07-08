@@ -1,10 +1,8 @@
 package com.googlecode.yatspec;
 
-import com.googlecode.totallylazy.Option;
-import com.googlecode.totallylazy.Some;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 public class Creator {
     public static <T> T create(Class<?> aClass) throws InstantiationException, IllegalAccessException, InvocationTargetException {
@@ -12,11 +10,11 @@ public class Creator {
         return (T) constructors[0].newInstance();
     }
 
-    public static Option<? extends Class<?>> optionalClass(String name) {
+    public static Optional<Class<?>> optionalClass(String name) {
         try {
-            return Option.some(Class.forName(name));
+            return Optional.of(Class.forName(name));
         } catch (ClassNotFoundException e) {
-            return Option.none();
+            return Optional.empty();
         }
     }
 }

@@ -51,8 +51,10 @@ public class HtmlResultRenderer implements SpecResultListener {
         group.registerRenderer(instanceOf(ContentAtUrl.class), asString());
         customRenderers.stream()
                 .forEach(predicateRendererPair -> registerRenderer().apply(group, predicateRendererPair));
-        for (Class document : Creator.optionalClass("org.jdom.Document")) {
-            group.registerRenderer(instanceOf(document), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
+
+        Optional<Class<?>> optionalDocument = Creator.optionalClass("org.jdom.Document");
+        if (optionalDocument.isEmpty()) {
+            group.registerRenderer(instanceOf(optionalDocument.get()), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
         }
 
         final StringTemplate template = group.getInstanceOf("yatspec");
