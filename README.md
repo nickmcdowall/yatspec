@@ -54,4 +54,7 @@ public class SequenceDiagramExampleTest implements WithTestState {
 }
 ```
 
-See [yatspec-example](https://github.com/nickmcdowall/yatspec-example) for an example project.
+See [yatspec-example](https://github.com/nickmcdowall/yatspec-example) for an example project that produces the below sequence diagram from 
+a SpringBootTest class:
+
+![example sequence diagram gif](https://github.com/nickmcdowall/yatspec-example/blob/master/sequence_diagram_example.gif)
