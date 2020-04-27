@@ -32,6 +32,10 @@ public class SequenceDiagramMessage {
         return messageId.contains("response") ? ArrowType.DOTTED.getMarkup() : ArrowType.SOLID.getMarkup();
     }
 
+    public String getMessageId() {
+        return messageId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,5 +58,15 @@ public class SequenceDiagramMessage {
         result = 31 * result + messageName.hashCode();
         result = 31 * result + messageId.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "SequenceDiagramMessage{" +
+                "from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", messageName='" + messageName + '\'' +
+                ", messageId='" + messageId + '\'' +
+                '}';
     }
 }

@@ -12,6 +12,7 @@ class ByNamingConventionMessageProducerTest {
 
     private static final int FIRST = 0;
     private static final int SECOND = 1;
+    private static final int THIRD = 2;
 
     @Test
     void ignoresValuesWithoutNamingConvention() {
@@ -24,11 +25,17 @@ class ByNamingConventionMessageProducerTest {
 
     @Test
     void convertsValuesWithNamingConventionToSequenceDiagramMessages() {
-        CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs().add("Kiss from Boy to Girl", new Object()).add("Slap from Girl to Boy", new Object());
+        CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs()
+                .add("Kiss from Boy to Girl", new Object())
+                .add("Slap from Girl to Boy", new Object())
+                .add("GET /some/path from Boy to Girl", new Object());
+
         Object[] messages = new ByNamingConventionMessageProducer().messages(inputAndOutputs).toArray();
-        assertThat(messages.length, is(equalTo(2)));
+
+        assertThat(messages.length, is(equalTo(3)));
         assertThat(messages[FIRST], is(equalTo(new SequenceDiagramMessage("Boy", "Girl", "Kiss", "Kiss_from_Boy_to_Girl"))));
         assertThat(messages[SECOND], is(equalTo(new SequenceDiagramMessage("Girl", "Boy", "Slap", "Slap_from_Girl_to_Boy"))));
+        assertThat(messages[THIRD], is(equalTo(new SequenceDiagramMessage("Boy", "Girl", "GET /some/path", "GET__some_path_from_Boy_to_Girl"))));
     }
 
     @Test
