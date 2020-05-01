@@ -1,16 +1,8 @@
 package com.googlecode.yatspec.junit5;
 
-import com.googlecode.yatspec.junit.Row;
-import com.googlecode.yatspec.junit.SequenceDiagramExtension;
-import com.googlecode.yatspec.junit.SpecListener;
-import com.googlecode.yatspec.junit.SpecResultListener;
-import com.googlecode.yatspec.junit.Table;
-import com.googlecode.yatspec.junit.WithCustomResultListeners;
-import com.googlecode.yatspec.junit.WithParticipants;
-import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
+import com.googlecode.yatspec.junit.*;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
-import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlValidatingResultRenderer;
 import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
@@ -24,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.googlecode.yatspec.sequence.Participants.ACTOR;
-import static org.junit.jupiter.api.Assertions.fail;
 
 
 @ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
@@ -103,7 +94,6 @@ class SequenceDiagramingExampleTest implements WithTestState, WithParticipants, 
     public Collection<SpecResultListener> getResultListeners() throws Exception {
         return List.of(
                 new HtmlValidatingResultRenderer("/expected/SequenceDiagramingExampleTest.html").
-                        withCustomHeaderContent(SequenceDiagramGenerator.getHeaderContentForModalWindows()).
                         withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())
         );
     }

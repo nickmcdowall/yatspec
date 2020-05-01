@@ -230,3 +230,10 @@ dl.index-result {
     display: block;
     padding : 5px;
 }
+
+.ui-dialog {
+    pointer-events: none;
+}
+.ui-dialog-titlebar-close {
+    pointer-events: all;
+}

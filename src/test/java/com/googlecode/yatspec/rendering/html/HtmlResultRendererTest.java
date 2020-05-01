@@ -1,13 +1,11 @@
 package com.googlecode.yatspec.rendering.html;
 
-import com.googlecode.yatspec.rendering.ContentAtUrl;
 import com.googlecode.yatspec.rendering.Renderer;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,32 +43,6 @@ class HtmlResultRendererTest {
                 render(result);
 
         assertThat(html, containsString(CUSTOM_RENDERED_TEXT));
-    }
-
-    @Test
-    void supportsCustomHeaderContent() throws Exception {
-        TestResult result = new TestResult(getClass());
-
-        String html = new HtmlResultRenderer().
-                withCustomHeaderContent(new ContentAtUrl(getClass().getResource("CustomHeaderContent.html"))).
-                render(result);
-
-        assertThat(html, containsString(readFile("CustomHeaderContent.html")));
-    }
-
-    @Test
-    void supportsCustomJavaScript() throws Exception {
-        TestResult result = new TestResult(getClass());
-
-        String html = new HtmlResultRenderer().
-                withCustomScripts(new ContentAtUrl(getClass().getResource("customJavaScript.js"))).
-                render(result);
-
-        assertThat(html, containsString(readFile("customJavaScript.js")));
-    }
-
-    private String readFile(String fileName) throws IOException {
-        return new String(getClass().getResourceAsStream(fileName).readAllBytes());
     }
 
     private TestResult aTestResultWithCustomRenderTypeAddedToScenarioLogs() throws Exception {

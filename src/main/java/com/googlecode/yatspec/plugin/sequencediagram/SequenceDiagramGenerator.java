@@ -1,8 +1,7 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
-import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.rendering.Content;
-import com.googlecode.yatspec.rendering.ContentAtUrl;
+import com.googlecode.yatspec.sequence.Participant;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import org.jdom.Document;
@@ -49,7 +48,16 @@ public class SequenceDiagramGenerator {
         }
     }
 
+    /**
+     * No longer required (automatically added with HTML renderer) - method will be removed
+     */
+    @Deprecated(forRemoval = true)
     public static Content getHeaderContentForModalWindows() {
-        return new ContentAtUrl(SequenceDiagramGenerator.class.getResource("dialogScriptHeaderContent.html"));
+        return new Content() {
+            @Override
+            public String toString() {
+                return "";
+            }
+        };
     }
 }

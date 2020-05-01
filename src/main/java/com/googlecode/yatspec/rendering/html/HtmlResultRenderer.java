@@ -34,9 +34,6 @@ import static java.lang.String.format;
 public class HtmlResultRenderer implements SpecResultListener {
     private final List<SimpleEntry<Predicate, Renderer>> customRenderers = new ArrayList<>();
 
-    private List<Content> customScripts = Collections.emptyList();
-    private List<Content> customHeaderContents = Collections.emptyList();
-
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
         File htmlResultFile = htmlResultFile(yatspecOutputDir, result.getTestClass());
@@ -69,14 +66,6 @@ public class HtmlResultRenderer implements SpecResultListener {
         }
 
         final StringTemplate template = group.getInstanceOf("yatspec");
-        template.setAttribute("script", loadContent("xregexp.js"));
-        template.setAttribute("script", loadContent("yatspec.js"));
-        for (Content customScript : customScripts) {
-            template.setAttribute("script", customScript);
-        }
-        for (Content customHeaderContent : customHeaderContents) {
-            template.setAttribute("customHeaderContent", customHeaderContent);
-        }
         template.setAttribute("cssClass", getCssMap());
         template.setAttribute("testResult", result);
         StringWriter writer = new StringWriter();
@@ -123,13 +112,19 @@ public class HtmlResultRenderer implements SpecResultListener {
                 testMethod.getName());
     }
 
+    /**
+     * No longer supported - will be removed
+     */
+    @Deprecated(forRemoval = true)
     public HtmlResultRenderer withCustomHeaderContent(Content... content) {
-        this.customHeaderContents = Arrays.asList(content);
         return this;
     }
 
+    /**
+     * No longer supported - will be removed
+     */
+    @Deprecated(forRemoval = true)
     public HtmlResultRenderer withCustomScripts(Content... scripts) {
-        this.customScripts = Arrays.asList(scripts);
         return this;
     }
 }

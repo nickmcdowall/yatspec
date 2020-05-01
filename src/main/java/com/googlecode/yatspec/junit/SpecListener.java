@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.ScenarioNameRenderer;
 import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
@@ -84,7 +83,6 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
     private WithCustomResultListeners defaultSequenceDiagramResultListener() {
         return () -> List.of(
                 new HtmlResultRenderer().
-                        withCustomHeaderContent(SequenceDiagramGenerator.getHeaderContentForModalWindows()).
                         withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer()),
                 new HtmlIndexRenderer()
         );
