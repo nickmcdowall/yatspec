@@ -1,0 +1,258 @@
+html, body {
+    margin: 1em 2ex 2em;
+    padding: 0;
+    background-color: #061826;
+    color: #fff;
+    font-family: "Andale Mono", AndaleMono, monospace;
+    font-size: 10pt;
+}
+
+h1 {
+    font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 700;
+    line-height: 26.4px;
+}
+
+h3 {
+    font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 700;
+    line-height: 15.4px;
+}
+
+p {
+    font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+blockquote {
+    font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+    font-size: 21px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 30px;
+}
+
+pre {
+    font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 18.5714px;
+}
+
+body {
+    position: absolute;
+    width: 95%;
+}
+
+.highlight {
+    background-color: #061826;
+    border: none;
+    padding: 5px;
+}
+
+.highlight .literal {
+    color: #89aae6;
+}
+
+.highlight .keyword {
+    color: #89aae6;
+}
+
+.highlight .constant {
+    color: #0471a6;
+}
+
+.highlight .quote {
+    color: #89aae6;
+}
+
+.highlight.specification .literal,
+.highlight.specification .keyword,
+.highlight.specification .constant,
+.highlight.specification .quote {
+    font-weight: bold;
+}
+
+pre.test-not-run, .test-not-run, .interestingGiven {
+    background-color: #3685b5;
+    border: 2px solid #89aae6;
+}
+
+.interestingGiven {
+    padding: 0 2px;
+}
+
+pre.test-failed, .test-failed {
+    background-color: #ad4a92;
+    border: 2px solid #ac80a0;
+}
+
+li.test-not-run, li.test-passed {
+    border: none;
+    background-color: #061826;
+}
+
+ul.contents a {
+    text-transform: capitalize;
+}
+
+a, table a {
+    color: #fff;
+    text-decoration: none;
+}
+
+a:hover, table a:hover {
+    text-decoration: underline;
+}
+
+table {
+    background-color: #061826;
+    border: 1px solid #0471a6;
+    border-collapse: collapse;
+    empty-cells: show;
+}
+
+th {
+    background-color: #061826;
+    border: 1px solid #0471a6;
+}
+
+td {
+    border: 1px solid #0471a6;
+}
+
+div.contents, div.testmethod {
+    margin-bottom: 40px;
+}
+
+.scenarios td {
+    padding: 0 20px;
+    text-align: center;
+}
+
+.scenarios, .scenario {
+    margin-bottom: 20px;
+}
+
+.SvgWrapper {
+    color: #061826;
+    background-color: #fff;
+}
+
+.scenario {
+    background-color: #061826;
+    border: 10px solid #0471a6;
+    padding: 0 10px;
+}
+
+h2 {
+    margin-top: 10px;
+}
+
+pre {
+    margin-bottom: 32px;
+}
+
+div.example {
+    margin-bottom: 64px;
+}
+
+.hide {
+    display: none;
+}
+
+.logKey {
+    cursor: pointer;
+}
+
+.logKey:hover {
+    text-decoration: underline;
+}
+
+.interestingGivens th {
+    text-align: left;
+}
+
+.ui-widget-content {
+    background-color: #061826;
+    color: #fff;
+}
+
+.interestingGivens td {
+    text-align: right;
+    padding: 0 5px;
+    vertical-align: middle;
+}
+
+.logValue {
+    white-space: pre-wrap;
+    margin-bottom: 32px;
+}
+
+.package-name {
+    cursor: pointer;
+}
+
+.package-name:hover {
+    text-decoration: underline;
+}
+
+dt {
+    font-weight: bold;
+    margin: 0px;
+    padding: 2px;
+}
+
+dd {
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 1px;
+    margin-left: 20px;
+    margin-right: 0;
+    padding: 2px;
+    padding-right: 0;
+}
+
+dl {
+    margin: 0;
+}
+
+dl.index-result {
+    padding: 10px;
+}
+
+.index-result dt {
+    margin-bottom: 5px;
+}
+
+.index-result dd {
+    margin-left: 0px;
+    margin-right: 5px;
+}
+
+.section div {
+    width: 100%;
+}
+
+.section .section-header {
+    padding: 2px;
+    cursor: pointer;
+}
+
+.section .section-body {
+    display: block;
+    padding: 5px;
+}

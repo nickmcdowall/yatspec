@@ -141,3 +141,13 @@ $('ul.contents > li > a').click(function () {
     $('div.testmethod > ' + $link.attr('href')).siblings('.section-body').slideDown(150);
 });
 
+function toggleTheme() {
+    var el = document.getElementById("theme");
+    if (el.href.match("yatspec.css")) {
+        el.href = "yatspec_dark.css";
+    }
+    else {
+        el.href = "yatspec.css";
+    }
+}
+

@@ -20,10 +20,12 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
 
 import static com.googlecode.totallylazy.Callables.asString;
+import static com.googlecode.totallylazy.Files.write;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
 import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
@@ -37,7 +39,16 @@ public class HtmlResultRenderer implements SpecResultListener {
 
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
-        overwrite(htmlResultFile(yatspecOutputDir, result.getTestClass()), render(result));
+        File htmlResultFile = htmlResultFile(yatspecOutputDir, result.getTestClass());
+        overwrite(htmlResultFile, render(result));
+        addAdjacentFile(htmlResultFile, "yatspec.css");
+        addAdjacentFile(htmlResultFile, "yatspec_dark.css");
+        addAdjacentFile(htmlResultFile, "yatspec.js");
+        addAdjacentFile(htmlResultFile, "xregexp.js");
+    }
+
+    private File addAdjacentFile(File htmlResultFile, String fileName) throws UnsupportedEncodingException {
+        return write(loadContent(fileName).toString().getBytes("UTF-8"), new File(htmlResultFile.getParentFile(), fileName));
     }
 
     public String render(Result result) throws Exception {
@@ -66,7 +77,6 @@ public class HtmlResultRenderer implements SpecResultListener {
         for (Content customHeaderContent : customHeaderContents) {
             template.setAttribute("customHeaderContent", customHeaderContent);
         }
-        template.setAttribute("stylesheet", loadContent("yatspec.css"));
         template.setAttribute("cssClass", getCssMap());
         template.setAttribute("testResult", result);
         StringWriter writer = new StringWriter();

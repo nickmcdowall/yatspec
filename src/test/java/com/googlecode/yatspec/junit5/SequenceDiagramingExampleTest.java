@@ -10,6 +10,7 @@ import com.googlecode.yatspec.junit.WithParticipants;
 import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
+import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlValidatingResultRenderer;
 import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
@@ -23,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.googlecode.yatspec.sequence.Participants.ACTOR;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 @ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
@@ -80,6 +82,7 @@ class SequenceDiagramingExampleTest implements WithTestState, WithParticipants, 
 
     private void givenMrFlintstoneIs(String feeling) {
         interestingGivens.add("Flintstone is " + feeling);
+        interestingGivens.add("burger");
     }
 
     @Override

@@ -3,22 +3,14 @@
     <head>
         <title>$testSuite$</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" type="text/javascript"></script>
-
+        <link rel="stylesheet" id="theme" type="text/css" href="yatspec.css">
         $customHeaderContent:{
         $it$
-        }$
-
-        $stylesheet:{
-            <style type="text/css">
-                /* <![CDATA[ */
-                $it$
-                /* ]]> */
-            </style>
         }$
     </head>
     <body>
 
-        <h1>$testResult.name$</h1>
+        <h1>$testResult.name$ <sup><button type="button" onclick="toggleTheme()">Toggle Theme</button></sup></h1>
 
         $testResult.annotations:{ annotation |
         <pre class="notes">$annotation$</pre>
@@ -103,13 +95,8 @@
         }$
 
     <div class="footer">
-        $script:{
-        <script type="text/javascript">
-            // <![CDATA[
-            $it$
-            // ]]>
-        </script>
-        }$
+        <script src="xregexp.js" type="text/javascript"></script>
+        <script src="yatspec.js" type="text/javascript"></script>
     </div>
 
     </body>
