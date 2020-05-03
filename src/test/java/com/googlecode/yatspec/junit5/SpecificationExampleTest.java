@@ -30,10 +30,9 @@ public class SpecificationExampleTest implements WithTestState, WithCustomResult
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
     private static final String REGEX_PATTERN = "(?:#)([^\\s]+)";
-    private static final String REPLACEMENT_PATTERN = "<a href='http://localhost:8080/pretent-issue-tracking/$1'>$1</a>";
+    private static final String REPLACEMENT_PATTERN = "<a href='http://localhost:8080/pretend-issue-tracking/$1'>$1</a>";
 
     private final TestState interactions = new TestState();
-//    private final CapturedInputAndOutputs capturedInputAndOutputs = interactions.capturedInputAndOutputs();
     private final InterestingGivens interestingGivens = interactions.interestingGivens();
 
     @Test
