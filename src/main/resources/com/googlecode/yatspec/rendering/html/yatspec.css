@@ -122,7 +122,7 @@ td {
     border: 1px solid #C3D9FF;
 }
 
-div.contents, div.testmethod {
+nav.contents, article.testmethod {
     margin-bottom: 40px;
 }
 
