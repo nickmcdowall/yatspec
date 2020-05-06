@@ -40,6 +40,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         overwrite(htmlResultFile, render(result));
         addAdjacentFile(htmlResultFile, "yatspec.css");
         addAdjacentFile(htmlResultFile, "yatspec_dark.css");
+        addAdjacentFile(htmlResultFile, "yatspec_purple.css");
         addAdjacentFile(htmlResultFile, "yatspec.js");
         addAdjacentFile(htmlResultFile, "xregexp.js");
     }

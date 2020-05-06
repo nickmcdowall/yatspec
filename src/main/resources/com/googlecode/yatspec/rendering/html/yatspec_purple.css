@@ -1,0 +1,83 @@
+section.scenario {
+    border: 5px solid rgb(111,41,97);
+    border-radius: 15px;
+    display: grid;
+    grid-template-areas:
+            "A1 A1 A2 A2 A2"
+            "A1 A1 A2 A2 A2"
+            "A1 A1 A3 A3 A3"
+            "A5 A5 A5 A5 A5"
+            "A4 A4 A4 A4 A4"
+            "A4 A4 A4 A4 A4";
+    gap: 3px;
+}
+
+section.scenario > * {
+    background-color: rgba(111,41,97,.4);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+section.results {
+    grid-area: A3;
+}
+
+section.specification {
+    grid-area: A2;
+}
+
+section.interestingGivens {
+    grid-area: A1;
+}
+
+section.interactions {
+    grid-area: A4;
+}
+
+section.diagram {
+    grid-area: A5;
+}
+
+svg {
+    display:block;
+    margin:auto;
+}
+
+
+/* Adding back Yatspec CSS  */
+ul.contents a {
+    text-transform: capitalize;
+}
+
+.highlight.specification .literal,
+.highlight.specification .keyword,
+.highlight.specification .constant,
+.highlight.specification .quote {
+    font-weight: bold;
+}
+
+.highlight .literal {
+    color: #066;
+}
+
+.highlight .keyword {
+    color: #008;
+}
+
+.highlight .constant {
+    color: #606;
+}
+
+.highlight .quote {
+    color: #080;
+}
+
+pre.test-not-run, .test-not-run, .interestingGiven {
+    background-color: rgba(165, 92, 150, 0.4);
+}
+
+pre.test-failed, .test-failed {
+    background-color: #f53e3e;
+    border: 2px solid #f11e1e;
+
+}

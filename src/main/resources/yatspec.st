@@ -64,34 +64,44 @@
                         $endif$
                         $testMethod.scenarios: { scenario |
                         <section class="scenario" id="$testMethod.uid$_$scenario.uid$">
-                                <a id="$scenario.name$"></a>
-                                <section>
-                                    <h2>Specification</h2>
-                                    <pre class="highlight specification">$scenario.specification$</pre>
-                                </section>
-                                <section>
-                                    <h3 class="logKey">Test results:</h3>
-                                    <pre class='highlight results $cssClass.(scenario.status)$'>$scenario.message$</pre>
-                                </section>
-                                $if(!scenario.interestingGivens.keys.empty)$
-                                <section>
-                                    <h3 class="logKey">Interesting Givens</h3>
-                                    <table class="interestingGivens logValue">
-                                    $scenario.interestingGivens.keys:{ key |
-                                        <tr>
-                                            <th class="key">$key$</th>
-                                            <td class="interestingGiven">$scenario.interestingGivens.(key)$</td>
-                                        </tr>
-                                    }$
-                                    </table>
-                                </section>
-                                $endif$
-                                $scenario.logs.keys:{ key |
-                                <section>
-                                    <h3 class="logKey" logkey="$key.valueWithSpacesReplacedByUnderscore$">$key.value$</h3>
-                                    <div class="logValue highlight $scenario.logs.(key).class.simpleName$" >$scenario.logs.(key)$</div>
-                                </section>
+                            <section class="specification">
+                                <h2>Specification<a id="$scenario.name$"></a></h2>
+                                <pre class="highlight specification">$scenario.specification$</pre>
+                            </section>
+                            <section class="results">
+                                <h3 class="logKey">Test results:</h3>
+                                <pre class='highlight results $cssClass.(scenario.status)$'>$scenario.message$</pre>
+                            </section>
+                            $if(scenario.diagram)$
+                            <section class="diagram">
+                                <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
+                                <div class="highlight SvgWrapper" >$scenario.diagram$</div>
+                            </section>
+                            $endif$
+                            $if(!scenario.interestingGivens.keys.empty)$
+                            <section class="interestingGivens">
+                                <h3 class="logKey">Interesting Givens</h3>
+                                <table class="interestingGivens">
+                                $scenario.interestingGivens.keys:{ key |
+                                    <tr>
+                                        <th class="key">$key$</th>
+                                        <td class="interestingGiven">$scenario.interestingGivens.(key)$</td>
+                                    </tr>
                                 }$
+                                </table>
+                            </section>
+                            $endif$
+                            <section class="interactions">
+                                <details>
+                                    <summary>Captured Messages</summary>
+                                    $scenario.logs.keys:{ key |
+                                    <section class="interaction">
+                                        <h3 class="logKey" logkey="$key.valueWithSpacesReplacedByUnderscore$">$key.value$</h3>
+                                        <div class="logValue highlight $scenario.logs.(key).class.simpleName$" >$scenario.logs.(key)$</div>
+                                    </section>
+                                    }$
+                                </details>
+                            </section>
                         </section>
                         }$
                 </section>

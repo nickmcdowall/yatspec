@@ -145,8 +145,9 @@ function toggleTheme() {
     var el = document.getElementById("theme");
     if (el.href.match("yatspec.css")) {
         el.href = "yatspec_dark.css";
-    }
-    else {
+    } else if (el.href.match("yatspec_dark.css")) {
+        el.href = "yatspec_purple.css";
+    } else {
         el.href = "yatspec.css";
     }
 }
@@ -171,9 +172,6 @@ var createDialogsForSequenceDiagramMessages = function() {
 var dialogsCreated = false;
 var messagePayloadDialogs = {};
 $(document).ready(function () {
-
-    $(".SvgWrapper").toggleClass("hide");
-
     $(".sequence_diagram_clickable").click(function() {
         openDialog($(this), "click");
     });

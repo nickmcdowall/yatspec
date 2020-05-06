@@ -33,9 +33,8 @@
         </header>
         <section class="section-body">
             <section class="scenario" id="-1030922301_0_-1546608972">
-                <a id=""></a>
-                <section>
-                    <h2>Specification</h2>
+                <section class="specification">
+                    <h2>Specification<a id=""></a></h2>
                     <pre class="highlight specification">Given mr flintstone is &quot;hungry&quot;
 When he demands food from bambam
 Then bambam places a burger order with barney &quot;a burger&quot;
@@ -44,43 +43,13 @@ When barney gives to bambam &quot;1 burger&quot;
 Then bambam gives to mr flintstone &quot;1 burger&quot;
 Then mr flintstone shares his food with barney because he likes him</pre>
                 </section>
-                <section>
+                <section class="results">
                     <h3 class="logKey">Test results:</h3>
                     <pre class='highlight results test-passed'>Test passed</pre>
                 </section>
-                <section>
-                    <h3 class="logKey">Interesting Givens</h3>
-                    <table class="interestingGivens logValue">
-                        <tr>
-                            <th class="key">String</th>
-                            <td class="interestingGiven">burger</td>
-                        </tr>
-
-                    </table>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="food_demand_from_mrflintstone_to_bambam">food demand from mrflintstone to bambam</h3>
-                    <div class="logValue highlight String" >I want a burger</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="food_order_from_bambam_to_barney">food order from bambam to barney</h3>
-                    <div class="logValue highlight String" >Get me a burger</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="_kindness__food_response_from_barney_to_bambam">(kindness) food response from barney to bambam</h3>
-                    <div class="logValue highlight String" >1 burger here u go</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="_kindness__response_from_bambam_to_mrflintstone">(kindness) response from bambam to mrflintstone</h3>
-                    <div class="logValue highlight String" >here is your 1 burger</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="_kindness__bite_of_burger_from_mrflintstone_to_barney">(kindness) bite of burger from mrflintstone to barney</h3>
-                    <div class="logValue highlight String" >have some of my burger because I like you</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="Sequence_Diagram">Sequence Diagram</h3>
-                    <div class="logValue highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
+                <section class="diagram">
+                    <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
+                    <div class="highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="371px" preserveAspectRatio="none" style="width:482px;height:371px;" version="1.1" viewBox="0 0 482 371" width="482px" zoomAndPan="magnify">
                             <defs>
                                 <filter height="300%" id="firls20yv4h78" width="300%" x="-1" y="-1">
@@ -191,7 +160,42 @@ Then mr flintstone shares his food with barney because he likes him</pre>
 
                     </div></div>
                 </section>
+                <section class="interestingGivens">
+                    <h3 class="logKey">Interesting Givens</h3>
+                    <table class="interestingGivens">
+                        <tr>
+                            <th class="key">String</th>
+                            <td class="interestingGiven">burger</td>
+                        </tr>
 
+                    </table>
+                </section>
+                <section class="interactions">
+                    <details>
+                        <summary>Captured Messages</summary>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="food_demand_from_mrflintstone_to_bambam">food demand from mrflintstone to bambam</h3>
+                            <div class="logValue highlight String" >I want a burger</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="food_order_from_bambam_to_barney">food order from bambam to barney</h3>
+                            <div class="logValue highlight String" >Get me a burger</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="_kindness__food_response_from_barney_to_bambam">(kindness) food response from barney to bambam</h3>
+                            <div class="logValue highlight String" >1 burger here u go</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="_kindness__response_from_bambam_to_mrflintstone">(kindness) response from bambam to mrflintstone</h3>
+                            <div class="logValue highlight String" >here is your 1 burger</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="_kindness__bite_of_burger_from_mrflintstone_to_barney">(kindness) bite of burger from mrflintstone to barney</h3>
+                            <div class="logValue highlight String" >have some of my burger because I like you</div>
+                        </section>
+
+                    </details>
+                </section>
             </section>
 
         </section>
@@ -226,9 +230,8 @@ Then mr flintstone shares his food with barney because he likes him</pre>
                 </table>
             </section>
             <section class="scenario" id="1899422076_-1303561665_1168937711">
-                <a id="bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(starving)"></a>
-                <section>
-                    <h2>Specification</h2>
+                <section class="specification">
+                    <h2>Specification<a id="bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(starving)"></a></h2>
                     <pre class="highlight specification">Given mr flintstone is &quot;starving&quot;
 When he demands food from bambam
 Then bambam places a burger order with barney &quot;a burger&quot;
@@ -238,43 +241,13 @@ Then bambam gives to mr flintstone &quot;1 burger&quot;
 
 Then mr flintstone shares his food with barney because he likes him</pre>
                 </section>
-                <section>
+                <section class="results">
                     <h3 class="logKey">Test results:</h3>
                     <pre class='highlight results test-passed'>Test passed</pre>
                 </section>
-                <section>
-                    <h3 class="logKey">Interesting Givens</h3>
-                    <table class="interestingGivens logValue">
-                        <tr>
-                            <th class="key">String</th>
-                            <td class="interestingGiven">burger</td>
-                        </tr>
-
-                    </table>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="food_demand_from_mrflintstone_to_bambam">food demand from mrflintstone to bambam</h3>
-                    <div class="logValue highlight String" >I want a burger</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="food_order_from_bambam_to_barney">food order from bambam to barney</h3>
-                    <div class="logValue highlight String" >Get me a burger</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="_kindness__food_response_from_barney_to_bambam">(kindness) food response from barney to bambam</h3>
-                    <div class="logValue highlight String" >1 burger here u go</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="_kindness__response_from_bambam_to_mrflintstone">(kindness) response from bambam to mrflintstone</h3>
-                    <div class="logValue highlight String" >here is your 1 burger</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="_kindness__bite_of_burger_from_mrflintstone_to_barney">(kindness) bite of burger from mrflintstone to barney</h3>
-                    <div class="logValue highlight String" >have some of my burger because I like you</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="Sequence_Diagram">Sequence Diagram</h3>
-                    <div class="logValue highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
+                <section class="diagram">
+                    <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
+                    <div class="highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="371px" preserveAspectRatio="none" style="width:482px;height:371px;" version="1.1" viewBox="0 0 482 371" width="482px" zoomAndPan="magnify">
                             <defs>
                                 <filter height="300%" id="firls20yv4h78" width="300%" x="-1" y="-1">
@@ -385,12 +358,46 @@ Then mr flintstone shares his food with barney because he likes him</pre>
 
                     </div></div>
                 </section>
+                <section class="interestingGivens">
+                    <h3 class="logKey">Interesting Givens</h3>
+                    <table class="interestingGivens">
+                        <tr>
+                            <th class="key">String</th>
+                            <td class="interestingGiven">burger</td>
+                        </tr>
 
+                    </table>
+                </section>
+                <section class="interactions">
+                    <details>
+                        <summary>Captured Messages</summary>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="food_demand_from_mrflintstone_to_bambam">food demand from mrflintstone to bambam</h3>
+                            <div class="logValue highlight String" >I want a burger</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="food_order_from_bambam_to_barney">food order from bambam to barney</h3>
+                            <div class="logValue highlight String" >Get me a burger</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="_kindness__food_response_from_barney_to_bambam">(kindness) food response from barney to bambam</h3>
+                            <div class="logValue highlight String" >1 burger here u go</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="_kindness__response_from_bambam_to_mrflintstone">(kindness) response from bambam to mrflintstone</h3>
+                            <div class="logValue highlight String" >here is your 1 burger</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="_kindness__bite_of_burger_from_mrflintstone_to_barney">(kindness) bite of burger from mrflintstone to barney</h3>
+                            <div class="logValue highlight String" >have some of my burger because I like you</div>
+                        </section>
+
+                    </details>
+                </section>
             </section>
             <section class="scenario" id="1899422076_-1768393676_1837746044">
-                <a id="bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(peckish)"></a>
-                <section>
-                    <h2>Specification</h2>
+                <section class="specification">
+                    <h2>Specification<a id="bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(peckish)"></a></h2>
                     <pre class="highlight specification">Given mr flintstone is &quot;peckish&quot;
 When he demands food from bambam
 Then bambam places a burger order with barney &quot;a burger&quot;
@@ -400,43 +407,13 @@ Then bambam gives to mr flintstone &quot;1 burger&quot;
 
 Then mr flintstone shares his food with barney because he likes him</pre>
                 </section>
-                <section>
+                <section class="results">
                     <h3 class="logKey">Test results:</h3>
                     <pre class='highlight results test-passed'>Test passed</pre>
                 </section>
-                <section>
-                    <h3 class="logKey">Interesting Givens</h3>
-                    <table class="interestingGivens logValue">
-                        <tr>
-                            <th class="key">String</th>
-                            <td class="interestingGiven">burger</td>
-                        </tr>
-
-                    </table>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="food_demand_from_mrflintstone_to_bambam">food demand from mrflintstone to bambam</h3>
-                    <div class="logValue highlight String" >I want a burger</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="food_order_from_bambam_to_barney">food order from bambam to barney</h3>
-                    <div class="logValue highlight String" >Get me a burger</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="_kindness__food_response_from_barney_to_bambam">(kindness) food response from barney to bambam</h3>
-                    <div class="logValue highlight String" >1 burger here u go</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="_kindness__response_from_bambam_to_mrflintstone">(kindness) response from bambam to mrflintstone</h3>
-                    <div class="logValue highlight String" >here is your 1 burger</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="_kindness__bite_of_burger_from_mrflintstone_to_barney">(kindness) bite of burger from mrflintstone to barney</h3>
-                    <div class="logValue highlight String" >have some of my burger because I like you</div>
-                </section>
-                <section>
-                    <h3 class="logKey" logkey="Sequence_Diagram">Sequence Diagram</h3>
-                    <div class="logValue highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
+                <section class="diagram">
+                    <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
+                    <div class="highlight SvgWrapper" ><div class='nohighlight'><?xml version="1.0" encoding="UTF-8"?>
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="371px" preserveAspectRatio="none" style="width:482px;height:371px;" version="1.1" viewBox="0 0 482 371" width="482px" zoomAndPan="magnify">
                             <defs>
                                 <filter height="300%" id="firls20yv4h78" width="300%" x="-1" y="-1">
@@ -547,7 +524,42 @@ Then mr flintstone shares his food with barney because he likes him</pre>
 
                     </div></div>
                 </section>
+                <section class="interestingGivens">
+                    <h3 class="logKey">Interesting Givens</h3>
+                    <table class="interestingGivens">
+                        <tr>
+                            <th class="key">String</th>
+                            <td class="interestingGiven">burger</td>
+                        </tr>
 
+                    </table>
+                </section>
+                <section class="interactions">
+                    <details>
+                        <summary>Captured Messages</summary>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="food_demand_from_mrflintstone_to_bambam">food demand from mrflintstone to bambam</h3>
+                            <div class="logValue highlight String" >I want a burger</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="food_order_from_bambam_to_barney">food order from bambam to barney</h3>
+                            <div class="logValue highlight String" >Get me a burger</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="_kindness__food_response_from_barney_to_bambam">(kindness) food response from barney to bambam</h3>
+                            <div class="logValue highlight String" >1 burger here u go</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="_kindness__response_from_bambam_to_mrflintstone">(kindness) response from bambam to mrflintstone</h3>
+                            <div class="logValue highlight String" >here is your 1 burger</div>
+                        </section>
+                        <section class="interaction">
+                            <h3 class="logKey" logkey="_kindness__bite_of_burger_from_mrflintstone_to_barney">(kindness) bite of burger from mrflintstone to barney</h3>
+                            <div class="logValue highlight String" >have some of my burger because I like you</div>
+                        </section>
+
+                    </details>
+                </section>
             </section>
 
         </section>

@@ -1,6 +1,7 @@
 package com.googlecode.yatspec.state;
 
 import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -15,7 +16,7 @@ public class Scenario {
     private final JavaSource specification;
     private Throwable exception;
     private boolean wasRun = false;
-
+    private SvgWrapper diagram;
 
     public Scenario(String name, JavaSource specification) {
         this.name = name;
@@ -28,6 +29,10 @@ public class Scenario {
 
     public void setTestState(TestState testState) {
         this.testState = testState;
+    }
+
+    public SvgWrapper getDiagram() {
+        return testState.getDiagram();
     }
 
     public Map<LogKey, Object> getLogs() {

@@ -1,7 +1,8 @@
+/* Fonts  */
 html, body {
     margin: 1em 2ex 2em;
     padding: 0;
-    background-color: #061826;
+    background-color: #417faf;
     color: #fff;
     font-family: "Andale Mono", AndaleMono, monospace;
     font-size: 10pt;
@@ -52,6 +53,61 @@ pre {
     line-height: 18.5714px;
 }
 
+
+/* Layout  */
+section.scenario {
+    border: 5px solid #89aae6;
+    border-radius: 15px;
+    display: grid;
+    grid-template-areas:
+            "A1 A1 A2 A2 A2"
+            "A1 A1 A2 A2 A2"
+            "A1 A1 A3 A3 A3"
+            "A5 A5 A5 A5 A5"
+            "A4 A4 A4 A4 A4"
+            "A4 A4 A4 A4 A4";
+    gap: 3px;
+}
+
+section.scenario > * {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+section.results {
+    grid-area: A3;
+}
+
+section.specification {
+    grid-area: A2;
+}
+
+section.interestingGivens {
+    grid-area: A1;
+}
+
+section.interactions {
+    grid-area: A4;
+}
+
+section.diagram {
+    grid-area: A5;
+
+}
+
+svg {
+    display:block;
+    margin:auto;
+}
+
+/* Other  */
+
+div.nohighlight {
+    background-color: #417faf;
+    border-radius: 3%
+}
+
+
 body {
     position: absolute;
     width: 95%;
@@ -96,13 +152,12 @@ pre.test-not-run, .test-not-run, .interestingGiven {
 }
 
 pre.test-failed, .test-failed {
-    background-color: #ad4a92;
-    border: 2px solid #ac80a0;
+    background-color: #cd0a0a;
+    border: 2px solid #d03a3a;
 }
 
 li.test-not-run, li.test-passed {
     border: none;
-    background-color: #061826;
 }
 
 ul.contents a {
@@ -134,40 +189,15 @@ td {
     border: 1px solid #0471a6;
 }
 
-div.contents, div.testmethod {
-    margin-bottom: 40px;
-}
-
 .scenarios td {
     padding: 0 20px;
     text-align: center;
-}
-
-.scenarios, .scenario {
-    margin-bottom: 20px;
-}
-
-.SvgWrapper {
-    color: #061826;
-    background-color: #fff;
 }
 
 .scenario {
     background-color: #061826;
     border: 10px solid #0471a6;
     padding: 0 10px;
-}
-
-h2 {
-    margin-top: 10px;
-}
-
-pre {
-    margin-bottom: 32px;
-}
-
-div.example {
-    margin-bottom: 64px;
 }
 
 .hide {
@@ -195,64 +225,4 @@ div.example {
     text-align: right;
     padding: 0 5px;
     vertical-align: middle;
-}
-
-.logValue {
-    white-space: pre-wrap;
-    margin-bottom: 32px;
-}
-
-.package-name {
-    cursor: pointer;
-}
-
-.package-name:hover {
-    text-decoration: underline;
-}
-
-dt {
-    font-weight: bold;
-    margin: 0px;
-    padding: 2px;
-}
-
-dd {
-    font-weight: normal;
-    margin-top: 0;
-    margin-bottom: 1px;
-    margin-left: 20px;
-    margin-right: 0;
-    padding: 2px;
-    padding-right: 0;
-}
-
-dl {
-    margin: 0;
-}
-
-dl.index-result {
-    padding: 10px;
-}
-
-.index-result dt {
-    margin-bottom: 5px;
-}
-
-.index-result dd {
-    margin-left: 0px;
-    margin-right: 5px;
-}
-
-.section div {
-    width: 100%;
-}
-
-.section .section-header {
-    padding: 2px;
-    cursor: pointer;
-}
-
-.section .section-body {
-    display: block;
-    padding: 5px;
 }

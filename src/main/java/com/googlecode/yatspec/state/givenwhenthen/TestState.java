@@ -2,6 +2,7 @@ package com.googlecode.yatspec.state.givenwhenthen;
 
 import com.googlecode.yatspec.plugin.sequencediagram.ByNamingConventionMessageProducer;
 import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramMessage;
+import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -13,6 +14,7 @@ public class TestState {
     private InterestingGivens interestingGivens = new InterestingGivens();
     private CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
     private ByNamingConventionMessageProducer byNamingConventionMessageProducer = new ByNamingConventionMessageProducer();
+    private SvgWrapper diagram;
 
     public synchronized void log(String name, Object value) {
         int count = 1;
@@ -52,5 +54,12 @@ public class TestState {
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    public SvgWrapper getDiagram() {
+        return diagram;
+    }
+    public void setDiagram(SvgWrapper diagram) {
+        this.diagram = diagram;
     }
 }

@@ -16,7 +16,6 @@ import static java.util.Collections.emptyList;
 
 public class SequenceDiagramExtension implements TestInstancePostProcessor, BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
-    private static final String SEQUENCE_DIAGRAM = "Sequence Diagram";
     private SequenceDiagramGenerator sequenceDiagramGenerator;
     private Optional<TestState> interactions = Optional.empty();
     private List<Participant> participants = emptyList();
@@ -41,7 +40,7 @@ public class SequenceDiagramExtension implements TestInstancePostProcessor, Befo
     @Override
     public void afterTestExecution(ExtensionContext extensionContext) {
         interactions.ifPresent(interactions ->
-                interactions.log(SEQUENCE_DIAGRAM, sequenceDiagramGenerator.generateSequenceDiagram(interactions.sequenceMessages(), participants)));
+                interactions.setDiagram(sequenceDiagramGenerator.generateSequenceDiagram(interactions.sequenceMessages(), participants)));
     }
 
 }
