@@ -84,3 +84,8 @@ text, .ui-dialog {
     color: #717171;
     font-family: 'Architects Daughter', cursive;
 }
+
+/* preserves pretty printed json etc. */
+.logValue {
+    white-space: pre-wrap;
+}
