@@ -1,0 +1,86 @@
+
+@import url("https://fxaeberhard.github.io/handdrawn.css/handdrawn.css");
+
+
+/* Layout  */
+section.scenario {
+    border-radius: 15px;
+    display: grid;
+    grid-template-areas:
+            "A2 A2 A2 A3 A3"
+            "A2 A2 A2 A1 A1"
+            "A5 A5 A5 A5 A5"
+            "A6 A6 A6 A6 A6"
+;
+    gap: 3px;
+}
+
+section.specification {
+    grid-area: A2;
+}
+
+section.results {
+    grid-area: A1;
+}
+
+section.interestingGivens {
+    grid-area: A3;
+}
+
+section.diagram {
+    grid-area: A5;
+}
+
+footer {
+    grid-area: A6;
+
+}
+
+h1 {
+    font-size: 4.2rem;
+    margin: 2rem 0 0.4rem;
+    line-height: 4.2rem;
+    text-align: center;
+}
+
+svg {
+    display:block;
+    margin:auto;
+}
+
+
+ul.contents a {
+    text-transform: capitalize;
+}
+
+.interestingGiven,
+.literal,
+.keyword,
+.constant,
+.quote {
+    font-weight: bold;
+    color: #9E5E6F;
+}
+
+article {
+    padding-left: 20px;
+}
+
+section.scenario {
+    padding-left: 30px;
+}
+
+.test-failed {
+    color:#DA2C43;
+    background-color: #BBB477;
+}
+
+.test-passed {
+    color: #56887D;
+}
+
+/* svg and popup looking the same */
+text, .ui-dialog {
+    color: #717171;
+    font-family: 'Architects Daughter', cursive;
+}

@@ -9,7 +9,10 @@
 <body>
 <h1>Index</h1>
 <div class="contents">
-    $result.packages:indexPackage(package=it, cssClass=cssClass)$
+    <h2>Contents</h2>
+    <p>
+        $result.packages:indexPackage(package=it, cssClass=cssClass)$
+    </p>
 </div>
 </body>
 </html>

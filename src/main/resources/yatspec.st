@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <title>$testSuite$</title>
+        <title>LSD</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js" type="text/javascript"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" type="text/css" media="all"/>
         <link rel="stylesheet" href="https://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all"/>
-        <link rel="stylesheet" id="theme" type="text/css" href="yatspec.css">
+        <link rel="stylesheet" id="theme" type="text/css" href="yatspec_alt.css">
     </head>
     <body>
         <header>
-            <h1>$testResult.name$ <sup><button type="button" onclick="toggleTheme()">Toggle Theme</button></sup></h1>
+            <div class="hd-switch">
+                <input type="checkbox" id="switch-id" name="myswitch" onchange="toggleTheme()">
+                <label for="switch-id">Classic</label>
+                <span class="hd-switch-knob"></span>
+            </div>
+            <h1>$testResult.name$</h1>
             $testResult.annotations:{ annotation |
             <pre class="notes">$annotation$</pre>
             }$
@@ -69,7 +74,7 @@
                                 <pre class="highlight specification">$scenario.specification$</pre>
                             </section>
                             <section class="results">
-                                <h3 class="logKey">Test results:</h3>
+                                <h3 class="logKey">Test result:</h3>
                                 <pre class='highlight results $cssClass.(scenario.status)$'>$scenario.message$</pre>
                             </section>
                             $if(scenario.diagram)$
@@ -91,17 +96,22 @@
                                 </table>
                             </section>
                             $endif$
-                            <section class="interactions">
+                            <footer>
+                                <section class="interactions">
                                 <details>
-                                    <summary>Captured Messages</summary>
+                                    <summary>Captured Interactions</summary>
                                     $scenario.logs.keys:{ key |
-                                    <section class="interaction">
-                                        <h3 class="logKey" logkey="$key.valueWithSpacesReplacedByUnderscore$">$key.value$</h3>
-                                        <div class="logValue highlight $scenario.logs.(key).class.simpleName$" >$scenario.logs.(key)$</div>
-                                    </section>
+                                    <p>
+
+                                    <details class="interaction">
+                                        <summary class="logKey" logkey="$key.valueWithSpacesReplacedByUnderscore$">$key.value$</summary>
+                                        <div class="logValue highlight $scenario.logs.(key).class.simpleName$" ><p>$scenario.logs.(key)$</p></div>
+                                    </details>
+                                    </p>
                                     }$
                                 </details>
                             </section>
+                            </footer>
                         </section>
                         }$
                 </section>

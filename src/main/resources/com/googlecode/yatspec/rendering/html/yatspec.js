@@ -143,12 +143,10 @@ $('ul.contents > li > a').click(function () {
 
 function toggleTheme() {
     var el = document.getElementById("theme");
-    if (el.href.match("yatspec.css")) {
-        el.href = "yatspec_dark.css";
-    } else if (el.href.match("yatspec_dark.css")) {
-        el.href = "yatspec_purple.css";
+    if (el.href.match("yatspec_classic.css")) {
+        el.href = "yatspec_alt.css";
     } else {
-        el.href = "yatspec.css";
+        el.href = "yatspec_classic.css";
     }
 }
 
@@ -160,7 +158,7 @@ var createDialogsForSequenceDiagramMessages = function() {
         var scenarioUid = myScenario.attr("id");
         var sequenceDiagramMessageId = sequenceDiagramMessage.attr("sequence_diagram_message_id");
 
-        var dialogContent = myScenario.find('H3[logKey="' + sequenceDiagramMessageId + '"]').next("div").clone();
+        var dialogContent = myScenario.find('summary[logKey="' + sequenceDiagramMessageId + '"]').next("div").clone();
 
         var capturedInputAndOutputsName = sequenceDiagramMessage.text();
         sequenceDiagramMessageId = "" + sequenceDiagramMessageId + "_" + scenarioUid;

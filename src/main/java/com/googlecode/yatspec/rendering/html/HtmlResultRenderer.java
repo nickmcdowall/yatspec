@@ -38,9 +38,8 @@ public class HtmlResultRenderer implements SpecResultListener {
     public void complete(File yatspecOutputDir, Result result) throws Exception {
         File htmlResultFile = htmlResultFile(yatspecOutputDir, result.getTestClass());
         overwrite(htmlResultFile, render(result));
-        addAdjacentFile(htmlResultFile, "yatspec.css");
-        addAdjacentFile(htmlResultFile, "yatspec_dark.css");
-        addAdjacentFile(htmlResultFile, "yatspec_purple.css");
+        addAdjacentFile(htmlResultFile, "yatspec_classic.css");
+        addAdjacentFile(htmlResultFile, "yatspec_alt.css");
         addAdjacentFile(htmlResultFile, "yatspec.js");
         addAdjacentFile(htmlResultFile, "xregexp.js");
     }
@@ -93,9 +92,9 @@ public class HtmlResultRenderer implements SpecResultListener {
 
     public static Map<Status, String> getCssMap() {
         return new HashMap<>() {{
-            put(Status.Passed, "test-passed");
-            put(Status.Failed, "test-failed");
-            put(Status.NotRun, "test-not-run");
+            put(Status.Passed, "test-passed icon-check");
+            put(Status.Failed, "test-failed icon-times");
+            put(Status.NotRun, "test-not-run icon-warning");
         }};
     }
 

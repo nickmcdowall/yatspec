@@ -50,7 +50,7 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
         StringTemplate template = group.getInstanceOf("tagindex_index",
                 model().
                         add("script", null).
-                        add("stylesheet", HtmlResultRenderer.loadContent("yatspec.css")).
+                        add("stylesheet", HtmlResultRenderer.loadContent("yatspec_classic.css")).
                         add("cssClass", getCssMap()).
                         add("tags", tagModels(index).toList()).
                         toMap());

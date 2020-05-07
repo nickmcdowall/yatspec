@@ -8,6 +8,7 @@ import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.googlecode.yatspec.sequence.Participants.ACTOR;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 @ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
