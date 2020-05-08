@@ -101,13 +101,11 @@
                                 <details>
                                     <summary>Captured Interactions</summary>
                                     $scenario.logs.keys:{ key |
-                                    <p>
-
                                     <details class="interaction">
                                         <summary class="logKey" logkey="$key.valueWithSpacesReplacedByUnderscore$">$key.value$</summary>
-                                        <div class="logValue highlight $scenario.logs.(key).class.simpleName$" ><p>$scenario.logs.(key)$</p></div>
+                                        <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
+                                             class="logValue highlight $scenario.logs.(key).class.simpleName$">$scenario.logs.(key)$</div>
                                     </details>
-                                    </p>
                                     }$
                                 </details>
                             </section>
