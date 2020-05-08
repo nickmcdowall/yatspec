@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 
-public class SequenceDiagramExtension implements TestInstancePostProcessor, BeforeTestExecutionCallback, AfterTestExecutionCallback {
+public class SequenceDiagramExtension extends SpecListener implements TestInstancePostProcessor, BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
     private SequenceDiagramGenerator sequenceDiagramGenerator;
     private Optional<TestState> interactions = Optional.empty();

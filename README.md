@@ -21,7 +21,7 @@ Add YatSpec to your project e.g. Gradle:
 
 ````
 dependencies {
-    testImplementation 'com.github.nickmcdowall:yatspec:release-2019.1.12'
+    testImplementation 'com.github.nickmcdowall:yatspec:release-2020.0.1'
     ...
 }
 ````
@@ -37,19 +37,19 @@ repositories {
 Create a new Test:
 
 ```java
-@ExtendWith({SpecListener.class, SequenceDiagramExtension.class})
+@ExtendWith(SequenceDiagramExtension.class)
 public class SequenceDiagramExampleTest implements WithTestState {
 
     private TestState interactions = new TestState();
 
     @Test
     public void messageFromUpstreamToDownstream() {
-        //code
+        // (method names here turn into the specification in report)
     }
 
     @Override
     public TestState testState() {
-        return interactions;
+        return interactions; // (this is used to 'log' interactions that get added to the sequence diagram)
     }
 }
 ```
