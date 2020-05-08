@@ -110,10 +110,6 @@ $(document).ready(function () {
                 ];
             }).get();
 
-        $('.logKey', this).click(function() {
-            $(this).next(".logValue").toggleClass("hide");
-        });
-
         $('.logKey', this).each(function() {
             $(this).next('.logValue.highlight').each(function() {
                 yatspec.highlight(this, interestingGivens.concat([
@@ -129,17 +125,6 @@ $(document).ready(function () {
     })
 
 }, false);
-
-$(".section-header").click(function () {
-    $sheader = $(this);
-    $sbody = $sheader.siblings(".section-body");
-    $sbody.slideToggle(150);
-});
-
-$('ul.contents > li > a').click(function () {
-    $link = $(this);
-    $('div.testmethod > ' + $link.attr('href')).siblings('.section-body').slideDown(150);
-});
 
 function toggleTheme() {
     var el = document.getElementById("theme");
