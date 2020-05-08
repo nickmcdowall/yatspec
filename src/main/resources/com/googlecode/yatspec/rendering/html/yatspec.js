@@ -120,8 +120,6 @@ $(document).ready(function () {
                 ]));
             })
         });
-
-        $('.logKey', this).next(".logValue").toggleClass("hide");
     })
 
 }, false);
