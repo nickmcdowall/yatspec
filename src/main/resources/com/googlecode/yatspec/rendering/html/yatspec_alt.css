@@ -89,3 +89,13 @@ text, .ui-dialog {
 .logValue {
     white-space: pre-wrap;
 }
+
+section.specification {
+    margin: 2rem;
+    padding:1rem;
+    box-shadow: 7px 9px 22px 0px rgba(0,0,0,0.54);
+}
+
+details.interaction {
+    margin-left: 3rem;
+}
