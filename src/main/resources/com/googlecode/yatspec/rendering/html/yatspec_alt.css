@@ -44,10 +44,8 @@ h1 {
 }
 
 svg {
-    display:block;
-    margin:auto;
+    margin: 2rem;
 }
-
 
 ul.contents a {
     text-transform: capitalize;
