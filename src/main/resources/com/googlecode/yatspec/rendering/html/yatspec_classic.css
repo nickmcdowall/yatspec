@@ -200,3 +200,7 @@ svg {
     display:block;
     margin:auto;
 }
+
+div.logo {
+    display: none;
+}

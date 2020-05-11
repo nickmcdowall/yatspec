@@ -9,12 +9,16 @@
         <link rel="stylesheet" id="theme" type="text/css" href="yatspec_alt.css">
     </head>
     <body>
+        <div class="hd-switch">
+            <input type="checkbox" id="switch-id" name="myswitch" onchange="toggleTheme()">
+            <label for="switch-id">Classic</label>
+            <span class="hd-switch-knob"></span>
+        </div>
+        <div class="logo">
+            <h5 class="logo1">L</h5>iving &nbsp;<h5 class="logo2">S</h5>equnce &nbsp;<h5 class="logo3">D</h5>iagrams
+        </div>
+
         <header>
-            <div class="hd-switch">
-                <input type="checkbox" id="switch-id" name="myswitch" onchange="toggleTheme()">
-                <label for="switch-id">Classic</label>
-                <span class="hd-switch-knob"></span>
-            </div>
             <h1>$testResult.name$</h1>
             $testResult.annotations:{ annotation |
             <pre class="notes">$annotation$</pre>

@@ -2,8 +2,11 @@ package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.yatspec.state.Result;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

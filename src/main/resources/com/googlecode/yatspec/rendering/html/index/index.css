@@ -36,3 +36,68 @@ div.contents {
 .test-passed {
     color: #56887D;
 }
+
+/* Styling for animated LSD logo */
+.logo1, .logo2, .logo3 {
+    animation-timing-function: cubic-bezier(0.73, -0.24, 0.21, 1.2);
+    animation-duration: 4s;
+    animation-iteration-count: 1;
+    will-change: transform;
+    color: #9E5E6F;
+    font-weight: bold;
+}
+
+.logo1 {animation-name: a1;}
+.logo2 {animation-name: a2;}
+.logo3 {animation-name: a3;}
+
+@keyframes a1 {
+    0%, 20% {transform: translateY(0);}
+    50%, 70% {transform: translateY(-1rem);}
+}
+
+@keyframes a2 {
+    0%, 25% {transform: translateY(0);}
+    50%, 70% {transform: translateY(-1rem);}
+}
+
+@keyframes a3 {
+    0%, 30% {transform: translateY(0);}
+    50%, 70% {transform: translateY(-1rem);}
+}
+
+/* Styling for animated LSD logo */
+div.logo {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo1, .logo2, .logo3 {
+    animation-timing-function: cubic-bezier(0.73, -0.24, 0.21, 1.2);
+    animation-duration: 4s;
+    animation-iteration-count: 1;
+    will-change: transform;
+    color: #9E5E6F;
+    font-weight: bold;
+}
+
+.logo1 {animation-name: a1;}
+.logo2 {animation-name: a2;}
+.logo3 {animation-name: a3;}
+
+@keyframes a1 {
+    0%, 20% {transform: translateY(0);}
+    50%, 70% {transform: translateY(-1rem);}
+}
+
+@keyframes a2 {
+    0%, 25% {transform: translateY(0);}
+    50%, 70% {transform: translateY(-1rem);}
+}
+
+@keyframes a3 {
+    0%, 30% {transform: translateY(0);}
+    50%, 70% {transform: translateY(-1rem);}
+}

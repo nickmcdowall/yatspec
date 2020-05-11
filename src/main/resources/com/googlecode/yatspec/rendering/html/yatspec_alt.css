@@ -1,4 +1,3 @@
-
 @import url("https://fxaeberhard.github.io/handdrawn.css/handdrawn.css");
 
 
@@ -31,9 +30,8 @@ section.diagram {
     grid-area: A5;
 }
 
-footer {
+section.scenario footer {
     grid-area: A6;
-
 }
 
 h1 {
@@ -60,6 +58,12 @@ ul.contents a {
     color: #9E5E6F;
 }
 
+.interestingGiven {
+    background-color: #9e5e6f;
+    color: #f9f5f6;
+    padding: 3px;
+}
+
 article {
     padding-left: 20px;
 }
@@ -69,7 +73,7 @@ section.scenario {
 }
 
 .test-failed {
-    color:#DA2C43;
+    color: #DA2C43;
     background-color: #BBB477;
 }
 
@@ -90,10 +94,46 @@ text, .ui-dialog {
 
 section.specification {
     margin: 2rem;
-    padding:1rem;
-    box-shadow: 7px 9px 22px 0px rgba(0,0,0,0.54);
+    padding: 1rem;
+    box-shadow: 7px 9px 22px 0px rgba(0, 0, 0, 0.54);
 }
 
 details.interaction {
     margin-left: 3rem;
+}
+
+/* Styling for animated LSD logo */
+div.logo {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo1, .logo2, .logo3 {
+    animation-timing-function: cubic-bezier(0.73, -0.24, 0.21, 1.2);
+    animation-duration: 4s;
+    animation-iteration-count: 1;
+    will-change: transform;
+    color: #9E5E6F;
+    font-weight: bold;
+}
+
+.logo1 {animation-name: a1;}
+.logo2 {animation-name: a2;}
+.logo3 {animation-name: a3;}
+
+@keyframes a1 {
+    0%, 20% {transform: translateY(0);}
+    50%, 70% {transform: translateY(-1rem);}
+}
+
+@keyframes a2 {
+    0%, 25% {transform: translateY(0);}
+    50%, 70% {transform: translateY(-1rem);}
+}
+
+@keyframes a3 {
+    0%, 30% {transform: translateY(0);}
+    50%, 70% {transform: translateY(-1rem);}
 }
