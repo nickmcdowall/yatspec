@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="logo">
-    <h5 class="logo1">L</h5>iving &nbsp;<h5 class="logo2">S</h5>equnce &nbsp;<h5 class="logo3">D</h5>iagrams
+    <h5 class="logo1">L</h5>iving &nbsp;<h5 class="logo2">S</h5>equence &nbsp;<h5 class="logo3">D</h5>iagrams
 </div>
 <h1>Index</h1>
 <div class="contents">
