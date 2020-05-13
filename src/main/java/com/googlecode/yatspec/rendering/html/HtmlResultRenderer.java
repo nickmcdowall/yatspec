@@ -32,6 +32,9 @@ import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
 import static java.lang.String.format;
 
 public class HtmlResultRenderer implements SpecResultListener {
+
+    public static final String HTML_COMMENTS = "(?s)<!--.*?-->";
+
     private final List<SimpleEntry<Predicate, Renderer>> customRenderers = new ArrayList<>();
 
     @Override
@@ -42,10 +45,6 @@ public class HtmlResultRenderer implements SpecResultListener {
         addAdjacentFile(htmlResultFile, "yatspec_alt.css");
         addAdjacentFile(htmlResultFile, "yatspec.js");
         addAdjacentFile(htmlResultFile, "xregexp.js");
-    }
-
-    private File addAdjacentFile(File htmlResultFile, String fileName) throws UnsupportedEncodingException {
-        return write(loadContent(fileName).toString().getBytes("UTF-8"), new File(htmlResultFile.getParentFile(), fileName));
     }
 
     public String render(Result result) throws Exception {
@@ -70,7 +69,8 @@ public class HtmlResultRenderer implements SpecResultListener {
         template.setAttribute("testResult", result);
         StringWriter writer = new StringWriter();
         template.write(new NoIndentWriter(writer));
-        return writer.toString();
+        String generatedHtml = writer.toString();
+        return generatedHtml.replaceAll(HTML_COMMENTS, ""); //metadata prints out OS and location info which makes testing a nightmare
     }
 
     public <T> HtmlResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer) {
@@ -110,6 +110,10 @@ public class HtmlResultRenderer implements SpecResultListener {
         return format("%s#%s",
                 htmlResultRelativePath(testMethod.getTestClass()),
                 testMethod.getName());
+    }
+
+    private File addAdjacentFile(File htmlResultFile, String fileName) throws UnsupportedEncodingException {
+        return write(loadContent(fileName).toString().getBytes("UTF-8"), new File(htmlResultFile.getParentFile(), fileName));
     }
 
     /**
