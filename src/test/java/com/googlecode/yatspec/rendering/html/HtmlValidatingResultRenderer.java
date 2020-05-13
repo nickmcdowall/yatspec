@@ -2,11 +2,8 @@ package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.yatspec.state.Result;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,21 +14,19 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class HtmlValidatingResultRenderer extends HtmlResultRenderer {
 
-    public static final String HTML_COMMENTS = "(?s)<!--.*?-->";
-    public static final String EMPTY = "";
     public static final String MAC_OSX = "Mac OS X";
     public static final String OS_NAME = "os.name";
 
-    private final String expectedHtmlResult;
+    private final InputStream expectedHtmlResult;
 
-    public HtmlValidatingResultRenderer(String expectedHtmlFileName) throws IOException {
+    public HtmlValidatingResultRenderer(String expectedHtmlFileName) {
         expectedHtmlResult = loadResource(expectedHtmlFileName);
     }
 
     public String render(Result result) throws Exception {
         String actualHtml = super.render(result);
         if (runningOn(MAC_OSX)) {
-            testExpectationAgainst(actualHtml);
+            testExpectationAgainst(new ByteArrayInputStream(actualHtml.getBytes()));
         }
         return actualHtml;
     }
@@ -40,17 +35,11 @@ public class HtmlValidatingResultRenderer extends HtmlResultRenderer {
         return operatingSystem.equalsIgnoreCase(System.getProperty(OS_NAME));
     }
 
-    private void testExpectationAgainst(String actualHtml) {
-        assertThat(withoutComments(actualHtml))
-                .isEqualToIgnoringWhitespace(withoutComments(expectedHtmlResult));
+    private void testExpectationAgainst(InputStream actualHtml) {
+        assertThat(actualHtml).hasSameContentAs(expectedHtmlResult);
     }
 
-    private String withoutComments(String actualHtml) {
-        return actualHtml.replaceAll(HTML_COMMENTS, EMPTY);
-    }
-
-    private String loadResource(String name) throws IOException {
-        InputStream resource = getClass().getResourceAsStream(name);
-        return new String(resource.readAllBytes());
+    private InputStream loadResource(String name) {
+        return getClass().getResourceAsStream(name);
     }
 }

@@ -91,7 +91,7 @@ class SequenceDiagramingExampleTest implements WithTestState, WithParticipants, 
     }
 
     @Override
-    public Collection<SpecResultListener> getResultListeners() throws Exception {
+    public Collection<SpecResultListener> getResultListeners() {
         return List.of(
                 new HtmlValidatingResultRenderer("/expected/SequenceDiagramingExampleTest.html").
                         withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())
