@@ -64,11 +64,11 @@ class SequenceDiagramingExampleTest implements WithTestState, WithParticipants, 
     }
 
     private void thenBambamPlacesABurgerOrderWithBarney(String foodItem) {
-        interactions.log("food order from bambam to barney", "Get me " + foodItem);
+        interactions.log("/food-order from bambam to barney", "Get me " + foodItem);
     }
 
     private void whenHeDemandsFoodFromBambam() {
-        interactions.log("food demand from mrflintstone to bambam", "I want a burger");
+        interactions.log("/food-demand from mrflintstone to bambam", "I want a burger");
     }
 
     private void givenMrFlintstoneIs(String feeling) {

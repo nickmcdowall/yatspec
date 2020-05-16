@@ -13,10 +13,11 @@ class LogKeyTest {
 
     @Test
     void shouldRemoveSpecialCharactersThatCauseIssues() {
-        String logKeyValue = new LogKey("GET /some/path () from A to B").getValueWithSpacesReplacedByUnderscore();
+        String logKeyValue = new LogKey("GET /some-path () from A to B").getValueWithSpacesReplacedByUnderscore();
 
         assertThat(logKeyValue)
                 .doesNotContain("/")
+                .doesNotContain("-")
                 .doesNotContain(" ")
                 .doesNotContain("(")
                 .doesNotContain(")");
@@ -25,10 +26,10 @@ class LogKeyTest {
     @Test
     void produceSameLogKeyValueAsMessageIdFromByNamingConventionMessageProducer() {
         Collection<SequenceDiagramMessage> messages = new ByNamingConventionMessageProducer().messages(
-                new CapturedInputAndOutputs().add("GET /some/path () from A to B", new Object())
+                new CapturedInputAndOutputs().add("GET /some-path () from A to B", new Object())
         );
 
-        String logKeyValue = new LogKey("GET /some/path () from A to B").getValueWithSpacesReplacedByUnderscore();
+        String logKeyValue = new LogKey("GET /some-path () from A to B").getValueWithSpacesReplacedByUnderscore();
 
         assertThat(logKeyValue).isEqualTo(messages.stream()
                 .map(SequenceDiagramMessage::getMessageId)

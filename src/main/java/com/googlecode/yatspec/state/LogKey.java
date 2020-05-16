@@ -16,8 +16,9 @@ public class LogKey {
         return value
                 .replaceAll(" ", "_")
                 .replaceAll("/", "_")
+                .replaceAll("-", "_")
                 .replaceAll("\\(", "_")
-                .replaceAll("\\)","_");
+                .replaceAll("\\)", "_");
     }
 
     @Override

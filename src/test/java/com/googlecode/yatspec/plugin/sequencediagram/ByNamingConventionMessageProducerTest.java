@@ -28,14 +28,14 @@ class ByNamingConventionMessageProducerTest {
         CapturedInputAndOutputs inputAndOutputs = new CapturedInputAndOutputs()
                 .add("Kiss from Boy to Girl", new Object())
                 .add("Slap from Girl to Boy", new Object())
-                .add("GET /some/path from Boy to Girl", new Object());
+                .add("GET /some-path from Boy to Girl", new Object());
 
         Object[] messages = new ByNamingConventionMessageProducer().messages(inputAndOutputs).toArray();
 
         assertThat(messages.length, is(equalTo(3)));
         assertThat(messages[FIRST], is(equalTo(new SequenceDiagramMessage("Boy", "Girl", "Kiss", "Kiss_from_Boy_to_Girl"))));
         assertThat(messages[SECOND], is(equalTo(new SequenceDiagramMessage("Girl", "Boy", "Slap", "Slap_from_Girl_to_Boy"))));
-        assertThat(messages[THIRD], is(equalTo(new SequenceDiagramMessage("Boy", "Girl", "GET /some/path", "GET__some_path_from_Boy_to_Girl"))));
+        assertThat(messages[THIRD], is(equalTo(new SequenceDiagramMessage("Boy", "Girl", "GET /some-path", "GET__some_path_from_Boy_to_Girl"))));
     }
 
     @Test

@@ -43,6 +43,7 @@ public class ByNamingConventionMessageProducer {
     private String replaceSpacesAndBrackets(String key, String replacement) {
         return key.replaceAll(SPACE, replacement)
                 .replaceAll("/", replacement)
+                .replaceAll("-", replacement)
                 .replaceAll(OPENING_BRACKET, replacement)
                 .replaceAll(CLOSING_BRACKET, replacement);
     }
