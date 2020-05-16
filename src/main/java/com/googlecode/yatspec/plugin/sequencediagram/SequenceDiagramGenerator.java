@@ -41,7 +41,7 @@ public class SequenceDiagramGenerator {
     private String createSvg(String plantUmlMarkup) {
         SourceStringReader reader = new SourceStringReader(plantUmlMarkup);
         try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            reader.outputImage(os, new FileFormatOption(SVG));
+            reader.outputImage(os, new FileFormatOption(SVG, false));
             return new String(os.toByteArray());
         } catch (IOException e) {
             throw new RuntimeException(e);

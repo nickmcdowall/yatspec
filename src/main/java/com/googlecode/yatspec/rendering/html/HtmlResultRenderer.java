@@ -33,8 +33,6 @@ import static java.lang.String.format;
 
 public class HtmlResultRenderer implements SpecResultListener {
 
-    public static final String HTML_COMMENTS = "(?s)<!--.*?-->";
-
     private final List<SimpleEntry<Predicate, Renderer>> customRenderers = new ArrayList<>();
 
     @Override
@@ -70,7 +68,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         StringWriter writer = new StringWriter();
         template.write(new NoIndentWriter(writer));
         String generatedHtml = writer.toString();
-        return generatedHtml.replaceAll(HTML_COMMENTS, ""); //metadata prints out OS and location info which makes testing a nightmare
+        return generatedHtml;
     }
 
     public <T> HtmlResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer) {
