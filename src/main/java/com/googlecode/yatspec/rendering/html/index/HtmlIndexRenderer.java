@@ -26,8 +26,10 @@ public class HtmlIndexRenderer implements SpecResultListener {
         write(outputDir, "index.js", read("index.js"));
     }
 
-    private Path write(File directory, String fileName, String targetFileContent) throws IOException {
-        return Files.write(new File(directory, fileName).toPath(), targetFileContent.getBytes());
+    private void write(File directory, String fileName, String targetFileContent) throws IOException {
+        Path path = new File(directory, fileName).toPath();
+        Files.write(path, targetFileContent.getBytes());
+        if (fileName.endsWith(".html")) System.out.println("Yatspec output:\n" + path);
     }
 
     private String render(Index index) {
