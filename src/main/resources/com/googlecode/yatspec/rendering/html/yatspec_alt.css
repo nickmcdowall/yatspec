@@ -73,7 +73,7 @@ section.scenario {
 
 .test-failed {
     color: #DA2C43;
-    background-color: #BBB477;
+    background-color: #feced8;
 }
 
 .test-passed {
