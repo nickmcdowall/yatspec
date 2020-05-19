@@ -27,8 +27,8 @@ public class Scenario {
         return name;
     }
 
-    public void setTestState(TestState testState) {
-        this.testState = testState;
+    public void copyTestState(TestState testState) {
+        this.testState = new TestState(testState);
     }
 
     public SvgWrapper getDiagram() {

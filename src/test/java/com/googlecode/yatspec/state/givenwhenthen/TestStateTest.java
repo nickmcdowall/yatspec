@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
+import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -23,7 +24,21 @@ class TestStateTest {
 
     @Test
     void hashCodeIsDeterministic() {
-        assertThat(new TestState().hashCode())
-                .isEqualTo(new TestState().hashCode());
+        assertThat(state.hashCode())
+                .isEqualTo(new TestState().hashCode())
+                .isEqualTo(new TestState(state).hashCode());
+    }
+
+    @Test
+    void createCopyOfState() {
+        state.interestingGivens().add("A", "B");
+        state.log("C", "D");
+        state.setDiagram(new SvgWrapper("svg"));
+
+        TestState clone = new TestState(state);
+        assertThat(clone).isEqualTo(state);
+
+        state.reset();
+        assertThat(state).isNotEqualTo(clone);
     }
 }

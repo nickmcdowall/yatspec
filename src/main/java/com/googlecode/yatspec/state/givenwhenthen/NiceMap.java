@@ -76,6 +76,10 @@ class NiceMap<T extends NiceMap> {
         return (T) this;
     }
 
+    public T putAll(Map<String, Object> map) {
+        return putAll(map.entrySet());
+    }
+
     public void clear() {
         map.clear();
     }

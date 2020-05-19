@@ -55,7 +55,8 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
 
         if (testInstance instanceof WithTestState) {
             TestState testState = ((WithTestState) testInstance).testState();
-            currentScenario.get(fullyQualifiedTestMethod).setTestState(testState);
+            currentScenario.get(fullyQualifiedTestMethod).copyTestState(testState);
+            testState.reset();
         }
     }
 

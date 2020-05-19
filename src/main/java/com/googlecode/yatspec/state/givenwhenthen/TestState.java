@@ -11,10 +11,22 @@ import java.util.Map;
 
 public class TestState {
 
-    private InterestingGivens interestingGivens = new InterestingGivens();
-    private CapturedInputAndOutputs capturedInputAndOutputs = new CapturedInputAndOutputs();
-    private ByNamingConventionMessageProducer byNamingConventionMessageProducer = new ByNamingConventionMessageProducer();
+    private final InterestingGivens interestingGivens;
+    private final CapturedInputAndOutputs capturedInputAndOutputs;
+    private final ByNamingConventionMessageProducer byNamingConventionMessageProducer = new ByNamingConventionMessageProducer();
+
     private SvgWrapper diagram;
+
+    public TestState() {
+        interestingGivens = new InterestingGivens();
+        capturedInputAndOutputs = new CapturedInputAndOutputs();
+    }
+
+    public TestState(TestState testState) {
+        interestingGivens = new InterestingGivens().putAll(testState.interestingGivens.getTypes());
+        capturedInputAndOutputs = new CapturedInputAndOutputs().putAll(testState.capturedInputAndOutputs.getTypes());
+        diagram = (null == testState.diagram) ? null : new SvgWrapper(testState.getDiagram().toString());
+    }
 
     public synchronized void log(String name, Object value) {
         int count = 1;
@@ -59,7 +71,12 @@ public class TestState {
     public SvgWrapper getDiagram() {
         return diagram;
     }
+
     public void setDiagram(SvgWrapper diagram) {
         this.diagram = diagram;
+    }
+
+    public void reset() {
+        capturedInputAndOutputs.clear();
     }
 }

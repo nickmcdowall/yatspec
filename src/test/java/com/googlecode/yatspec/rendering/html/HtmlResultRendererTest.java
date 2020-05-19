@@ -55,7 +55,7 @@ class HtmlResultRendererTest {
         Scenario scenario = result.getTestMethods().get(0).getScenarios().get(0);
         TestState testState = new TestState();
         testState.log("custom rendered thing", thingToBeCustomRendered);
-        scenario.setTestState(testState);
+        scenario.copyTestState(testState);
     }
 
     static class RenderedType {
