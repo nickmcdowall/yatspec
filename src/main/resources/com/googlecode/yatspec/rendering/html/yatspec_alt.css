@@ -9,8 +9,7 @@ section.scenario {
             "A2 A2 A2 A3 A3"
             "A2 A2 A2 A1 A1"
             "A5 A5 A5 A5 A5"
-            "A6 A6 A6 A6 A6"
-;
+            "A6 A6 A6 A6 A6";
     gap: 3px;
 }
 
@@ -95,11 +94,28 @@ text, .ui-dialog {
 section.specification {
     margin: 2rem;
     padding: 1rem;
-    box-shadow: 7px 9px 22px 0px rgba(0, 0, 0, 0.54);
+    box-shadow: 7px 9px 22px 0 rgba(0, 0, 0, 0.54);
 }
 
 details.interaction {
     margin-left: 3rem;
+}
+
+div.logValue {
+    border: 1px solid #ddd;
+    border-left: 3px solid #a80638;
+    background-color: #fefece;
+    page-break-inside: avoid;
+    font: normal normal 14px/16px "Courier New", Courier, Monospace;
+    line-height: 1.5;
+    max-width: 100%;
+    padding: .5em 1em;
+    display: block;
+    word-wrap: break-word;
+    margin: 1em 1em 1em 30px;
+    overflow: auto;
+    white-space: pre-wrap;
+    counter-reset: line;
 }
 
 /* Styling for animated LSD logo */
