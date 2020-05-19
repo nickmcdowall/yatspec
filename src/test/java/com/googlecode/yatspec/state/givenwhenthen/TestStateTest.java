@@ -41,4 +41,18 @@ class TestStateTest {
         state.reset();
         assertThat(state).isNotEqualTo(clone);
     }
+
+    @Test
+    void resetsFields() {
+        state.interestingGivens().add("A", "B");
+        state.log("C", "D");
+        state.setDiagram(new SvgWrapper("svg"));
+
+        state.reset();
+
+        assertThat(state.getDiagram()).isNull();
+        assertThat(state.interestingGivens().getTypes()).isEmpty();
+        assertThat(state.getCapturedTypes()).isEmpty();
+        assertThat(state.sequenceMessages()).isEmpty();
+    }
 }

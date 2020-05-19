@@ -78,5 +78,7 @@ public class TestState {
 
     public void reset() {
         capturedInputAndOutputs.clear();
+        interestingGivens.clear();
+        diagram = null;
     }
 }
