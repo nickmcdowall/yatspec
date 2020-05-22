@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'maven'
     id 'pl.allegro.tech.build.axion-release' version '1.10.0'
+    id "com.jfrog.bintray" version "1.8.5"
 }
 
 repositories {
@@ -12,6 +13,24 @@ repositories {
 group = 'com.github.nickmcdowall'
 sourceCompatibility = '11'
 project.version = scmVersion.version
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+    configurations = ['archives']
+    pkg {
+        repo = 'nkm'
+        name = 'yatspec'
+        override = false
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/nickmcdowall/yatspec.git'
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            name = project.version
+        }
+    }
+}
 
 ext {
     junitJupiter = '5.3.2'
@@ -29,6 +48,11 @@ jar {
             zipTree(it)
         }
     }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
 }
 
 dependencies {
@@ -50,8 +74,6 @@ dependencies {
 
     implementation "org.apache.commons:commons-lang3:3.8.1"
     implementation "org.jtwig:jtwig-core:5.87.0.RELEASE"
-
-
 }
 
 // Remove non-maven-central dependencies from generated pom (bundled in jar)
@@ -59,6 +81,11 @@ install.repositories.mavenInstaller.pom.whenConfigured { pom ->
     pom.dependencies.removeAll {
         dep -> dep.groupId ==~ /com\.googlecode.*/
     }
+}
+
+artifacts {
+    archives jar
+    archives sourcesJar
 }
 
 test {
