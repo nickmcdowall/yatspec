@@ -5,9 +5,9 @@
  
 ## Releases
  
- Bintray: [![](https://api.bintray.com/packages/nickmcdowall/nkm/yatspec/images/download.svg)](https://bintray.com/nickmcdowall/nkm/yatspec/_latestVersion)
+ Bintray/jcenter: [![](https://api.bintray.com/packages/nickmcdowall/nkm/yatspec/images/download.svg)](https://bintray.com/nickmcdowall/nkm/yatspec/_latestVersion)
  
- Jitpack: [![](https://jitpack.io/v/nickmcdowall/yatspec.svg)](https://jitpack.io/#nickmcdowall/yatspec)
+ or alternatively Jitpack: [![](https://jitpack.io/v/nickmcdowall/yatspec.svg)](https://jitpack.io/#nickmcdowall/yatspec)
 
 ## Overview
 This project builds upon the excellent [Yatspec](https://github.com/bodar/yatspec) project.
@@ -32,11 +32,11 @@ dependencies {
 }
 ````
 
-You will also need the jitpack repository e.g.:
+`jcenter()` contains the yatspec artifacts (alternatively you can add `https://jitpack.io` as a maven repository):
 ````
 repositories {
+    jcenter()
     mavenCentral()
-    maven { url 'https://jitpack.io' }
 }
 ````
 
@@ -44,8 +44,9 @@ Create a new Test:
 
 ```java
 @ExtendWith(SequenceDiagramExtension.class)
-public class SequenceDiagramExampleTest implements WithTestState {
+public class SequenceDiagramExampleTest {
 
+    // Use this instance to log interactions by calling the log() method
     private TestState interactions = new TestState();
 
     @Test
@@ -53,10 +54,6 @@ public class SequenceDiagramExampleTest implements WithTestState {
         // (method names here turn into the specification in report)
     }
 
-    @Override
-    public TestState testState() {
-        return interactions; // (this is used to 'log' interactions that get added to the sequence diagram)
-    }
 }
 ```
 

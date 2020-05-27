@@ -11,7 +11,6 @@ import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.ScenarioName;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -20,10 +19,9 @@ import org.junit.jupiter.engine.execution.AfterEachMethodAdapter;
 import org.junit.jupiter.engine.extension.ExtensionRegistry;
 import org.junit.platform.commons.util.Preconditions;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
@@ -53,8 +51,9 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
         }
         currentScenario.put(fullyQualifiedTestMethod, scenario);
 
-        if (testInstance instanceof WithTestState) {
-            TestState testState = ((WithTestState) testInstance).testState();
+        Optional<TestState> optionalTestState = getOptionalTestState(testInstance);
+        if (optionalTestState.isPresent()) {
+            TestState testState = optionalTestState.get();
             currentScenario.get(fullyQualifiedTestMethod).copyTestState(testState);
             testState.reset();
         }
@@ -69,6 +68,23 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
     @Override
     public void afterAll(ExtensionContext extensionContext) {
         resultListeners(testInstance).complete(testResult);
+    }
+
+    protected Optional<TestState> getOptionalTestState(Object testInstance) {
+        return Arrays.stream(testInstance.getClass().getDeclaredFields())
+                .filter(field -> field.getType() == TestState.class)
+                .map(field -> getField(testInstance, field))
+                .map(TestState.class::cast)
+                .findFirst();
+    }
+
+    private Object getField(Object testInstance, Field field) {
+        try {
+            field.setAccessible(true);
+            return field.get(testInstance);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private WithCustomResultListeners resultListeners(Object testInstance) {

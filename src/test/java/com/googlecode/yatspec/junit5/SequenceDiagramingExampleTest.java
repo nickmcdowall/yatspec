@@ -7,7 +7,6 @@ import com.googlecode.yatspec.rendering.html.HtmlValidatingResultRenderer;
 import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,7 +18,7 @@ import static com.googlecode.yatspec.sequence.Participants.ACTOR;
 
 
 @ExtendWith(SequenceDiagramExtension.class)
-class SequenceDiagramingExampleTest implements WithTestState, WithParticipants, WithCustomResultListeners {
+class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResultListeners {
 
     private final TestState interactions = new TestState();
     private final InterestingGivens interestingGivens = interactions.interestingGivens();
@@ -74,11 +73,6 @@ class SequenceDiagramingExampleTest implements WithTestState, WithParticipants, 
     private void givenMrFlintstoneIs(String feeling) {
         interestingGivens.add("Flintstone is " + feeling);
         interestingGivens.add("burger");
-    }
-
-    @Override
-    public TestState testState() {
-        return interactions;
     }
 
     @Override

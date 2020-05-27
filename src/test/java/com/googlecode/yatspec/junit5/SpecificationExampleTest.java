@@ -6,7 +6,9 @@ import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.rendering.html.tagindex.HtmlTagIndexRenderer;
-import com.googlecode.yatspec.state.givenwhenthen.*;
+import com.googlecode.yatspec.state.givenwhenthen.Action;
+import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
+import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.hamcrest.Matcher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +28,7 @@ import static org.hamcrest.core.Is.is;
 @ExtendWith(SpecListener.class)
 @Notes("This is a note on the whole class\n" +
         "It will preserve space")
-public class SpecificationExampleTest implements WithTestState, WithCustomResultListeners {
+public class SpecificationExampleTest implements WithCustomResultListeners {
     private static final String RADICAND = "Radicand";
     private static final String RESULT = "Result";
     private static final String REGEX_PATTERN = "(?:#)([^\\s]+)";
@@ -107,8 +109,4 @@ public class SpecificationExampleTest implements WithTestState, WithCustomResult
         );
     }
 
-    @Override
-    public TestState testState() {
-        return interactions;
-    }
 }

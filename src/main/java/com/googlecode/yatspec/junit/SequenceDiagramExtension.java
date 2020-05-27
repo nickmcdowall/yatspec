@@ -3,7 +3,6 @@ package com.googlecode.yatspec.junit;
 import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
 import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import com.googlecode.yatspec.state.givenwhenthen.WithTestState;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -28,9 +27,7 @@ public class SequenceDiagramExtension extends SpecListener implements TestInstan
 
     @Override
     public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) {
-        if (testInstance instanceof WithTestState) {
-            interactions = Optional.ofNullable(((WithTestState) testInstance).testState());
-        }
+        interactions = getOptionalTestState(testInstance);
         if (testInstance instanceof WithParticipants) {
             participants = Optional.ofNullable(((WithParticipants) testInstance).participants()).orElse(emptyList());
         }
