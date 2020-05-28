@@ -74,6 +74,7 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
         return Arrays.stream(testInstance.getClass().getDeclaredFields())
                 .filter(field -> field.getType() == TestState.class)
                 .map(field -> getField(testInstance, field))
+                .filter(Objects::nonNull)
                 .map(TestState.class::cast)
                 .findFirst();
     }

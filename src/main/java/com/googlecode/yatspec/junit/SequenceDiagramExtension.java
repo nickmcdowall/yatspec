@@ -28,6 +28,11 @@ public class SequenceDiagramExtension extends SpecListener implements TestInstan
     @Override
     public void postProcessTestInstance(Object testInstance, ExtensionContext extensionContext) {
         interactions = getOptionalTestState(testInstance);
+
+        if (interactions.isEmpty()) {
+            throw new IllegalStateException("Invalid TestState - field is missing or null. A TestState field is required to build a sequence diagram");
+        }
+
         if (testInstance instanceof WithParticipants) {
             participants = Optional.ofNullable(((WithParticipants) testInstance).participants()).orElse(emptyList());
         }
