@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
+import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramMessage;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,19 @@ class TestStateTest {
 
     private final TestState state = new TestState();
     private final SimpleEntry<String, String> entry = new SimpleEntry<>("logTitle", "content");
+
+    @Test
+    void prefixMessageNameWithCountWhenDuplicateKeyIsFoundToAllowForMultipleCallsBetweenSourceAndDestination() {
+        state.log("message from A to B", "X");
+        state.log("message from A to B", "Y");
+        state.log("message from A to B", "Z");
+
+        assertThat(state.sequenceMessages()).containsExactly(
+                new SequenceDiagramMessage("A", "B", "message", "message_from_A_to_B"),
+                new SequenceDiagramMessage("A", "B", "2 message", "2_message_from_A_to_B"),
+                new SequenceDiagramMessage("A", "B", "3 message", "3_message_from_A_to_B")
+        );
+    }
 
     @Test
     void loggerShouldHandleNamingForMultiThreadCalls() {

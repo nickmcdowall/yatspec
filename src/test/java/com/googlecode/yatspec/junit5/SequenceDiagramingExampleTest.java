@@ -26,7 +26,7 @@ class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResul
     @Test
     void bambamGetsFoodForHisDad() {
         givenMrFlintstoneIs("hungry");
-        whenHeDemandsFoodFromBambam();
+        whenHeHarassesBambamForFood();
         thenBambamPlacesABurgerOrderWithBarney("a burger");
 
         whenBarneyGivesToBambam("1 burger");
@@ -41,7 +41,7 @@ class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResul
     @ParameterizedTest
     void bambamGetsFoodForHisDadRepeatedSoWeCanCheckMultipleScenariosPerTestMethod(String feeling) {
         givenMrFlintstoneIs(feeling);
-        whenHeDemandsFoodFromBambam();
+        whenHeHarassesBambamForFood();
         thenBambamPlacesABurgerOrderWithBarney("a burger");
 
         whenBarneyGivesToBambam("1 burger");
@@ -66,8 +66,10 @@ class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResul
         interactions.log("/food-order from bambam to barney", "Get me " + foodItem);
     }
 
-    private void whenHeDemandsFoodFromBambam() {
+    private void whenHeHarassesBambamForFood() {
         interactions.log("/food-demand from mrflintstone to bambam", "I want a burger");
+        interactions.log("/food-demand from mrflintstone to bambam", "I need a burger");
+        interactions.log("/food-demand from mrflintstone to bambam", "I demand a burger");
     }
 
     private void givenMrFlintstoneIs(String feeling) {

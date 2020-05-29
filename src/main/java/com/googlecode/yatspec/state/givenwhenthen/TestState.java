@@ -32,8 +32,8 @@ public class TestState {
         int count = 1;
         String keyName = name;
         while (capturedInputAndOutputs.contains(keyName)) {
-            keyName = name + count;
             count++;
+            keyName = String.format("%s %s", count, name);
         }
         capturedInputAndOutputs.add(keyName, value);
     }
