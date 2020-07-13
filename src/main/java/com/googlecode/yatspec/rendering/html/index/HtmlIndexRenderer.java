@@ -29,7 +29,7 @@ public class HtmlIndexRenderer implements SpecResultListener {
     private void write(File directory, String fileName, String targetFileContent) throws IOException {
         Path path = new File(directory, fileName).toPath();
         Files.write(path, targetFileContent.getBytes());
-        if (fileName.endsWith(".html")) System.out.println("Yatspec output:\n" + path);
+        if (fileName.endsWith(".html")) System.out.println("Yatspec output:\nfile://" + path);
     }
 
     private String render(Index index) {
