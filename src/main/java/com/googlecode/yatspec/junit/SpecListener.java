@@ -74,19 +74,24 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
     protected Optional<TestState> getOptionalTestState(Object testInstance) {
         Class<?> clazz = testInstance.getClass();
         while (clazz != null) {
-            Optional<TestState> optionalField = Optional.ofNullable(clazz)
-                    .map(Class::getDeclaredFields)
-                    .stream().flatMap(Stream::of)
-                    .filter(field -> field.getType() == TestState.class)
-                    .map(field -> getField(testInstance, field))
-                    .filter(Objects::nonNull)
-                    .map(TestState.class::cast)
-                    .findFirst();
-
-            if (optionalField.isEmpty()) clazz = clazz.getSuperclass();
-            else return optionalField;
+            Optional<TestState> optionalTestState = extractTestStateIfExists(testInstance, clazz);
+            if (optionalTestState.isPresent()) {
+                return optionalTestState;
+            }
+            clazz = clazz.getSuperclass();
         }
         return Optional.empty();
+    }
+
+    private Optional<TestState> extractTestStateIfExists(Object testInstance, Class<?> clazz) {
+        return Optional.ofNullable(clazz)
+                .map(Class::getDeclaredFields).stream()
+                .flatMap(Stream::of)
+                .filter(field -> field.getType() == TestState.class)
+                .map(field -> getField(testInstance, field))
+                .filter(Objects::nonNull)
+                .map(TestState.class::cast)
+                .findFirst();
     }
 
     private Object getField(Object testInstance, Field field) {
