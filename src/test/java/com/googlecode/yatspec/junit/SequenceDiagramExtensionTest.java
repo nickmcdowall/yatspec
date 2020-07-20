@@ -18,6 +18,11 @@ class SequenceDiagramExtensionTest {
     }
 
     @Test
+    void noExceptionWhenTestStateIsFoundInSuperClass() {
+        sequenceDiagramExtension.postProcessTestInstance(new ClassWithNestedTestState(), null);
+    }
+
+    @Test
     void throwsAnExceptionIfNoTestStateFieldExistsInTest() {
         throwsIllegalStateException(new ClassWithNoTestState());
     }
@@ -48,4 +53,7 @@ class SequenceDiagramExtensionTest {
         @SuppressWarnings("unused")
         private final TestState testState = new TestState();
     }
+
+    public static class ClassWithNestedTestState extends AnotherTestClass { }
+    public static class AnotherTestClass extends ClassWithTestState { }
 }

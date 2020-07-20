@@ -22,6 +22,7 @@ import org.junit.platform.commons.util.Preconditions;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
@@ -71,7 +72,21 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
     }
 
     protected Optional<TestState> getOptionalTestState(Object testInstance) {
-        return Arrays.stream(testInstance.getClass().getDeclaredFields())
+        Class<?> clazz = testInstance.getClass();
+        while (clazz != null) {
+            Optional<TestState> optionalTestState = extractTestStateIfExists(testInstance, clazz);
+            if (optionalTestState.isPresent()) {
+                return optionalTestState;
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return Optional.empty();
+    }
+
+    private Optional<TestState> extractTestStateIfExists(Object testInstance, Class<?> clazz) {
+        return Optional.ofNullable(clazz)
+                .map(Class::getDeclaredFields).stream()
+                .flatMap(Stream::of)
                 .filter(field -> field.getType() == TestState.class)
                 .map(field -> getField(testInstance, field))
                 .filter(Objects::nonNull)
