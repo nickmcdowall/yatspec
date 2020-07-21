@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 # To bump the minor version use:
 # ./gradlew marNextVersion -Prelease.incrementer=incrementMinor
 
