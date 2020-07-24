@@ -8,9 +8,13 @@ import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
+import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 
 public class SequenceDiagramExtension extends SpecListener implements TestInstancePostProcessor, BeforeTestExecutionCallback, AfterTestExecutionCallback {
@@ -41,8 +45,29 @@ public class SequenceDiagramExtension extends SpecListener implements TestInstan
 
     @Override
     public void afterTestExecution(ExtensionContext extensionContext) {
+        additionalPostTestProcessing(extensionContext.getRequiredTestInstance());
         interactions.ifPresent(interactions ->
                 interactions.setDiagram(sequenceDiagramGenerator.generateSequenceDiagram(interactions.sequenceMessages(), participants)));
     }
 
+    private void additionalPostTestProcessing(final Object instance) {
+        Class<?> klass = instance.getClass();
+        while (klass != Object.class) {
+            stream(klass.getDeclaredMethods())
+                    .filter(method -> method.isAnnotationPresent(PostTestProcessing.class))
+                    .forEach(invokeMethodOn(instance));
+            klass = klass.getSuperclass();
+        }
+    }
+
+    private Consumer<Method> invokeMethodOn(Object instance) {
+        return method -> {
+            try {
+                method.setAccessible(true);
+                method.invoke(instance);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        };
+    }
 }
