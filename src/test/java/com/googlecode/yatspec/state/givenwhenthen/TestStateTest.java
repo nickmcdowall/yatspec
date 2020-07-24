@@ -5,6 +5,10 @@ import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import org.junit.jupiter.api.Test;
 
 import java.util.AbstractMap.SimpleEntry;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,5 +72,23 @@ class TestStateTest {
         assertThat(state.interestingGivens().getTypes()).isEmpty();
         assertThat(state.getCapturedTypes()).isEmpty();
         assertThat(state.sequenceMessages()).isEmpty();
+    }
+
+    @Test
+    void uniqueCorrelationIdGenerationPerThread() throws ExecutionException, InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        Future<String> correlationId1 = executorService.submit(state::getCorrelationId);
+        Future<String> correlationId2 = executorService.submit(state::getCorrelationId);
+        assertThat(correlationId1.get()).isNotEqualTo(correlationId2.get());
+    }
+
+    @Test
+    void sameCorrelationIdWithinSingleThread() {
+        assertThat(state.getCorrelationId()).isEqualTo(state.getCorrelationId());
+    }
+
+    @Test
+    void correlationIdHasSpecificLength() {
+        assertThat(state.getCorrelationId().length()).isEqualTo(16);
     }
 }

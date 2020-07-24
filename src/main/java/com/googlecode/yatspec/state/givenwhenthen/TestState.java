@@ -9,11 +9,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.Collection;
 import java.util.Map;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
+
 public class TestState {
 
     private final InterestingGivens interestingGivens;
     private final CapturedInputAndOutputs capturedInputAndOutputs;
     private final ByNamingConventionMessageProducer byNamingConventionMessageProducer = new ByNamingConventionMessageProducer();
+    private final transient ThreadLocal<String> threadLocal = ThreadLocal.withInitial(() -> randomAlphanumeric(16));
 
     private SvgWrapper diagram;
 
@@ -80,5 +83,9 @@ public class TestState {
         capturedInputAndOutputs.clear();
         interestingGivens.clear();
         diagram = null;
+    }
+
+    public String getCorrelationId() {
+        return threadLocal.get();
     }
 }
