@@ -14,7 +14,7 @@ public class Files {
         output.delete();
         output.getParentFile().mkdirs();
         write(content.getBytes("UTF-8"), output);
-        System.out.println("Yatspec output:\n" + output);
+        System.out.println("Yatspec output:\nfile://" + output);
     }
 
     public static String toJavaResourcePath(Class testClass) {
