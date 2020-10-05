@@ -11,25 +11,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class LogKeyTest {
 
+    private String troublesomeKeyValue = "GET /some-path?cat&dog () from A to B.c";
+
     @Test
-    void shouldRemoveSpecialCharactersThatCauseIssues() {
-        String logKeyValue = new LogKey("GET /some-path () from A to B").getValueWithSpacesReplacedByUnderscore();
+    void shouldReplaceSpecialCharactersThatCauseIssues() {
+        String logKeyValue = new LogKey(troublesomeKeyValue).getHtmlSafeValue();
 
         assertThat(logKeyValue)
                 .doesNotContain("/")
                 .doesNotContain("-")
                 .doesNotContain(" ")
+                .doesNotContain("?")
                 .doesNotContain("(")
+                .doesNotContain(".")
                 .doesNotContain(")");
     }
 
     @Test
     void produceSameLogKeyValueAsMessageIdFromByNamingConventionMessageProducer() {
         Collection<SequenceDiagramMessage> messages = new ByNamingConventionMessageProducer().messages(
-                new CapturedInputAndOutputs().add("GET /some-path () from A to B", new Object())
+                new CapturedInputAndOutputs().add(troublesomeKeyValue, new Object())
         );
 
-        String logKeyValue = new LogKey("GET /some-path () from A to B").getValueWithSpacesReplacedByUnderscore();
+        String logKeyValue = new LogKey(troublesomeKeyValue).getHtmlSafeValue();
 
         assertThat(logKeyValue).isEqualTo(messages.stream()
                 .map(SequenceDiagramMessage::getMessageId)

@@ -12,12 +12,14 @@ public class LogKey {
         return value;
     }
 
-    public String getValueWithSpacesReplacedByUnderscore() {
+    public String getHtmlSafeValue() {
         return value
                 .replaceAll(" ", "_")
                 .replaceAll("/", "_")
                 .replaceAll("-", "_")
+                .replaceAll("\\?", "_")
                 .replaceAll("\\(", "_")
+                .replaceAll("\\.", "_")
                 .replaceAll("\\)", "_");
     }
 
@@ -29,7 +31,6 @@ public class LogKey {
         LogKey logKey = (LogKey) o;
 
         return value.equals(logKey.value);
-
     }
 
     @Override
