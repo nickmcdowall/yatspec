@@ -1,5 +1,7 @@
 package com.googlecode.yatspec.state;
 
+import static com.googlecode.yatspec.plugin.sequencediagram.ByNamingConventionMessageProducer.replaceTroublesomeCharacters;
+
 @SuppressWarnings({"unused"})
 public class LogKey {
     private final String value;
@@ -13,14 +15,7 @@ public class LogKey {
     }
 
     public String getHtmlSafeValue() {
-        return value
-                .replaceAll(" ", "_")
-                .replaceAll("/", "_")
-                .replaceAll("-", "_")
-                .replaceAll("\\?", "_")
-                .replaceAll("\\(", "_")
-                .replaceAll("\\.", "_")
-                .replaceAll("\\)", "_");
+        return replaceTroublesomeCharacters(value, "_");
     }
 
     @Override

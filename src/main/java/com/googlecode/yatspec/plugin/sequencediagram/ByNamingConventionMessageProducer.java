@@ -4,21 +4,16 @@ import com.googlecode.yatspec.state.givenwhenthen.CapturedInputAndOutputs;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ByNamingConventionMessageProducer {
+    public static final List<String> DODGY_CHARACTERS = List.of(" ", "/", "-", "=", "&", "\\.", "\\?", "\\(", "\\)");
 
     private static final String SEQUENCE_MESSAGE_REGEX = "(.*) from (.*) to (.*)";
     private static final Pattern SEQUENCE_MESSAGE_PATTERN = Pattern.compile(SEQUENCE_MESSAGE_REGEX);
-    private static final String SPACE = " ";
-    private static final String OPENING_BRACKET = "\\(";
     private static final String UNDERSCORE = "_";
-    private static final String CLOSING_BRACKET = "\\)";
-
 
     public Collection<SequenceDiagramMessage> messages(CapturedInputAndOutputs inputAndOutputs) {
         Collection<SequenceDiagramMessage> result = new ArrayList<>();
@@ -40,14 +35,9 @@ public class ByNamingConventionMessageProducer {
         result.add(new SequenceDiagramMessage(from, to, what, messageId));
     }
 
-    private String replaceTroublesomeCharacters(String key, String replacement) {
-        return key.replaceAll(SPACE, replacement)
-                .replaceAll("/", replacement)
-                .replaceAll("-", replacement)
-                .replaceAll("\\.", replacement)
-                .replaceAll("\\?", replacement)
-                .replaceAll(OPENING_BRACKET, replacement)
-                .replaceAll(CLOSING_BRACKET, replacement);
+    public static String replaceTroublesomeCharacters(String key, String replacement) {
+        return DODGY_CHARACTERS.stream()
+                .reduce(key, (newKey, dodgyCharacter) -> newKey.replaceAll(dodgyCharacter, replacement));
     }
 
     @Override

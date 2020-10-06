@@ -63,7 +63,7 @@ class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResul
     }
 
     private void thenBambamPlacesABurgerOrderWithBarney(String foodItem) {
-        interactions.log("/food-order from bambam to barney", "Get me " + foodItem);
+        interactions.log("/food-order?love=pie&like=mash from bambam to barney", "Get me " + foodItem);
     }
 
     private void whenHeHarassesBambamForFood() {
