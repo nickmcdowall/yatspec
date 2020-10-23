@@ -57,10 +57,14 @@ public class YatspecForCucumber implements EventListener {
     public void setEventPublisher(EventPublisher publisher) {
         publisher.registerHandlerFor(TestCaseStarted.class,
                 this::handleTestCaseStarted);
+
         publisher.registerHandlerFor(TestCaseFinished.class, event ->
                 testCaseFinishedEvents.add(event));
-        publisher.registerHandlerFor(TestRunFinished.class, event ->
-                defaultSequenceDiagramResultListener().complete(cucumberResult));
+
+        publisher.registerHandlerFor(TestRunFinished.class, event -> {
+            finishProcessingCompletedScenario();
+            defaultSequenceDiagramResultListener().complete(cucumberResult);
+        });
     }
 
     private void handleTestCaseStarted(TestCaseStarted event) {
