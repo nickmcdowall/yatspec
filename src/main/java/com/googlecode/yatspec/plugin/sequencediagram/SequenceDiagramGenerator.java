@@ -15,15 +15,31 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import static java.util.stream.Collectors.toList;
 import static net.sourceforge.plantuml.FileFormat.SVG;
 
 public class SequenceDiagramGenerator {
 
     public SvgWrapper generateSequenceDiagram(Collection<SequenceDiagramMessage> messages, List<Participant> participants) {
-        String plantUmlMarkup = new PlantUmlMarkupGenerator().generateMarkup(messages, participants);
+        List<Participant> usedParticipants = filterOutUnusedParticipants(messages, participants);
+        String plantUmlMarkup = PlantUmlMarkupGenerator.generateMarkup(messages, usedParticipants);
         return new SvgWrapper(prettyPrint(createSvg(plantUmlMarkup)));
+    }
+
+    private List<Participant> filterOutUnusedParticipants(Collection<SequenceDiagramMessage> messages, List<Participant> participants) {
+        Set<String> actualParticipants = new HashSet<>();
+        messages.forEach(message -> {
+            actualParticipants.add(message.from());
+            actualParticipants.add(message.to());
+        });
+
+        return participants.stream()
+                .filter(participant -> actualParticipants.contains(participant.name()))
+                .collect(toList());
     }
 
     private String prettyPrint(String xml) {

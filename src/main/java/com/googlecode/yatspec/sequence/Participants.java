@@ -18,11 +18,29 @@ public enum Participants {
     }
 
     public Participant create(final String name) {
-        return () -> String.format("%s %s", type, name);
+        return new Participant() {
+            @Override
+            public String toMarkup() {
+                return String.format("%s %s", type, name);
+            }
+            @Override
+            public String name() {
+                return name;
+            }
+        };
     }
 
     public Participant create(String name, String alias) {
-        return () -> String.format("%s %s as \"%s\"", type, name, alias);
+        return new Participant() {
+            @Override
+            public String toMarkup() {
+                return String.format("%s %s as \"%s\"", type, name, alias);
+            }
+            @Override
+            public String name() {
+                return name;
+            }
+        };
     }
 
 }
