@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 public interface Result {
@@ -13,5 +14,9 @@ public interface Result {
     String getName();
 
     String getPackageName();
+
+    default List<Annotation> getAnnotations() {
+        return List.of();
+    }
 
 }

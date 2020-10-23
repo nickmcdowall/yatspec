@@ -58,6 +58,8 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 dependencies {
     inFatJar "com.googlecode.funclate:funclate:110"
     implementation "com.googlecode.funclate:funclate:110"
+    implementation "io.cucumber:cucumber-spring:4.8.0"
+    implementation "org.springframework:spring-context:5.2.6.RELEASE"
 
     api "net.sourceforge.plantuml:plantuml:1.2020.9"
     api "antlr:antlr:2.7.7"
