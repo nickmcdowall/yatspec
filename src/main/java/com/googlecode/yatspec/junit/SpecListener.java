@@ -1,18 +1,13 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.ScenarioNameRenderer;
 import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
-import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
-import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
-import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.ScenarioName;
 import com.googlecode.yatspec.state.TestResult;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.jupiter.api.extension.AfterAllCallback;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 import org.junit.jupiter.engine.execution.AfterEachMethodAdapter;
@@ -106,25 +101,12 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
     private WithCustomResultListeners resultListeners(Object testInstance) {
         if (testInstance instanceof WithCustomResultListeners) {
             return (WithCustomResultListeners) testInstance;
-        } else if (hasSequenceDiagramExtension(testInstance)) {
-            return defaultSequenceDiagramResultListener();
-        } else {
-            return new DefaultResultListeners();
         }
+        return createDefaultResultListeners();
     }
 
-    private WithCustomResultListeners defaultSequenceDiagramResultListener() {
-        return () -> List.of(
-                new HtmlResultRenderer().
-                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer()),
-                new HtmlIndexRenderer()
-        );
-    }
-
-    private boolean hasSequenceDiagramExtension(Object testInstance) {
-        if (null == testInstance) return false;
-        ExtendWith annotation = testInstance.getClass().getAnnotation(ExtendWith.class);
-        return asList(annotation.value()).contains(SequenceDiagramExtension.class);
+    protected WithCustomResultListeners createDefaultResultListeners() {
+        return new DefaultResultListeners();
     }
 
     private static class MethodNameWithArguments {

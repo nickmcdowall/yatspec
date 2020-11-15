@@ -1,12 +1,7 @@
 package com.googlecode.yatspec.junit;
 
-import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
-import com.googlecode.yatspec.sequence.Participant;
-import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
-import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.TestInstancePostProcessor;
+import static java.util.Arrays.stream;
+import static java.util.Collections.emptyList;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,8 +9,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static java.util.Arrays.stream;
-import static java.util.Collections.emptyList;
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
+import org.junit.jupiter.api.extension.BeforeTestExecutionCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.TestInstancePostProcessor;
+
+import com.googlecode.yatspec.plugin.sequencediagram.SequenceDiagramGenerator;
+import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
+import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
+import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
+import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
+import com.googlecode.yatspec.sequence.Participant;
+import com.googlecode.yatspec.state.givenwhenthen.TestState;
 
 public class SequenceDiagramExtension extends SpecListener implements TestInstancePostProcessor, BeforeTestExecutionCallback, AfterTestExecutionCallback {
 
@@ -69,5 +74,18 @@ public class SequenceDiagramExtension extends SpecListener implements TestInstan
                 throw new RuntimeException(e);
             }
         };
+    }
+
+    @Override
+    protected WithCustomResultListeners createDefaultResultListeners() {
+        return defaultSequenceDiagramResultListener();
+    }
+
+    private WithCustomResultListeners defaultSequenceDiagramResultListener() {
+        return () -> List.of(
+                new HtmlResultRenderer().
+                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer()),
+                new HtmlIndexRenderer()
+        );
     }
 }
