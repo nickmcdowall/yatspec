@@ -10,7 +10,6 @@ import com.thoughtworks.qdox.model.JavaMethod;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,12 +30,12 @@ public class TestParser {
 
     private static final Option<URL> NO_URL = none(URL.class);
 
-    public static List<TestMethod> parseTestMethods(Class aClass) throws Exception {
+    public static List<TestMethod> parseTestMethods(Class aClass) {
         final Sequence<Method> methods = getMethods(aClass);
         return collectTestMethods(aClass, methods).toList();
     }
 
-    private static Sequence<TestMethod> collectTestMethods(Class aClass, Sequence<Method> methods) throws IOException {
+    private static Sequence<TestMethod> collectTestMethods(Class aClass, Sequence<Method> methods) {
         final Option<JavaClass> javaClass = getJavaClass(aClass);
         if (javaClass.isEmpty()) {
             return empty();

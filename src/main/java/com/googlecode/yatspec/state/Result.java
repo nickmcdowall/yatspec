@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface Result {
 
-    List<TestMethod> getTestMethods() throws Exception;
+    List<TestMethod> getTestMethods();
 
     Class<?> getTestClass();
 

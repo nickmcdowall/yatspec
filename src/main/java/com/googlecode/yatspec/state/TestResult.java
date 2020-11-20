@@ -25,7 +25,7 @@ public class TestResult implements Result {
     }
 
     @Override
-    public List<TestMethod> getTestMethods() throws Exception {
+    public List<TestMethod> getTestMethods() {
         if (testMethods == null) {
             testMethods = TestParser.parseTestMethods(klass);
         }
