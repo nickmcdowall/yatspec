@@ -1,25 +1,31 @@
 package com.googlecode.yatspec.rendering.html.index;
 
 import com.googlecode.funclate.Model;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.rendering.Index;
-import com.googlecode.yatspec.state.*;
+import com.googlecode.yatspec.state.Result;
+import com.googlecode.yatspec.state.Status;
+import com.googlecode.yatspec.state.TestMethod;
+
+import java.util.Collection;
+import java.util.function.Function;
 
 import static com.googlecode.funclate.Model.mutable.model;
-import static com.googlecode.totallylazy.Option.some;
-import static com.googlecode.totallylazy.Predicates.where;
-import static com.googlecode.totallylazy.Strings.startsWith;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultRelativePath;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
+import static com.googlecode.yatspec.state.Status.Passed;
+import static com.googlecode.yatspec.state.StatusPriority.statusPriority;
 import static java.util.stream.Collectors.toList;
 
 public class IndexModel {
-    private final Sequence<Result> entries;
-    private final Sequence<String> packageNames;
+    private final Collection<Result> entries;
+    private final Collection<String> packageNames;
 
     public IndexModel(Index index) {
-        this.entries = index.entries().memorise();
-        this.packageNames = entries.map(Result::getPackageName).unique();
+        this.entries = index.entries();
+        this.packageNames = entries.stream()
+                .map(Result::getPackageName)
+                .distinct()
+                .collect(toList());
     }
 
     public Model asModel() {
@@ -42,19 +48,26 @@ public class IndexModel {
         return model()
                 .add("name", result.getName())
                 .add("url", htmlResultRelativePath(result.getTestClass()))
-                .add("status", some(result).map(Results.resultStatus()).get())
+                .add("status", deriveResultStatus().apply(result))
                 .add("methods", result.getTestMethods().stream()
                         .map(this::testMethodModel)
                         .collect(toList()));
     }
 
     private Status statusOfPackage(String name) {
-        return entries.
-                filter(where(Results.packageName(), startsWith(name))).
-                map(Results.resultStatus()).
-                sortBy(StatusPriority.statusPriority()).
-                headOption().
-                getOrElse(Status.Passed);
+        return entries.stream()
+                .filter(result -> result.getPackageName().startsWith(name))
+                .map(deriveResultStatus())
+                .min(statusPriority())
+                .orElse(Passed);
+    }
+
+    private Function<Result, Status> deriveResultStatus() {
+        return result -> result.getTestMethods()
+                .stream()
+                .map(TestMethod::getStatus)
+                .min(statusPriority())
+                .orElse(Passed);
     }
 
     private Model testMethodModel(TestMethod testMethod) {

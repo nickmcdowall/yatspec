@@ -28,7 +28,8 @@ class HtmlIndexRendererTest {
 
     @Test
     void generatesExpectedFiles() throws Exception {
-        htmlIndexRenderer.complete(tempDirectory, aStubbedResult());
+        htmlIndexRenderer.complete(tempDirectory, aStubbedResult("com.an.example.package", "testMethodA"));
+        htmlIndexRenderer.complete(tempDirectory, aStubbedResult("com.an.other.package", "testMethodB"));
 
         assertThat(new File(tempDirectory, "index.css")).exists();
         assertThat(new File(tempDirectory, "index.js")).exists();
@@ -38,8 +39,8 @@ class HtmlIndexRendererTest {
 
     @Test
     void indexContainsResultsFromAllIndexRenderers() throws Exception {
-        new HtmlIndexRenderer().complete(tempDirectory, aStubbedResult("method1", "method2"));
-        new HtmlIndexRenderer().complete(tempDirectory, aStubbedResult("method3"));
+        new HtmlIndexRenderer().complete(tempDirectory, aStubbedResult("package1", "method1", "method2"));
+        new HtmlIndexRenderer().complete(tempDirectory, aStubbedResult("package2", "method3"));
 
         assertThat(HtmlIndexRenderer.INDEX.entries()).hasSize(2);
     }
@@ -51,12 +52,38 @@ class HtmlIndexRendererTest {
         );
     }
 
-    private Result aStubbedResult(String... methodName) {
+    private Result aStubbedResult(final String packageName, String... methodNames) {
         return new Result() {
+            private final List<TestMethod> testMethods = stubbedMethods(methodNames);
+
             @Override
             public List<TestMethod> getTestMethods() {
-                return Arrays.stream(methodName)
-                        .map(name -> aStubbedMethod(name))
+                return testMethods;
+            }
+
+            @Override
+            public Class<?> getTestClass() {
+                return getClass();
+            }
+
+            @Override
+            public Scenario getScenario(String name) {
+                return null;
+            }
+
+            @Override
+            public String getName() {
+                return "the name of the test";
+            }
+
+            @Override
+            public String getPackageName() {
+                return packageName;
+            }
+
+            private List<TestMethod> stubbedMethods(String... names) {
+                return Arrays.stream(names)
+                        .map(this::aStubbedMethod)
                         .collect(toList());
             }
 
@@ -68,26 +95,6 @@ class HtmlIndexRendererTest {
                         new JavaSource(""),
                         new ScenarioTable()
                 );
-            }
-
-            @Override
-            public Class<?> getTestClass() {
-                return getClass();
-            }
-
-            @Override
-            public Scenario getScenario(String name) {
-                return new Scenario("A scenario", new JavaSource(""));
-            }
-
-            @Override
-            public String getName() {
-                return "the name of the test";
-            }
-
-            @Override
-            public String getPackageName() {
-                return "com.an.example.package";
             }
         };
     }

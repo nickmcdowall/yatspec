@@ -11,7 +11,6 @@ import com.googlecode.yatspec.parsing.Files;
 import com.googlecode.yatspec.rendering.Index;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
-import com.googlecode.yatspec.state.Results;
 import com.googlecode.yatspec.state.TestMethod;
 import org.antlr.stringtemplate.StringTemplate;
 
@@ -58,8 +57,7 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
     }
 
     private Sequence<Model> tagModels(Index index) {
-        return index.
-                entries().
+        return sequence(index.entries()).
                 flatMap(testMethods()).
                 flatMap(methodTags()).
                 groupBy(first(String.class)).
@@ -91,9 +89,8 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
     }
 
     private static Callable1<Result, Collection<TestMethod>> testMethods() {
-        return fileResult ->
-                sequence(fileResult)
-                        .flatMap(Results.testMethods());
+        return fileResult -> sequence(fileResult)
+                .flatMap(Result::getTestMethods);
     }
 
     private static Callable1<Group<String, Pair<String, TestMethod>>, Model> toTagModel() {
