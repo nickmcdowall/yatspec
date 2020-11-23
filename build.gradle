@@ -121,6 +121,14 @@ def pomConfig = {
             distribution "repo"
         }
     }
+    developers {
+        developer {
+            name "Nick"
+            email "nicholas.mcdowall@gmail.com"
+            organization 'NKM IT Solutions'
+            organizationUrl 'https://github.com/nickmcdowall'
+        }
+    }
     scm {
         url "https://github.com/nickmcdowall/yatspec.git"
     }
