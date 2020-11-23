@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven'
+    id 'maven-publish'
     id 'pl.allegro.tech.build.axion-release' version '1.10.0'
     id "com.jfrog.bintray" version "1.8.5"
 }
@@ -26,7 +27,9 @@ bintray {
         vcsUrl = 'https://github.com/nickmcdowall/yatspec.git'
         publish = true
         publicDownloadNumbers = true
+        issueTrackerUrl = 'https://github.com/nickmcdowall/yatspec/issues'
         version {
+            released = new Date()
             name = project.version
         }
     }
@@ -53,6 +56,11 @@ jar {
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
 }
 
 dependencies {
@@ -88,6 +96,7 @@ install.repositories.mavenInstaller.pom.whenConfigured { pom ->
 
 artifacts {
     archives jar
+    archives javadocJar
     archives sourcesJar
 }
 
@@ -102,4 +111,37 @@ test {
 
 wrapper {
     gradleVersion = "5.3"
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    scm {
+        url "https://github.com/nickmcdowall/yatspec.git"
+    }
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId "$group"
+            artifactId 'yatspec'
+            version "${scmVersion.version}"
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'Yatspec living sequence diagrams')
+                root.appendNode('name', 'yatspec')
+                root.appendNode('url', 'https://github.com/nickmcdowall/yatspec.git')
+                root.children().last() + pomConfig
+            }
+        }
+    }
 }
