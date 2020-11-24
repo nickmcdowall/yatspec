@@ -66,7 +66,8 @@ public class SpecificationExampleTest implements WithCustomResultListeners {
 
     @ParameterizedTest
     @Table({
-            @Row({"someParam", "varargA", "varargB"}),
+            @Row({"someParam", "varargA"}),
+            @Row({"someParam", "varargA", "varargB", "varargC"}),
             @Row({"anotherParam"})
     })
     void callMethodsWithTrailingVarargs(String firstParam, String... otherParams) {
