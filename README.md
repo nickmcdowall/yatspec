@@ -7,7 +7,10 @@
  
 ## Latest Release
  
- [![](https://api.bintray.com/packages/nickmcdowall/nkm/yatspec/images/download.svg)](https://bintray.com/nickmcdowall/nkm/yatspec/_latestVersion)
+ | Bintray      | Sonatype |
+ | ----------- | ----------- |
+ | [![](https://api.bintray.com/packages/nickmcdowall/nkm/yatspec/images/download.svg)](https://bintray.com/nickmcdowall/nkm/yatspec/_latestVersion)   | [![Maven Central](https://img.shields.io/maven-central/v/com.github.nickmcdowall/yatspec.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.nickmcdowall%22%20AND%20a:%22yatspec%22)        |
+ 
 
 ## Overview
 This project builds upon (and breaks away from) the excellent original [Yatspec](https://github.com/bodar/yatspec) project.
