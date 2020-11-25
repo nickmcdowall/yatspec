@@ -46,9 +46,7 @@ public class SequenceDiagramMessage {
         if (!from.equals(that.from)) return false;
         if (!messageId.equals(that.messageId)) return false;
         if (!messageName.equals(that.messageName)) return false;
-        if (!to.equals(that.to)) return false;
-
-        return true;
+        return to.equals(that.to);
     }
 
     @Override

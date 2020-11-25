@@ -18,6 +18,6 @@ class JavaSourceRendererTest {
     }
 
     private String renderedVersionOf(String s) {
-        return JavaSourceRenderer.removateDotClass(s);
+        return JavaSourceRenderer.removeDotClass(s);
     }
 }

@@ -10,7 +10,6 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
-@SuppressWarnings({"unused", "unchecked"})
 class NiceMap<T extends NiceMap> {
     private final Map<String, Object> map = Collections.synchronizedMap(new LinkedHashMap<>());
 
@@ -84,6 +83,7 @@ class NiceMap<T extends NiceMap> {
         map.clear();
     }
 
+    @SuppressWarnings("unused") // may be used externally
     public void remove(String key) {
         map.remove(key);
     }

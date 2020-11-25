@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.sequence;
 
-@SuppressWarnings("unused")
 public enum Participants {
 
     COLLECTIONS("collections"),
@@ -11,7 +10,7 @@ public enum Participants {
     DATABASE("database"),
     ACTOR("actor");
 
-    private String type;
+    private final String type;
 
     Participants(final String type) {
         this.type = type;
@@ -23,6 +22,7 @@ public enum Participants {
             public String toMarkup() {
                 return String.format("%s %s", type, name);
             }
+
             @Override
             public String name() {
                 return name;
@@ -36,6 +36,7 @@ public enum Participants {
             public String toMarkup() {
                 return String.format("%s %s as \"%s\"", type, name, alias);
             }
+
             @Override
             public String name() {
                 return name;

@@ -8,10 +8,9 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-@SuppressWarnings("unused")
 public class ScenarioTable {
     private List<ScenarioTableHeader> headers = new ArrayList<>();
-    private List<List<String>> rows = new ArrayList<>();
+    private final List<List<String>> rows = new ArrayList<>();
 
     @SuppressWarnings("WeakerAccess")//Used by templates
     public List<ScenarioTableHeader> getHeaders() {

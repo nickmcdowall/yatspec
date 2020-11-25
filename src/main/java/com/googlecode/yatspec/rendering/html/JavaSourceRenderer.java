@@ -16,7 +16,7 @@ public class JavaSourceRenderer implements Renderer<JavaSource> {
 
     @Override
     public String render(JavaSource javaSource) {
-        return escape(lines(removateDotClass(javaSource.value().trim()))
+        return escape(lines(removeDotClass(javaSource.value().trim()))
                 .map(Text::wordify)
                 .toString("\n"));
     }
@@ -25,7 +25,7 @@ public class JavaSourceRenderer implements Renderer<JavaSource> {
         return sequence(sourceCode.split(lineSeparator()));
     }
 
-    public static String removateDotClass(String s) {
+    public static String removeDotClass(String s) {
         return DOT_CLASS.matcher(s).replaceAll("$1");
     }
 }

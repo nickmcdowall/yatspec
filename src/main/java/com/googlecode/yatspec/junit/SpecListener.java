@@ -16,7 +16,10 @@ import org.junit.platform.commons.util.Preconditions;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
@@ -24,11 +27,11 @@ import static java.util.Arrays.asList;
 
 public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, TestExecutionExceptionHandler {
 
-    private Map<String, Scenario> currentScenario = new HashMap<>();
-    private Map<Method, Throwable> failures = new HashMap<>();
+    private final Map<String, Scenario> currentScenario = new HashMap<>();
+    private final Map<Method, Throwable> failures = new HashMap<>();
     private Object testInstance;
     private Result testResult;
-    private MethodNameWithArguments methodNameWithArguments = new MethodNameWithArguments();
+    private final MethodNameWithArguments methodNameWithArguments = new MethodNameWithArguments();
 
     @Override
     public void invokeAfterEachMethod(ExtensionContext extensionContext, ExtensionRegistry extensionRegistry) throws Throwable {

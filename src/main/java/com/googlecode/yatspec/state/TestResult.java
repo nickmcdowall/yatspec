@@ -10,7 +10,6 @@ import java.util.List;
 import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
 import static java.util.Arrays.asList;
 
-@SuppressWarnings({"unused"})
 public class TestResult implements Result {
     private final Class<?> klass;
     private List<TestMethod> testMethods;
@@ -33,7 +32,7 @@ public class TestResult implements Result {
     }
 
     @Override
-    public Scenario getScenario(String name) throws Exception {
+    public Scenario getScenario(String name) {
         final Scenario testScenario = findScenario(name);
         testScenario.hasRun(true);
         return testScenario;
@@ -58,7 +57,7 @@ public class TestResult implements Result {
         return className.substring(0, index);
     }
 
-    private Scenario findScenario(final String name) throws Exception {
+    private Scenario findScenario(final String name) {
         return getTestMethods().stream()
                 .filter(testMethod -> testMethod.hasScenario(name))
                 .findFirst().get()

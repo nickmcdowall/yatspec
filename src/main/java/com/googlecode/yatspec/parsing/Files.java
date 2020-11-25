@@ -7,13 +7,14 @@ import java.io.File;
 
 import static com.googlecode.totallylazy.Files.write;
 import static com.googlecode.totallylazy.Sequences.characters;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class Files {
 
-    public static void overwrite(File output, String content) throws Exception {
+    public static void overwrite(File output, String content) {
         output.delete();
         output.getParentFile().mkdirs();
-        write(content.getBytes("UTF-8"), output);
+        write(content.getBytes(UTF_8), output);
         System.out.println("Yatspec output:\nfile://" + output);
     }
 
@@ -23,10 +24,6 @@ public class Files {
 
     public static String toJavaPath(Class testClass) {
         return toPath(testClass) + ".java";
-    }
-
-    public static String toHtmlPath(Class testClass) {
-        return toPath(testClass) + ".html";
     }
 
     public static String toResourcePath(Class clazz) {

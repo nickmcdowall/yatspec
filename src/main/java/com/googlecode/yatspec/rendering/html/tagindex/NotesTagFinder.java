@@ -13,7 +13,7 @@ import static com.googlecode.totallylazy.regex.Regex.regex;
 import static java.util.Collections.emptyList;
 
 public class NotesTagFinder implements TagFinder {
-    private Regex regex;
+    private final Regex regex;
 
     NotesTagFinder() {
         this("#[^\\s]+");

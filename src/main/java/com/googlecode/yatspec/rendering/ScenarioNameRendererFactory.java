@@ -9,10 +9,6 @@ import static java.lang.System.getProperty;
 public class ScenarioNameRendererFactory {
     public static final String SCENARIO_NAME_RENDERER = "yatspec.scenario.name.renderer";
 
-    public static void setScenarioNameRenderer(Class<? extends ScenarioNameRenderer> aClass) {
-        System.setProperty(SCENARIO_NAME_RENDERER, aClass.getName());
-    }
-
     public static ScenarioNameRenderer renderer() {
         ScenarioNameRenderer renderer;
         try {

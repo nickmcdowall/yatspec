@@ -3,8 +3,6 @@ package com.googlecode.yatspec.rendering.junit;
 import com.googlecode.yatspec.rendering.ScenarioNameRenderer;
 import com.googlecode.yatspec.state.ScenarioName;
 
-import static java.util.stream.Collectors.joining;
-
 public class MavenSurefireScenarioNameRenderer implements ScenarioNameRenderer {
 
     @Override
@@ -13,8 +11,7 @@ public class MavenSurefireScenarioNameRenderer implements ScenarioNameRenderer {
             return scenarioName.getMethodName();
         }
 
-        String row = scenarioName.getRow().stream()
-                .collect(joining("_"));
+        String row = String.join("_", scenarioName.getRow());
 
         return scenarioName.getMethodName() + "__" + row;
     }

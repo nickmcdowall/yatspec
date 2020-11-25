@@ -4,7 +4,7 @@ enum ArrowType {
     SOLID("->>"),
     DOTTED("-->>");
 
-    private String markup;
+    private final String markup;
 
     ArrowType(String markup) {
         this.markup = markup;

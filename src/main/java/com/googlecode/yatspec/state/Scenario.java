@@ -9,14 +9,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@SuppressWarnings("unused")
 public class Scenario {
     private TestState testState = new TestState();
     private final String name;
     private final JavaSource specification;
     private Throwable exception;
     private boolean wasRun = false;
-    private SvgWrapper diagram;
 
     public Scenario(String name, JavaSource specification) {
         this.name = name;
@@ -35,6 +33,7 @@ public class Scenario {
         return testState.getDiagram();
     }
 
+    @SuppressWarnings("unused") //used by template
     public Map<LogKey, Object> getLogs() {
         Map<LogKey, Object> result = new LinkedHashMap<>();
         for (Map.Entry<String, Object> entry : getCapturedInputAndOutputs().entrySet()) {
@@ -63,6 +62,7 @@ public class Scenario {
         return exception != null;
     }
 
+    @SuppressWarnings("unused") //used by template
     public JavaSource getSpecification() {
         return specification;
     }

@@ -16,6 +16,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 public class TestMethodExtractor {
@@ -27,7 +28,6 @@ public class TestMethodExtractor {
         return new TestMethod(aClass, method, name, source, scenarioTable);
     }
 
-    @SuppressWarnings({"unchecked"})
     private ScenarioTable getScenarioTable(JavaMethod method) {
         ScenarioTable table = new ScenarioTable();
         table.setHeaders(getNames(method.getParameters()));
@@ -37,7 +37,7 @@ public class TestMethodExtractor {
             List<String> values = getRowValues(row);
             table.addRow(
                     values.stream()
-                            .map(value -> value.trim())
+                            .map(String::trim)
                             .collect(toList())
             );
         }
@@ -63,7 +63,7 @@ public class TestMethodExtractor {
         if (parameterValue instanceof List) {
             return (List<String>) parameterValue;
         } else {
-            return Arrays.asList(parameterValue.toString());
+            return singletonList(parameterValue.toString());
         }
     }
 

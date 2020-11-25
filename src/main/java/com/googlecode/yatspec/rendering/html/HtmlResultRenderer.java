@@ -20,7 +20,6 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
 
@@ -30,6 +29,7 @@ import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.yatspec.parsing.Files.overwrite;
 import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
 import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class HtmlResultRenderer implements SpecResultListener {
 
@@ -54,11 +54,10 @@ public class HtmlResultRenderer implements SpecResultListener {
         group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
         group.registerRenderer(instanceOf(LinkingNote.class), callable(new LinkingNoteRenderer(result.getTestClass())));
         group.registerRenderer(instanceOf(ContentAtUrl.class), asString());
-        customRenderers.stream()
-                .forEach(predicateRendererPair -> registerRenderer().apply(group, predicateRendererPair));
+        customRenderers.forEach(predicateRendererPair -> registerRenderer().apply(group, predicateRendererPair));
 
         Optional<Class<?>> optionalDocument = Creator.optionalClass("org.jdom.Document");
-        if (optionalDocument.isEmpty()) {
+        if (optionalDocument.isPresent()) {
             group.registerRenderer(instanceOf(optionalDocument.get()), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
         }
 
@@ -67,8 +66,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         template.setAttribute("testResult", result);
         StringWriter writer = new StringWriter();
         template.write(new NoIndentWriter(writer));
-        String generatedHtml = writer.toString();
-        return generatedHtml;
+        return writer.toString();
     }
 
     public <T> HtmlResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer) {
@@ -76,12 +74,12 @@ public class HtmlResultRenderer implements SpecResultListener {
     }
 
     private <T> HtmlResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
-        customRenderers.add(new SimpleEntry(predicate, renderer));
+        customRenderers.add(new SimpleEntry<>(predicate, renderer));
         return this;
     }
 
     public static <T> Callable1<T, String> callable(final Renderer<T> value) {
-        return o -> value.render(o);
+        return value::render;
     }
 
     public static Content loadContent(final String resource) {
@@ -110,23 +108,7 @@ public class HtmlResultRenderer implements SpecResultListener {
                 testMethod.getName());
     }
 
-    private File addAdjacentFile(File htmlResultFile, String fileName) throws UnsupportedEncodingException {
-        return write(loadContent(fileName).toString().getBytes("UTF-8"), new File(htmlResultFile.getParentFile(), fileName));
-    }
-
-    /**
-     * No longer supported - will be removed
-     */
-    @Deprecated(forRemoval = true)
-    public HtmlResultRenderer withCustomHeaderContent(Content... content) {
-        return this;
-    }
-
-    /**
-     * No longer supported - will be removed
-     */
-    @Deprecated(forRemoval = true)
-    public HtmlResultRenderer withCustomScripts(Content... scripts) {
-        return this;
+    private void addAdjacentFile(File htmlResultFile, String fileName) {
+        write(loadContent(fileName).toString().getBytes(UTF_8), new File(htmlResultFile.getParentFile(), fileName));
     }
 }

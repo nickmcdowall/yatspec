@@ -2,7 +2,6 @@ package com.googlecode.yatspec.state;
 
 import static com.googlecode.yatspec.plugin.sequencediagram.ByNamingConventionMessageProducer.replaceTroublesomeCharacters;
 
-@SuppressWarnings({"unused"})
 public class LogKey {
     private final String value;
 

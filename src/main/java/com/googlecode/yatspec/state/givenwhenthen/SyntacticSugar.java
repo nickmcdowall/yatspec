@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.state.givenwhenthen;
 
+@SuppressWarnings("unused") // may be useful externally
 public class SyntacticSugar {
 
     public static <T> T a(T t) {
