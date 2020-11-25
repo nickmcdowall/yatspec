@@ -1,16 +1,16 @@
 # YatSpec - LSD
 
-## Status
- Ubuntu build:  [![CircleCI](https://circleci.com/gh/nickmcdowall/yatspec.svg?style=svg)](https://circleci.com/gh/nickmcdowall/yatspec)
+## Build Status
  
- OSX build:     [![Build Status](https://travis-ci.com/nickmcdowall/yatspec.svg?branch=master)](https://travis-ci.com/nickmcdowall/yatspec)
+  | Ubuntu      | OSX | 
+  | ----------- | ----------- |
+  | [![CircleCI](https://circleci.com/gh/nickmcdowall/yatspec.svg?style=svg)](https://circleci.com/gh/nickmcdowall/yatspec) | [![Build Status](https://travis-ci.com/nickmcdowall/yatspec.svg?branch=master)](https://travis-ci.com/nickmcdowall/yatspec) |  
  
 ## Latest Release
  
- | Bintray      | Sonatype |
- | ----------- | ----------- |
- | [![](https://api.bintray.com/packages/nickmcdowall/nkm/yatspec/images/download.svg)](https://bintray.com/nickmcdowall/nkm/yatspec/_latestVersion)   | [![Maven Central](https://img.shields.io/maven-central/v/com.github.nickmcdowall/yatspec.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.nickmcdowall%22%20AND%20a:%22yatspec%22)        |
- 
+ | Bintray      | Sonatype | Jitpack |
+ | ----------- | ----------- | ----------- |
+ | [![](https://api.bintray.com/packages/nickmcdowall/nkm/yatspec/images/download.svg)](https://bintray.com/nickmcdowall/nkm/yatspec/_latestVersion)   | [![Maven Central](https://img.shields.io/maven-central/v/com.github.nickmcdowall/yatspec.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.nickmcdowall%22%20AND%20a:%22yatspec%22) | [![](https://jitpack.io/v/nickmcdowall/yatspec.svg)](https://jitpack.io/#nickmcdowall/yatspec) |
 
 ## Overview
 This project builds upon (and breaks away from) the excellent original [Yatspec](https://github.com/bodar/yatspec) project.
@@ -29,9 +29,11 @@ It focuses heavily on the **Sequence Diagram** capabilities of the framework for
 #### Gradle
 
 ````
+// Any one of these repositories
 repositories {
     jcenter()
     mavenCentral()
+    maven { url 'https://jitpack.io' }
     ...
 }
 
