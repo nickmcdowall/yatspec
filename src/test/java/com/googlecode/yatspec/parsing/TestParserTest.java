@@ -9,13 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Optional;
 
-import static com.googlecode.yatspec.junit.Notes.methods.notes;
 import static com.googlecode.yatspec.parsing.TestParser.parseTestMethods;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpecListener.class)
@@ -25,22 +24,34 @@ class TestParserTest {
 
     @Test
     @Notes("Some method notes")
-    public void testParseTestMethods() throws Exception {
-        final List<TestMethod> methods = parseTestMethods(getClass());
-        List<Annotation> annotations = extractAnnotations(methods);
-        assertThat(notes(annotations).get().value(), is("Some method notes"));
+    public void parsesNotesOnTestMethods() {
+        List<String> allNotes = parseTestMethods(getClass()).stream()
+                .map(TestMethod::getAnnotations)
+                .map(Notes.methods::notes)
+                .filter(Optional::isPresent)
+                .map(notes -> notes.get().value())
+                .collect(toList());
+
+        assertThat(allNotes).isEqualTo(List.of(
+                "Some method notes",
+                "Some more method notes"
+        ));
     }
 
-    public List<Annotation> extractAnnotations(List<TestMethod> methods) {
-        return methods.stream().findFirst().get().getAnnotations();
-    }
+    @Notes("Some more method notes")
+    @Test
+    void parsedMethodsRetainCorrectOrder() {
+        List<String> methodNames = parseTestMethods(getClass()).stream()
+                .map(TestMethod::getName)
+                .collect(toList());
 
-    @ParameterizedTest
-    @Table({
-            @Row({"meh"})
-    })
-    void yatspecWillTrimWhitespaceLeftBehindByQDoxInTableTestAnnotationsWhenAFieldVariableIsDeclared(String something) throws Exception {
-        //A workaround for weirdness in QDox
+        assertThat(methodNames).isEqualTo(List.of(
+                "parsesNotesOnTestMethods",
+                "parsedMethodsRetainCorrectOrder",
+                "supportsQuotationMarksInParameters",
+                "supportsEscapedCharactersInParameters",
+                "shouldParseParametersDeclaredAsConstants"
+        ));
     }
 
     @ParameterizedTest
@@ -48,7 +59,7 @@ class TestParserTest {
             @Row({"string with\" quotes"})
     })
     void supportsQuotationMarksInParameters(String value) {
-        assertThat(value, is("string with\" quotes"));
+        assertThat(value).isEqualTo("string with\" quotes");
     }
 
     @ParameterizedTest
@@ -56,7 +67,7 @@ class TestParserTest {
             @Row({"string with\\ escape chars"})
     })
     void supportsEscapedCharactersInParameters(String value) {
-        assertThat(value, is("string with\\ escape chars"));
+        assertThat(value).isEqualTo("string with\\ escape chars");
     }
 
     @ParameterizedTest
@@ -66,5 +77,4 @@ class TestParserTest {
     void shouldParseParametersDeclaredAsConstants(String param) {
         assertEquals("aString", param);
     }
-
 }

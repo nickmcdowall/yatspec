@@ -18,6 +18,8 @@ public class SpringBridge implements ApplicationContextAware {
     /**
      * This may be null if there is no Spring {@link ApplicationContext} or if this method is invoked
      * before the application context has been set.
+     *
+     * @return The injected applicationContext or null if the class is not loaded within a Spring context.
      */
     public static ApplicationContext getApplicationContext() {
         return applicationContext;

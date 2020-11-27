@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
-import com.googlecode.yatspec.rendering.Content;
 import com.googlecode.yatspec.sequence.Participant;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
@@ -62,18 +61,5 @@ public class SequenceDiagramGenerator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * No longer required (automatically added with HTML renderer) - method will be removed
-     */
-    @Deprecated(forRemoval = true)
-    public static Content getHeaderContentForModalWindows() {
-        return new Content() {
-            @Override
-            public String toString() {
-                return "";
-            }
-        };
     }
 }
