@@ -152,6 +152,12 @@ publishing {
                 root.appendNode('description', 'Yatspec living sequence diagrams')
                 root.appendNode('name', 'yatspec')
                 root.appendNode('url', 'https://github.com/nickmcdowall/yatspec.git')
+                // remove libraries in fatJar (until we can remove the dependency on them)
+                root.dependencies.'*'.findAll() {
+                    it.artifactId.text() == 'funclate'
+                }.each() {
+                    it.parent().remove(it)
+                }
                 root.children().last() + pomConfig
             }
         }
