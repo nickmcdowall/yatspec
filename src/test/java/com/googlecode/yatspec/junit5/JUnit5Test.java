@@ -5,7 +5,6 @@ import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
-import com.googlecode.yatspec.rendering.html.tagindex.HtmlTagIndexRenderer;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -34,7 +33,6 @@ class JUnit5Test implements WithCustomResultListeners {
         return List.of(
                 new HtmlResultRenderer().
                         withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), NOTE_REGEX_PATTERN, REPLACEMENT_PATTERN)),
-                new HtmlIndexRenderer(),
-                new HtmlTagIndexRenderer());
+                new HtmlIndexRenderer());
     }
 }
