@@ -1,14 +1,15 @@
 package com.googlecode.yatspec.rendering;
 
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.yatspec.junit.LinkingNote;
 
 import java.io.File;
+import java.util.function.Function;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.parsing.Text.wordify;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultRelativePath;
 import static java.lang.String.format;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
 
 public class LinkingNoteRenderer implements Renderer<LinkingNote> {
 
@@ -20,30 +21,27 @@ public class LinkingNoteRenderer implements Renderer<LinkingNote> {
 
     @Override
     public String render(LinkingNote linkingNoteNotes) {
-        return format(linkingNoteNotes.message(), (Object[]) sequence(linkingNoteNotes.links()).map(link()).toArray(String.class));
+        return format(linkingNoteNotes.message(), arrayOfHyperlinks(linkingNoteNotes));
     }
 
-    private Callable1<Class, String> link() {
+    private Object[] arrayOfHyperlinks(LinkingNote linkingNoteNotes) {
+        return stream(linkingNoteNotes.links())
+                .map(toHyperlink())
+                .toArray(String[]::new);
+    }
+
+    private Function<Class<?>, String> toHyperlink() {
         return targetClass -> format("<a href='%s'>%s</a>",
                 htmlResultFile(targetClass, source), wordify(targetClass.getSimpleName()));
     }
 
-    private File htmlResultFile(Class resultClass, Class sourceClass) {
+    private File htmlResultFile(Class<?> resultClass, Class<?> sourceClass) {
         return new File(getRootDirectoryPath(sourceClass) + htmlResultRelativePath(resultClass));
     }
 
-    private String getRootDirectoryPath(Class sourceClass) {
-        return sequence(htmlResultRelativePath(sourceClass).split("/"))
-                .map(toParent())
-                .toString("");
-    }
-
-    private Callable1<? super String, String> toParent() {
-        return (Callable1<String, String>) s -> {
-            if (s.contains(".")) {
-                return "";
-            }
-            return "../";
-        };
+    private String getRootDirectoryPath(Class<?> sourceClass) {
+        return stream(htmlResultRelativePath(sourceClass).split("/"))
+                .map(s -> s.contains(".") ? "" : "../")
+                .collect(joining());
     }
 }

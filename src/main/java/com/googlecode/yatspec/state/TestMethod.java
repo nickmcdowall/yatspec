@@ -13,23 +13,23 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
 import static java.lang.System.lineSeparator;
+import static java.util.Arrays.asList;
 import static java.util.Collections.nCopies;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 
 public class TestMethod {
-    private final Class testClass;
+    private final Class<?> testClass;
     private final Method method;
     private final String methodName;
     private final ScenarioTable scenarioTable;
     private final JavaSource specification;
     private final Map<String, Scenario> scenarioResults = new LinkedHashMap<>();
 
-    public TestMethod(Class testClass, Method method, String methodName, JavaSource methodBody, ScenarioTable scenarioTable) {
+    public TestMethod(Class<?> testClass, Method method, String methodName, JavaSource methodBody, ScenarioTable scenarioTable) {
         this.testClass = testClass;
         this.method = method;
         this.methodName = methodName;
@@ -134,7 +134,7 @@ public class TestMethod {
     }
 
     public List<Annotation> getAnnotations() {
-        return yatspecAnnotations(sequence(method.getAnnotations()));
+        return yatspecAnnotations(asList(method.getAnnotations()));
     }
 
     public String getUid() {
@@ -145,7 +145,7 @@ public class TestMethod {
         return testClass.getPackage().getName();
     }
 
-    public Class getTestClass() {
+    public Class<?> getTestClass() {
         return testClass;
     }
 

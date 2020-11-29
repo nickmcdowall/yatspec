@@ -14,14 +14,19 @@ import static org.hamcrest.core.Is.is;
 
 @ExtendWith(SpecListener.class)
 class LinkingNoteRendererTest {
+
     @Test
-    @LinkingNote(message = "Classes specified in the linking note should result in links to the resulted yatspec output eg. %s, %s", links = {String.class, Integer.class})
-    void shouldRenderLinkedNotesAsNotesWithLinksToTheYatspecOutputOfTheTestClassesSpecified() throws Exception {
+    @LinkingNote(message = "Classes specified in the linking note should result in links to the resulted yatspec output eg. %s, %s",
+            links = {String.class, Integer.class}
+    )
+    void shouldRenderLinkedNotesAsNotesWithLinksToTheYatspecOutputOfTheTestClassesSpecified() {
         assertThat(theRenderedValueOfTheLinkingNoteOfThisMethod(),
-                is("Classes specified in the linking note should result in links to the resulted yatspec output eg. <a href='../../../../java/lang/String.html'>String</a>, <a href='../../../../java/lang/Integer.html'>Integer</a>"));
+                is("Classes specified in the linking note should result in links to the resulted yatspec output eg. " +
+                        "<a href='../../../../java/lang/String.html'>String</a>, " +
+                        "<a href='../../../../java/lang/Integer.html'>Integer</a>"));
     }
 
-    private String theRenderedValueOfTheLinkingNoteOfThisMethod() throws Exception {
+    private String theRenderedValueOfTheLinkingNoteOfThisMethod() {
         Optional<LinkingNote> linkingNote = parseTestMethods(getClass()).stream()
                 .flatMap(testMethod -> testMethod.getAnnotations().stream())
                 .filter(LinkingNote.class::isInstance)

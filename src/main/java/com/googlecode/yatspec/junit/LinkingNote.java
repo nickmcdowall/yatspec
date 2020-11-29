@@ -10,6 +10,5 @@ import java.lang.annotation.Target;
 @YatspecAnnotation
 public @interface LinkingNote {
     String message();
-    Class[] links();
-
+    Class<?>[] links();
 }
