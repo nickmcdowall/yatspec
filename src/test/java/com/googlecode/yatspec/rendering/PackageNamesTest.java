@@ -11,8 +11,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PackageNamesTest {
 
     @Test
-    void allAncestorsSplitsByDots() throws Exception {
-        Collection<String> strings = PackageNames.allAncestors().call("com.googlecode.yatspec");
+    void allAncestorsSplitsByDots() {
+        Collection<String> strings = PackageNames.allAncestors().apply("com.googlecode.yatspec");
 
         assertThat(strings).contains(
                 "com",
@@ -24,7 +24,7 @@ class PackageNamesTest {
     @Test
     void matchesDirectSubpackage() {
         assertThat(PackageNames.directSubpackageOf("com.googlecode")
-                .matches("com.googlecode.yatspec")).isTrue();
+                .test("com.googlecode.yatspec")).isTrue();
     }
 
     @CsvSource(value = {

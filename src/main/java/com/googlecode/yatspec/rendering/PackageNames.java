@@ -1,10 +1,9 @@
 package com.googlecode.yatspec.rendering;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Predicate;
-
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 import static java.lang.String.format;
@@ -14,10 +13,7 @@ import static java.util.stream.Collectors.toList;
 public class PackageNames {
 
     public static Predicate<String> directSubpackageOf(final String parentPackage) {
-        return packageName -> {
-            String pattern = format("%s\\.?[^.]+$", quote(parentPackage));
-            return packageName.matches(pattern);
-        };
+        return packageName -> packageName.matches(format("%s\\.?[^.]+$", quote(parentPackage)));
     }
 
     public static String packageDisplayName(String name) {
@@ -30,7 +26,7 @@ public class PackageNames {
         }
     }
 
-    public static Callable1<String, Collection<String>> allAncestors() {
+    public static Function<String, Collection<String>> allAncestors() {
         return packageName -> {
             String[] words = packageName.split("\\.");
             return IntStream.range(0, words.length)
