@@ -2,10 +2,7 @@ package com.googlecode.yatspec.rendering.html.tagindex;
 
 import com.googlecode.funclate.Model;
 import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Group;
 import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Sequence;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.parsing.Files;
 import com.googlecode.yatspec.rendering.Index;
@@ -16,13 +13,18 @@ import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import static com.googlecode.funclate.Model.mutable.model;
-import static com.googlecode.totallylazy.Callables.first;
 import static com.googlecode.totallylazy.Sequences.repeat;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
+import static java.util.Map.Entry.comparingByKey;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 public class HtmlTagIndexRenderer implements SpecResultListener {
     private static final String TAG_NAME = "tag";
@@ -47,35 +49,32 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
         EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         group.setRootDir(null); //forces use of classpath to lookup template
         StringTemplate template = group.getInstanceOf("tagindex_index",
-                model().
-                        add("script", null).
-                        add("stylesheet", HtmlResultRenderer.loadContent("yatspec_alt.css")).
-                        add("cssClass", getCssMap()).
-                        add("tags", tagModels(index).toList()).
-                        toMap());
+                model().add("script", null)
+                        .add("stylesheet", HtmlResultRenderer.loadContent("yatspec_alt.css"))
+                        .add("cssClass", getCssMap())
+                        .add("tags", tagModels(index)).toMap());
         return template.toString();
     }
 
-    private Sequence<Model> tagModels(Index index) {
-        return sequence(index.entries()).
-                flatMap(testMethods()).
-                flatMap(methodTags()).
-                groupBy(first(String.class)).
-                sortBy(groupKey()).
-                map(toTagModel());
+    private List<Model> tagModels(Index index) {
+        return index.entries().stream()
+                .map(Result::getTestMethods)
+                .flatMap(Collection::stream)
+                .map(methodTags())
+                .flatMap(Collection::stream)
+                .collect(groupingBy(Pair::first)).entrySet().stream()
+                .sorted(comparingByKey())
+                .map(toTagModel())
+                .collect(toList());
     }
 
-    private Callable1<TestMethod, Collection<Pair<String, TestMethod>>> methodTags() {
+    private Function<TestMethod, Collection<Pair<String, TestMethod>>> methodTags() {
         return resultFileAndTestMethod ->
                 sequence(tagFinder.tags(resultFileAndTestMethod))
                         .zip(repeat(resultFileAndTestMethod));
     }
 
-    private static <K> Callable1<Group<K, ?>, K> groupKey() {
-        return Group::key;
-    }
-
-    private static Callable1<Pair<String, TestMethod>, Model> tagModel() {
+    private static Function<Pair<String, TestMethod>, Model> tagModel() {
         return tagAndTestMethod -> {
             TestMethod testMethod = tagAndTestMethod.second();
             return model().
@@ -88,15 +87,12 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
         };
     }
 
-    private static Callable1<Result, Collection<TestMethod>> testMethods() {
-        return fileResult -> sequence(fileResult)
-                .flatMap(Result::getTestMethods);
-    }
-
-    private static Callable1<Group<String, Pair<String, TestMethod>>, Model> toTagModel() {
-        return tagGroup -> model().
-                add("name", tagGroup.key()).
-                add("results", tagGroup.map(tagModel()).toList());
+    private static Function<Map.Entry<String, List<Pair<String, TestMethod>>>, Model> toTagModel() {
+        return entry -> model()
+                .add("name", entry.getKey())
+                .add("results", entry.getValue().stream()
+                        .map(tagModel())
+                        .collect(toList()));
     }
 
     private static File outputFile(File outputDirectory) {
