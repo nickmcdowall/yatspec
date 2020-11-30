@@ -26,7 +26,7 @@ import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMetho
 
 public class HtmlTagIndexRenderer implements SpecResultListener {
     private static final String TAG_NAME = "tag";
-    private final static Index index = new Index();
+    protected final static Index index = new Index();
     private final TagFinder tagFinder;
 
     public HtmlTagIndexRenderer() {
@@ -38,7 +38,7 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
     }
 
     @Override
-    public void complete(File yatspecOutputDir, Result result) throws Exception {
+    public void complete(File yatspecOutputDir, Result result) {
         index.add(result);
         Files.overwrite(outputFile(yatspecOutputDir), render(index));
     }
