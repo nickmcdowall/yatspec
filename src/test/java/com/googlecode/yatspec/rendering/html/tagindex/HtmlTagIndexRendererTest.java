@@ -26,12 +26,12 @@ class HtmlTagIndexRendererTest {
     HtmlTagIndexRendererTest() throws IOException {
         tempDirectory = Files.createTempDirectory("htmltagindexrenderertest").toFile();
         expectedTagIndex = loadResource("/expected/TagIndexRenderingTest.html");
+        renderer.index.reset();
     }
 
     @Notes("I am an example test method with a tag #tag-name")
     @Test
     void renderATagIndex() throws Exception {
-        renderer.index.reset();
         renderer.complete(tempDirectory, aStubbedResult("package.name"));
 
         assertThat(outputFile(tempDirectory, "tag-index.html")).hasSameContentAs(expectedTagIndex);
@@ -42,9 +42,7 @@ class HtmlTagIndexRendererTest {
     }
 
     private static FileInputStream outputFile(File outputDirectory, String name) throws FileNotFoundException {
-        File file = new File(outputDirectory, name);
-        System.out.println("file = " + file);
-        return new FileInputStream(file);
+        return new FileInputStream(new File(outputDirectory, name));
     }
 
     private Result aStubbedResult(final String packageName) {
