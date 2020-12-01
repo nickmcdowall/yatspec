@@ -1,12 +1,12 @@
 package com.googlecode.yatspec.parsing;
 
-import com.googlecode.totallylazy.Value;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
-public class JavaSource implements Value<String> {
+public class JavaSource {
     private static final String COMMA_OR_OPENING_BRACKET = "(\\s*[\\(\\,\"]\\s*)";
     private static final String COMMA_OR_CLOSING_BRACKET = "(\\s*[\\,\\)\"]\\s*)";
     private final String value;
@@ -15,7 +15,6 @@ public class JavaSource implements Value<String> {
         this.value = value;
     }
 
-    @Override
     public String value() {
         return value;
     }
