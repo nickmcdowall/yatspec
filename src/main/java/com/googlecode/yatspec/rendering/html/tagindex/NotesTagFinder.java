@@ -1,39 +1,42 @@
 package com.googlecode.yatspec.rendering.html.tagindex;
 
-import com.googlecode.totallylazy.regex.Matches;
-import com.googlecode.totallylazy.regex.Regex;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.state.TestMethod;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.Function;
-import java.util.regex.MatchResult;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static com.googlecode.totallylazy.regex.Regex.regex;
 import static java.util.Collections.emptyList;
 
 public class NotesTagFinder implements TagFinder {
-    private final Regex regex;
+
+    public static final String DEFAULT_TAG_REGEX = "#[^\\s]+";
+
+    private final Pattern pattern;
 
     NotesTagFinder() {
-        this("#[^\\s]+");
+        this(DEFAULT_TAG_REGEX);
     }
 
     private NotesTagFinder(String regex) {
-        this.regex = regex(regex);
+        this.pattern = Pattern.compile(regex);
     }
 
     public Collection<String> tags(TestMethod testMethod) {
         return Notes.methods.notes(testMethod.getAnnotations())
-                .map(notesToTags())
+                .map(this::notesToTags)
                 .orElse(emptyList());
     }
 
-    private Function<Notes, Collection<String>> notesToTags() {
-        return notes -> {
-            Matches matches = regex.findMatches(notes.value());
-            return matches.map(MatchResult::group);
-        };
+    private Collection<String> notesToTags(Notes notes) {
+        Matcher tagMatcher = pattern.matcher(notes.value());
+        List<String> tags = new ArrayList<>();
+        while (tagMatcher.find()) {
+            tags.add(tagMatcher.toMatchResult().group());
+        }
+        return tags;
     }
-
 }
