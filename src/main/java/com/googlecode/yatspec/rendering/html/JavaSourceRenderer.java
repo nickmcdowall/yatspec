@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeXml11;
+import static org.apache.commons.text.StringEscapeUtils.escapeXml11;
 
 public class JavaSourceRenderer implements Renderer<JavaSource> {
     private static final Pattern DOT_CLASS = Pattern.compile("\\.class(\\W|$)");
