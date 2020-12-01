@@ -8,7 +8,7 @@ import com.googlecode.yatspec.Creator;
 import com.googlecode.yatspec.junit.LinkingNote;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
-import com.googlecode.yatspec.parsing.Files;
+import com.googlecode.yatspec.parsing.FilesUtil;
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.rendering.*;
 import com.googlecode.yatspec.state.Result;
@@ -26,7 +26,7 @@ import java.util.*;
 import static com.googlecode.totallylazy.Callables.asString;
 import static com.googlecode.totallylazy.Files.write;
 import static com.googlecode.totallylazy.Predicates.*;
-import static com.googlecode.yatspec.parsing.Files.overwrite;
+import static com.googlecode.yatspec.parsing.FilesUtil.overwrite;
 import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -95,7 +95,7 @@ public class HtmlResultRenderer implements SpecResultListener {
     }
 
     public static String htmlResultRelativePath(Class resultClass) {
-        return Files.toPath(resultClass) + ".html";
+        return FilesUtil.toPath(resultClass) + ".html";
     }
 
     private static File htmlResultFile(File outputDirectory, Class resultClass) {

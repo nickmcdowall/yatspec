@@ -8,26 +8,21 @@ import java.io.File;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-class FilesTest {
+class FilesUtilTest {
 
-    private static final String LONG_NAME = "A".repeat(201);
-
-    /*
-     * Windows
-     */
     @Test
     void convertsDotsToFileSeparator() {
-        assertThat(Files.toPath(getClass()), is("com"
+        assertThat(FilesUtil.toPath(getClass()), is("com"
                 + separator() + "googlecode"
                 + separator() + "yatspec"
                 + separator() + "parsing"
-                + separator() + "FilesTest")
+                + separator() + "FilesUtilTest")
         );
     }
 
     @Test
     void convertsDotsToForwardSlashes() {
-        assertThat(Files.toResourcePath(getClass()), is("com/googlecode/yatspec/parsing/FilesTest"));
+        assertThat(FilesUtil.toResourcePath(getClass()), is("com/googlecode/yatspec/parsing/FilesUtilTest"));
     }
 
     private String separator() {

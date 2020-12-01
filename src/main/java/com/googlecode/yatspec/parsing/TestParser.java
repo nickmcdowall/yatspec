@@ -106,7 +106,7 @@ public class TestParser {
     }
 
     private static URL getResourceUrl(Class<?> aClass) {
-        return aClass.getClassLoader().getResource(Files.toJavaResourcePath(aClass));
+        return aClass.getClassLoader().getResource(FilesUtil.toJavaResourcePath(aClass));
     }
 
     private static Optional<URL> getJavaSourceUrlFromFileSystem(Class<?> aClass) {
@@ -114,7 +114,7 @@ public class TestParser {
     }
 
     private static Optional<URL> findSourceUrlFor(Class<?> aClass) {
-        return findFile(workingDirectory(), Files.toJavaPath(aClass))
+        return findFile(workingDirectory(), FilesUtil.toJavaPath(aClass))
                 .map(TestParser::urlFor);
     }
 

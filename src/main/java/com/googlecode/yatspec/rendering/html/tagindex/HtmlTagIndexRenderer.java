@@ -3,7 +3,7 @@ package com.googlecode.yatspec.rendering.html.tagindex;
 import com.googlecode.funclate.Model;
 import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
 import com.googlecode.yatspec.junit.SpecResultListener;
-import com.googlecode.yatspec.parsing.Files;
+import com.googlecode.yatspec.parsing.FilesUtil;
 import com.googlecode.yatspec.rendering.Index;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
@@ -12,6 +12,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -39,9 +40,9 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
     }
 
     @Override
-    public void complete(File outputDir, Result result) {
+    public void complete(File outputDir, Result result) throws IOException {
         index.add(result);
-        Files.overwrite(outputFile(outputDir), render(index));
+        FilesUtil.overwrite(outputFile(outputDir), render(index));
     }
 
     public String render(Index index) {
