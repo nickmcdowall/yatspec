@@ -19,17 +19,17 @@ import org.antlr.stringtemplate.NoIndentWriter;
 import org.antlr.stringtemplate.StringTemplate;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Files;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
 
 import static com.googlecode.totallylazy.Callables.asString;
-import static com.googlecode.totallylazy.Files.write;
 import static com.googlecode.totallylazy.Predicates.*;
 import static com.googlecode.yatspec.parsing.FilesUtil.overwrite;
 import static com.googlecode.yatspec.rendering.Renderers.registerRenderer;
 import static java.lang.String.format;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class HtmlResultRenderer implements SpecResultListener {
 
@@ -108,7 +108,9 @@ public class HtmlResultRenderer implements SpecResultListener {
                 testMethod.getName());
     }
 
-    private void addAdjacentFile(File htmlResultFile, String fileName) {
-        write(loadContent(fileName).toString().getBytes(UTF_8), new File(htmlResultFile.getParentFile(), fileName));
+    private void addAdjacentFile(File htmlResultFile, String fileName) throws IOException {
+        File resultDirectory = htmlResultFile.getParentFile();
+        File outputFile = new File(resultDirectory, fileName);
+        Files.writeString(outputFile.toPath(), loadContent(fileName).toString());
     }
 }
