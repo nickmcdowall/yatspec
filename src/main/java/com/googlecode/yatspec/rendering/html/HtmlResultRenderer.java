@@ -1,7 +1,6 @@
 package com.googlecode.yatspec.rendering.html;
 
 import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
-import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Predicate;
 import com.googlecode.totallylazy.Xml;
 import com.googlecode.yatspec.Creator;
@@ -49,16 +48,16 @@ public class HtmlResultRenderer implements SpecResultListener {
         final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         group.setRootDir(null); //forces use of classpath to lookup template
         group.registerRenderer(always().and(not(instanceOf(Number.class))), Xml.escape());
-        group.registerRenderer(instanceOf(ScenarioTableHeader.class), callable(new ScenarioTableHeaderRenderer()));
-        group.registerRenderer(instanceOf(JavaSource.class), callable(new JavaSourceRenderer()));
-        group.registerRenderer(instanceOf(Notes.class), callable(new NotesRenderer()));
-        group.registerRenderer(instanceOf(LinkingNote.class), callable(new LinkingNoteRenderer(result.getTestClass())));
+        group.registerRenderer(instanceOf(ScenarioTableHeader.class), renderer(new ScenarioTableHeaderRenderer()));
+        group.registerRenderer(instanceOf(JavaSource.class), renderer(new JavaSourceRenderer()));
+        group.registerRenderer(instanceOf(Notes.class), renderer(new NotesRenderer()));
+        group.registerRenderer(instanceOf(LinkingNote.class), renderer(new LinkingNoteRenderer(result.getTestClass())));
         group.registerRenderer(instanceOf(ContentAtUrl.class), asString());
         customRenderers.forEach(predicateRendererPair -> registerRenderer().apply(group, predicateRendererPair));
 
         Optional<Class<?>> optionalDocument = Creator.optionalClass("org.jdom.Document");
         if (optionalDocument.isPresent()) {
-            group.registerRenderer(instanceOf(optionalDocument.get()), callable(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
+            group.registerRenderer(instanceOf(optionalDocument.get()), renderer(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
         }
 
         final StringTemplate template = group.getInstanceOf("yatspec");
@@ -78,7 +77,7 @@ public class HtmlResultRenderer implements SpecResultListener {
         return this;
     }
 
-    public static <T> Callable1<T, String> callable(final Renderer<T> value) {
+    public <T> com.googlecode.funclate.Renderer<? super T> renderer(final Renderer<T> value) {
         return value::render;
     }
 
@@ -94,11 +93,11 @@ public class HtmlResultRenderer implements SpecResultListener {
         }};
     }
 
-    public static String htmlResultRelativePath(Class resultClass) {
+    public static String htmlResultRelativePath(Class<?> resultClass) {
         return FilesUtil.toPath(resultClass) + ".html";
     }
 
-    private static File htmlResultFile(File outputDirectory, Class resultClass) {
+    private static File htmlResultFile(File outputDirectory, Class<?> resultClass) {
         return new File(outputDirectory, htmlResultRelativePath(resultClass));
     }
 
