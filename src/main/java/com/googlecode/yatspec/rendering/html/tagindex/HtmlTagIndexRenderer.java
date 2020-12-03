@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.rendering.html.tagindex;
 
-import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.parsing.FilesUtil;
 import com.googlecode.yatspec.rendering.Index;
@@ -8,6 +7,7 @@ import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.TestMethod;
 import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
@@ -19,6 +19,7 @@ import java.util.function.Function;
 
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
+import static com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer.packageUrl;
 import static java.util.Comparator.comparing;
 import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.groupingBy;
@@ -44,7 +45,8 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
     }
 
     public String render(Index index) {
-        EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
+        String packageUrl = packageUrl(getClass()).toString();
+        StringTemplateGroup group = new StringTemplateGroup(packageUrl, packageUrl);
         group.setRootDir(null); //forces use of classpath to lookup template
         StringTemplate template = group.getInstanceOf("tagindex_index", Map.of(
                 "stylesheet", HtmlResultRenderer.loadContent("yatspec_alt.css"),
