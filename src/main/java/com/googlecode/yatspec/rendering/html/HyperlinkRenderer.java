@@ -25,7 +25,7 @@ public class HyperlinkRenderer<T> implements Renderer<T> {
     }
 
     @Override
-    public String render(T value) throws Exception {
+    public String render(T value) {
         String valueStr = delegateRenderer.render(value);
         return valueStr != null ? valueStr.replaceAll(regexPattern, replacementPattern) : null;
     }

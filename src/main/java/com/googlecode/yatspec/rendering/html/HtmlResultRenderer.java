@@ -1,12 +1,11 @@
 package com.googlecode.yatspec.rendering.html;
 
-import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
-import com.googlecode.yatspec.Creator;
 import com.googlecode.yatspec.junit.LinkingNote;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.parsing.FilesUtil;
 import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.plugin.jdom.DocumentRenderer;
 import com.googlecode.yatspec.rendering.*;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.ScenarioTableHeader;
@@ -14,6 +13,7 @@ import com.googlecode.yatspec.state.Status;
 import com.googlecode.yatspec.state.TestMethod;
 import org.antlr.stringtemplate.NoIndentWriter;
 import org.antlr.stringtemplate.StringTemplate;
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.commons.text.StringEscapeUtils;
 import org.jdom.Document;
 
@@ -22,15 +22,18 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.googlecode.yatspec.parsing.FilesUtil.overwrite;
+import static com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer.packageUrl;
 import static java.lang.String.format;
 
 public class HtmlResultRenderer implements SpecResultListener {
 
-    private final List<SimpleEntry<Predicate, Renderer>> customRenderers = new ArrayList<>();
+    private final List<SimpleEntry<Class, Renderer>> customRenderers = new ArrayList<>();
 
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
@@ -43,21 +46,18 @@ public class HtmlResultRenderer implements SpecResultListener {
     }
 
     public String render(Result result) throws Exception {
-        final EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
+        String packageUrl = packageUrl(getClass()).toString();
+        final StringTemplateGroup group = new StringTemplateGroup(packageUrl, packageUrl);
         group.setRootDir(null); //forces use of classpath to lookup template
-        group.registerRenderer(o -> !(o instanceof Number), renderer(StringEscapeUtils::escapeXml11));
-        group.registerRenderer(ScenarioTableHeader.class::isInstance, renderer(new ScenarioTableHeaderRenderer()));
-        group.registerRenderer(JavaSource.class::isInstance, renderer(new JavaSourceRenderer()));
-        group.registerRenderer(Notes.class::isInstance, renderer(new NotesRenderer()));
-        group.registerRenderer(LinkingNote.class::isInstance, renderer(new LinkingNoteRenderer(result.getTestClass())));
-        group.registerRenderer(ContentAtUrl.class::isInstance, renderer(Object::toString));
-        customRenderers.forEach(predicateRendererPair ->
-                group.registerRenderer(o -> predicateRendererPair.getKey().test(o), renderer(predicateRendererPair.getValue())));
-
-        Optional<Class<?>> optionalDocument = Creator.optionalClass("org.jdom.Document");
-        if (optionalDocument.isPresent()) {
-            group.registerRenderer(Document.class::isInstance, renderer(Creator.<Renderer>create(Class.forName("com.googlecode.yatspec.plugin.jdom.DocumentRenderer"))));
-        }
+        group.registerRenderer(String.class, renderer(StringEscapeUtils::escapeXml11));
+        group.registerRenderer(ScenarioTableHeader.class, new ScenarioTableHeaderRenderer());
+        group.registerRenderer(JavaSource.class, new JavaSourceRenderer());
+        group.registerRenderer(Notes.class, new NotesRenderer());
+        group.registerRenderer(LinkingNote.class, new LinkingNoteRenderer(result.getTestClass()));
+        group.registerRenderer(ContentAtUrl.class, renderer(Object::toString));
+        group.registerRenderer(Document.class, new DocumentRenderer());
+        customRenderers.forEach(typeRenderer ->
+                group.registerRenderer(typeRenderer.getKey(), typeRenderer.getValue()));
 
         final StringTemplate template = group.getInstanceOf("yatspec");
         template.setAttribute("cssClass", getCssMap());
@@ -67,17 +67,13 @@ public class HtmlResultRenderer implements SpecResultListener {
         return writer.toString();
     }
 
-    public <T> HtmlResultRenderer withCustomRenderer(Class<T> klazz, Renderer<T> renderer) {
-        return withCustomRenderer(klazz::isInstance, renderer);
-    }
-
-    private <T> HtmlResultRenderer withCustomRenderer(Predicate<T> predicate, Renderer<T> renderer) {
-        customRenderers.add(new SimpleEntry<>(predicate, renderer));
+    public <T> HtmlResultRenderer withCustomRenderer(Class<T> type, Renderer<T> renderer) {
+        customRenderers.add(new SimpleEntry<>(type, renderer));
         return this;
     }
 
-    public <T> com.googlecode.funclate.Renderer<? super T> renderer(final Renderer<T> value) {
-        return value::render;
+    public <T> Renderer<? super T> renderer(final Renderer<T> value) {
+        return value;
     }
 
     public static Content loadContent(final String resource) {
