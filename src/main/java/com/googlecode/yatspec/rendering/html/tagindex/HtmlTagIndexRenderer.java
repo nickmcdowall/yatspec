@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.rendering.html.tagindex;
 
-import com.googlecode.funclate.Model;
 import com.googlecode.funclate.stringtemplate.EnhancedStringTemplateGroup;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.parsing.FilesUtil;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.googlecode.funclate.Model.mutable.model;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
 import static java.util.Comparator.comparing;
@@ -48,15 +46,15 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
     public String render(Index index) {
         EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         group.setRootDir(null); //forces use of classpath to lookup template
-        StringTemplate template = group.getInstanceOf("tagindex_index",
-                model().add("script", null)
-                        .add("stylesheet", HtmlResultRenderer.loadContent("yatspec_alt.css"))
-                        .add("cssClass", getCssMap())
-                        .add("tags", tagModels(index)).toMap());
+        StringTemplate template = group.getInstanceOf("tagindex_index", Map.of(
+                "stylesheet", HtmlResultRenderer.loadContent("yatspec_alt.css"),
+                "cssClass", getCssMap(),
+                "tags", tagModels(index)));
+
         return template.toString();
     }
 
-    private List<Model> tagModels(Index index) {
+    private List<Map<String, Object>> tagModels(Index index) {
         return index.entries().stream()
                 .map(Result::getTestMethods)
                 .flatMap(Collection::stream)
@@ -75,25 +73,25 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
                         .collect(toList());
     }
 
-    private static Function<Map.Entry<String, List<Pair<String, TestMethod>>>, Model> toTagModel() {
-        return entry -> model()
-                .add("name", entry.getKey())
-                .add("results", entry.getValue().stream()
+    private static Function<Map.Entry<String, List<Pair<String, TestMethod>>>, Map<String, Object>> toTagModel() {
+        return entry -> Map.of(
+                "name", entry.getKey(),
+                "results", entry.getValue().stream()
                         .sorted(comparing(pair -> pair.getRight().getName()))
                         .map(tagModel())
                         .collect(toList()));
     }
 
-    private static Function<Pair<String, TestMethod>, Model> tagModel() {
+    private static Function<Pair<String, TestMethod>, Map<String, Object>> tagModel() {
         return tagAndTestMethod -> {
             TestMethod testMethod = tagAndTestMethod.getRight();
-            return model().
-                    add(TAG_NAME, tagAndTestMethod.getLeft()).
-                    add("package", testMethod.getPackageName()).
-                    add("resultName", testMethod.getName()).
-                    add("url", testMethodRelativePath(testMethod)).
-                    add("class", getCssMap().get(testMethod.getStatus())).
-                    add("name", testMethod.getDisplayName());
+            return Map.of(
+                    TAG_NAME, tagAndTestMethod.getLeft(),
+                    "package", testMethod.getPackageName(),
+                    "resultName", testMethod.getName(),
+                    "url", testMethodRelativePath(testMethod),
+                    "class", getCssMap().get(testMethod.getStatus()),
+                    "name", testMethod.getDisplayName());
         };
     }
 

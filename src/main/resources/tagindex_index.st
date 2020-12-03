@@ -11,13 +11,6 @@
             /* ]]> */
     </style>
     }$
-    $script:{
-    <script type="text/javascript">
-        // <![CDATA[
-        $it$
-        // ]]>
-    </script>
-    }$
 </head>
 <body>
 
