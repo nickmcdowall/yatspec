@@ -11,8 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
-import static com.googlecode.funclate.Model.mutable.model;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
 
 public class HtmlIndexRenderer implements SpecResultListener {
@@ -36,9 +36,9 @@ public class HtmlIndexRenderer implements SpecResultListener {
         EnhancedStringTemplateGroup group = new EnhancedStringTemplateGroup(getClass());
         group.setRootDir(null); //forces use of classpath lookup
         StringTemplate template = group.getInstanceOf("index",
-                model().
-                        add("cssClass", getCssMap()).
-                        add("result", new IndexModel(index).asModel()).toMap());
+                Map.of(
+                        "cssClass", getCssMap(),
+                        "result", new IndexModel(index).asModel()));
         return template.toString();
     }
 

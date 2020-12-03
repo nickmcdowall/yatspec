@@ -1,15 +1,14 @@
 package com.googlecode.yatspec.rendering.html.index;
 
-import com.googlecode.funclate.Model;
 import com.googlecode.yatspec.rendering.Index;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Status;
 import com.googlecode.yatspec.state.TestMethod;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 
-import static com.googlecode.funclate.Model.mutable.model;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultRelativePath;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
 import static com.googlecode.yatspec.state.Status.Passed;
@@ -28,28 +27,28 @@ public class IndexModel {
                 .collect(toList());
     }
 
-    public Model asModel() {
-        return model().add("packages", packageNames.stream()
+    public Map<String, Object> asModel() {
+        return Map.of("packages", packageNames.stream()
                 .map(this::modelOfPackage)
                 .collect(toList()));
     }
 
-    private Model modelOfPackage(String name) {
-        return model()
-                .add("name", name)
-                .add("status", statusOfPackage(name))
-                .add("results", entries.stream()
+    private Map<String, Object> modelOfPackage(String name) {
+        return Map.of(
+                "name", name,
+                "status", statusOfPackage(name),
+                "results", entries.stream()
                         .filter(result -> result.getPackageName().equalsIgnoreCase(name))
                         .map(this::modelOfResult)
                         .collect(toList()));
     }
 
-    private Model modelOfResult(Result result) {
-        return model()
-                .add("name", result.getName())
-                .add("url", htmlResultRelativePath(result.getTestClass()))
-                .add("status", deriveResultStatus().apply(result))
-                .add("methods", result.getTestMethods().stream()
+    private Map<String, Object> modelOfResult(Result result) {
+        return Map.of(
+                "name", result.getName(),
+                "url", htmlResultRelativePath(result.getTestClass()),
+                "status", deriveResultStatus().apply(result),
+                "methods", result.getTestMethods().stream()
                         .map(this::testMethodModel)
                         .collect(toList()));
     }
@@ -70,10 +69,10 @@ public class IndexModel {
                 .orElse(Passed);
     }
 
-    private Model testMethodModel(TestMethod testMethod) {
-        return model()
-                .add("name", testMethod.getName())
-                .add("url", testMethodRelativePath(testMethod))
-                .add("status", testMethod.getStatus());
+    private Map<String, Object> testMethodModel(TestMethod testMethod) {
+        return Map.of(
+                "name", testMethod.getName(),
+                "url", testMethodRelativePath(testMethod),
+                "status", testMethod.getStatus());
     }
 }
