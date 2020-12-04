@@ -10,7 +10,16 @@
 <h1>Tags</h1>
 
 <div class="contents">
-    $tags:tagIndex(tag=it, cssClass=cssClass)$
+    {%- for tag in tags %}
+    <dl class="tag-index">
+        <dt>{{tag.name}}</dt>
+        {%- for result in tag.results %}
+        <dd class="{{result.class}}">
+            <a href="{{result.url}}">{{result.name}}</a>
+        </dd>
+        {%- endfor %}
+    </dl>
+    {%- endfor %}
 </div>
 </body>
 </html>
