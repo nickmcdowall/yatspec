@@ -20,6 +20,8 @@ import org.jdom.Document;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
@@ -28,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.googlecode.yatspec.parsing.FilesUtil.overwrite;
-import static com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer.packageUrl;
 import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 public class HtmlResultRenderer implements SpecResultListener {
 
@@ -107,5 +109,14 @@ public class HtmlResultRenderer implements SpecResultListener {
         File resultDirectory = htmlResultFile.getParentFile();
         File outputFile = new File(resultDirectory, fileName);
         Files.writeString(outputFile.toPath(), loadContent(fileName).toString());
+    }
+
+    private URL packageUrl(final Class<?> aClass) {
+        try {
+            String name = aClass.getSimpleName() + ".class";
+            return new URL(aClass.getResource(name).toString().replace(name, EMPTY));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -4,22 +4,21 @@ import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.rendering.ContentAtUrl;
 import com.googlecode.yatspec.rendering.Index;
 import com.googlecode.yatspec.state.Result;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jtwig.JtwigModel;
+import org.jtwig.JtwigTemplate;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 public class HtmlIndexRenderer implements SpecResultListener {
     public final static Index INDEX = new Index();
+
+    private final JtwigTemplate template = JtwigTemplate.classpathTemplate("/index.twig");
+    private final JtwigModel model = JtwigModel.newModel();
 
     @Override
     public void complete(File outputDir, Result result) throws Exception {
@@ -36,26 +35,12 @@ public class HtmlIndexRenderer implements SpecResultListener {
     }
 
     private String render(Index index) {
-        String baseUrl = packageUrl(getClass()).toString();
-        StringTemplateGroup group = new StringTemplateGroup(baseUrl, baseUrl);
-        group.setRootDir(null); //forces use of classpath lookup
-        StringTemplate template = group.getInstanceOf("index",
-                Map.of(
-                        "cssClass", getCssMap(),
-                        "result", new IndexModel(index).asModel()));
-        return template.toString();
+        return template.render(model
+                .with("cssClass", getCssMap())
+                .with("result", new IndexModel(index).asModel()));
     }
 
     private String read(String name) {
         return new ContentAtUrl(getClass().getResource(name)).toString();
-    }
-
-    public static URL packageUrl(final Class<?> aClass) {
-        try {
-            String name = aClass.getSimpleName() + ".class";
-            return new URL(aClass.getResource(name).toString().replace(name, EMPTY));
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

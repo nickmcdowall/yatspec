@@ -27,7 +27,7 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
     protected static final Index index = new Index();
     
     private final TagFinder tagFinder;
-    private final JtwigTemplate template = JtwigTemplate.classpathTemplate("/tagindex_index.twig");
+    private final JtwigTemplate template = JtwigTemplate.classpathTemplate("/tagIndex.twig");
     private final JtwigModel model = JtwigModel.newModel();
 
     public HtmlTagIndexRenderer() {

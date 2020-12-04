@@ -14,7 +14,21 @@
 <div class="contents">
     <h2>Contents</h2>
     <p>
-        $result.packages:indexPackage(package=it, cssClass=cssClass)$
+        {%- for package in result.packages %}
+        <dl>
+            <dt class="package-name">{{package.name}}</dt>
+            {%- for result in package.results %}
+            <dd>
+                <dl class="index-result">
+                    <dt><a href="{{result.url}}">{{result.name}}</a></dt>
+                    {%- for method in result.methods %}
+                    <dd class="{{cssClass[method.status]}} "><a href="{{method.url}}">{{method.name}}</a></dd>
+                    {%- endfor %}
+                </dl>
+            </dd>
+            {%- endfor %}
+        </dl>
+        {%- endfor %}
     </p>
 </div>
 </body>
