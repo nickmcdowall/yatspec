@@ -102,7 +102,8 @@ public class HtmlResultRenderer implements SpecResultListener {
                 testMethod.getName());
     }
 
-    private void addAdjacentFile(File htmlResultFile, String fileName) throws IOException {
+    //TODO move to shared file
+    public static void addAdjacentFile(File htmlResultFile, String fileName) throws IOException {
         File resultDirectory = htmlResultFile.getParentFile();
         File outputFile = new File(resultDirectory, fileName);
         Files.writeString(outputFile.toPath(), loadContent(fileName).toString());

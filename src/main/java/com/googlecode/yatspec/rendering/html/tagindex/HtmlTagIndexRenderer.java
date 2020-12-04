@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
-import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.*;
 import static com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer.packageUrl;
 import static java.util.Comparator.comparing;
 import static java.util.Map.Entry.comparingByKey;
@@ -41,7 +40,9 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
     @Override
     public void complete(File outputDir, Result result) throws IOException {
         index.add(result);
-        FilesUtil.overwrite(outputFile(outputDir), render(index));
+        File outputFile = outputFile(outputDir);
+        FilesUtil.overwrite(outputFile, render(index));
+        addAdjacentFile(outputFile, "yatspec_alt.css");
     }
 
     public String render(Index index) {
