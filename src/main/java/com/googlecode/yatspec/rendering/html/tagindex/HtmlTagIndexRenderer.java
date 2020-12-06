@@ -5,12 +5,14 @@ import com.googlecode.yatspec.parsing.FilesUtil;
 import com.googlecode.yatspec.rendering.Index;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.TestMethod;
+import com.mitchellbosecke.pebble.PebbleEngine;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jtwig.JtwigModel;
-import org.jtwig.JtwigTemplate;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +27,10 @@ import static java.util.stream.Collectors.toList;
 public class HtmlTagIndexRenderer implements SpecResultListener {
     private static final String TAG_NAME = "tag";
     protected static final Index index = new Index();
-    
+
     private final TagFinder tagFinder;
-    private final JtwigTemplate template = JtwigTemplate.classpathTemplate("/tagIndex.twig");
-    private final JtwigModel model = JtwigModel.newModel();
+    private final PebbleEngine engine = new PebbleEngine.Builder().build();
+    private final PebbleTemplate compiledTemplate = engine.getTemplate("tagIndex.peb");
 
     public HtmlTagIndexRenderer() {
         this(new NotesTagFinder());
@@ -46,10 +48,13 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
         addAdjacentFile(outputFile, "yatspec_alt.css");
     }
 
-    public String render(Index index) {
-        return template.render(model
-                .with("cssClass", getCssMap())
-                .with("tags", tagModels(index)));
+    public String render(Index index) throws IOException {
+        Writer writer = new StringWriter();
+        compiledTemplate.evaluate(writer, Map.of(
+                "cssClass", getCssMap(),
+                "tags", tagModels(index)
+        ));
+        return writer.toString();
     }
 
     private List<Map<String, Object>> tagModels(Index index) {
