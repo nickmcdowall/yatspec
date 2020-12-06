@@ -4,21 +4,25 @@ import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.rendering.ContentAtUrl;
 import com.googlecode.yatspec.rendering.Index;
 import com.googlecode.yatspec.state.Result;
-import org.jtwig.JtwigModel;
-import org.jtwig.JtwigTemplate;
+import com.mitchellbosecke.pebble.PebbleEngine;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.getCssMap;
 
 public class HtmlIndexRenderer implements SpecResultListener {
     public final static Index INDEX = new Index();
 
-    private final JtwigTemplate template = JtwigTemplate.classpathTemplate("/index.twig");
-    private final JtwigModel model = JtwigModel.newModel();
+    private final PebbleEngine engine = new PebbleEngine.Builder().build();
+    private final PebbleTemplate compiledTemplate = engine.getTemplate("index.peb");
+
 
     @Override
     public void complete(File outputDir, Result result) throws Exception {
@@ -34,10 +38,14 @@ public class HtmlIndexRenderer implements SpecResultListener {
         if (fileName.endsWith(".html")) System.out.println("Yatspec output:\nfile://" + path);
     }
 
-    private String render(Index index) {
-        return template.render(model
-                .with("cssClass", getCssMap())
-                .with("result", new IndexModel(index).asModel()));
+    private String render(Index index) throws IOException {
+        Writer writer = new StringWriter();
+        compiledTemplate.evaluate(writer, Map.of(
+                "cssClass", getCssMap(),
+                "result", new IndexModel(index).asModel()
+        ));
+
+        return writer.toString();
     }
 
     private String read(String name) {
