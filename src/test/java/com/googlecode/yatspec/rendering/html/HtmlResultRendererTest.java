@@ -36,7 +36,7 @@ class HtmlResultRendererTest {
 
     @Test
     void supportsCustomRenderingOfScenarioLogs() throws Exception {
-        TestResult result = aTestResultWithCustomRenderTypeAddedToScenarioLogs();
+        TestResult result = aTestResultWithCustomRenderTypeAddedToScenarioLogs(new RenderedType());
 
         String html = new HtmlResultRenderer().
                 withCustomRenderer(RenderedType.class, new DefaultReturningRenderer(CUSTOM_RENDERED_TEXT)).
@@ -45,13 +45,13 @@ class HtmlResultRendererTest {
         assertThat(html, containsString(CUSTOM_RENDERED_TEXT));
     }
 
-    private TestResult aTestResultWithCustomRenderTypeAddedToScenarioLogs() throws Exception {
+    private TestResult aTestResultWithCustomRenderTypeAddedToScenarioLogs(RenderedType thingToBeCustomRendered) {
         TestResult result = new TestResult(getClass());
-        addToCapturedInputsAndOutputs(result, new RenderedType());
+        addToCapturedInputsAndOutputs(result, thingToBeCustomRendered);
         return result;
     }
 
-    private void addToCapturedInputsAndOutputs(TestResult result, Object thingToBeCustomRendered) throws Exception {
+    private void addToCapturedInputsAndOutputs(TestResult result, Object thingToBeCustomRendered) {
         Scenario scenario = result.getTestMethods().get(0).getScenarios().get(0);
         TestState testState = new TestState();
         testState.log("custom rendered thing", thingToBeCustomRendered);

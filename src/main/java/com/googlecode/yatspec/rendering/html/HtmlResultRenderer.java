@@ -1,6 +1,5 @@
 package com.googlecode.yatspec.rendering.html;
 
-import com.googlecode.yatspec.junit.LinkingNote;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.parsing.FilesUtil;
@@ -11,19 +10,19 @@ import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.ScenarioTableHeader;
 import com.googlecode.yatspec.state.Status;
 import com.googlecode.yatspec.state.TestMethod;
-import org.antlr.stringtemplate.NoIndentWriter;
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
-import org.apache.commons.text.StringEscapeUtils;
+import com.mitchellbosecke.pebble.PebbleEngine;
+import com.mitchellbosecke.pebble.error.PebbleException;
+import com.mitchellbosecke.pebble.extension.AbstractExtension;
+import com.mitchellbosecke.pebble.extension.Filter;
+import com.mitchellbosecke.pebble.template.EvaluationContext;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import org.jdom.Document;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.Writer;
 import java.nio.file.Files;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,11 +30,26 @@ import java.util.Map;
 
 import static com.googlecode.yatspec.parsing.FilesUtil.overwrite;
 import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 public class HtmlResultRenderer implements SpecResultListener {
 
-    private final List<SimpleEntry<Class, Renderer>> customRenderers = new ArrayList<>();
+    private Map<Class<?>, Renderer> renderers = new HashMap<>(Map.of(
+            ScenarioTableHeader.class, new ScenarioTableHeaderRenderer(),
+            JavaSource.class, new JavaSourceRenderer(),
+            Notes.class, new NotesRenderer(),
+//            LinkingNote.class, new LinkingNoteRenderer(result.getTestClass()), // TODO needs runtime result variable
+            ContentAtUrl.class, renderer(Object::toString),
+            Document.class, new DocumentRenderer()));
+
+    List<List<String>> rows = new ArrayList<>();
+
+    private final PebbleEngine engine = new PebbleEngine.Builder()
+            .autoEscaping(false)
+            .methodAccessValidator((object, method) -> true) //TODO look into using the default validator when possible
+            .extension(new CustomRenderingExtension())
+            .build();
+
+    private final PebbleTemplate compiledTemplate = engine.getTemplate("yatspec.peb");
 
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
@@ -48,29 +62,16 @@ public class HtmlResultRenderer implements SpecResultListener {
     }
 
     public String render(Result result) throws Exception {
-        String packageUrl = packageUrl(getClass()).toString();
-        final StringTemplateGroup group = new StringTemplateGroup(packageUrl, packageUrl);
-        group.setRootDir(null); //forces use of classpath to lookup template
-        group.registerRenderer(String.class, renderer(StringEscapeUtils::escapeXml11));
-        group.registerRenderer(ScenarioTableHeader.class, new ScenarioTableHeaderRenderer());
-        group.registerRenderer(JavaSource.class, new JavaSourceRenderer());
-        group.registerRenderer(Notes.class, new NotesRenderer());
-        group.registerRenderer(LinkingNote.class, new LinkingNoteRenderer(result.getTestClass()));
-        group.registerRenderer(ContentAtUrl.class, renderer(Object::toString));
-        group.registerRenderer(Document.class, new DocumentRenderer());
-        customRenderers.forEach(typeRenderer ->
-                group.registerRenderer(typeRenderer.getKey(), typeRenderer.getValue()));
-
-        final StringTemplate template = group.getInstanceOf("yatspec");
-        template.setAttribute("cssClass", getCssMap());
-        template.setAttribute("testResult", result);
-        StringWriter writer = new StringWriter();
-        template.write(new NoIndentWriter(writer));
+        Writer writer = new StringWriter();
+        compiledTemplate.evaluate(writer, Map.of(
+                "cssClass", getCssMap(),
+                "testResult", result
+        ));
         return writer.toString();
     }
 
     public <T> HtmlResultRenderer withCustomRenderer(Class<T> type, Renderer<T> renderer) {
-        customRenderers.add(new SimpleEntry<>(type, renderer));
+        renderers.put(type, renderer);
         return this;
     }
 
@@ -111,12 +112,28 @@ public class HtmlResultRenderer implements SpecResultListener {
         Files.writeString(outputFile.toPath(), loadContent(fileName).toString());
     }
 
-    private URL packageUrl(final Class<?> aClass) {
-        try {
-            String name = aClass.getSimpleName() + ".class";
-            return new URL(aClass.getResource(name).toString().replace(name, EMPTY));
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+    // TODO move out
+    private class CustomRenderingExtension extends AbstractExtension {
+        @Override
+        public Map<String, Filter> getFilters() {
+            return Map.of("render", new RenderFilter());
+        }
+    }
+
+    // TODO move out
+    private class RenderFilter implements Filter {
+        @Override
+        public Object apply(Object input, Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) throws PebbleException {
+            if (input == null) {
+                return null;
+            }
+            Renderer renderer = renderers.getOrDefault(input.getClass(), Object::toString);
+            return renderer.render(input);
+        }
+
+        @Override
+        public List<String> getArgumentNames() {
+            return null;
         }
     }
 }

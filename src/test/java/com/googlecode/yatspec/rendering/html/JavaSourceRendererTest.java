@@ -12,8 +12,8 @@ class JavaSourceRendererTest {
     private final JavaSourceRenderer renderer = new JavaSourceRenderer();
 
     @Test
-    void escapedXmlCharacters() {
-        assertThat(renderer.render(new JavaSource("<abc>&:</abc>\\+:\n"))).isEqualTo("&lt;abc&gt;&amp; &lt;/abc&gt;\\+");
+    void noLongerEscapeXmlCharactersInRenderer() {
+        assertThat(renderer.render(new JavaSource("<abc>&:</abc>\\+:\n"))).isEqualTo("<abc>& </abc>\\+");
     }
 
     @Test

@@ -20,108 +20,109 @@
 
         <header>
             <h1>{{testResult.name}}</h1>
-            {%- for annotation in testResult.annotations %}
-            <pre class="notes">{{annotation.value}}</pre>
-            {%- endfor %}
+{% for annotation in testResult.annotations %}
+            <pre class="notes">{{annotation.value | render | escape }}</pre>
+{% endfor %}
             <nav class="contents">
                 <h2>Contents</h2>
                 <ul class="contents">
-                    {%- for testMethod in testResult.testMethods %}
+{% for testMethod in testResult.testMethods %}
                         <li class='{{cssClass[testMethod.status]}}'>
-                            <a href="#{{testMethod.name}}">{{testMethod.displayName}}</a>
+                            <a href="#{{testMethod.name}}">{{testMethod.displayName | render}}</a>
                         </li>
-                    {%- endfor %}
+{% endfor %}
                 </ul>
             </nav>
         </header>
         <main role="main">
-            {%- for testMethod in testResult.testMethods %}    
+{% for testMethod in testResult.testMethods %}
             <article class="testmethod section">
                 <header>
                     <a id="{{testMethod.name}}"></a>
-                    <h2 class="section-header">{{testMethod.displayName}}</h2>
+                    <h2 class="section-header">{{testMethod.displayName | render}}</h2>
                 </header>
                 <section class="section-body">
-                        {%- for annotation in testMethod.annotations %}
-                            <pre class="notes">{{annotation}}</pre>
-                        {%- endfor %}
-                        {% if not testMethod.scenarioTable.empty %}
+{% for annotation in testMethod.annotations %}
+                            <pre class="notes">{{annotation | render | escape}}</pre>
+{% endfor %}
+{% if testMethod.scenarioTable.headers is not empty %}
                         <section>
                             <h3>Scenarios</h3>
                             <table class="scenarios">
                                 <thead>
                                 <tr>
-                                    {%- for header in testMethod.scenarioTable.headers %}
-                                    <th>{{header}}</th>
-                                    {%- endfor %}
+{% for header in testMethod.scenarioTable.headers %}
+                                    <th>{{header | render}}</th>
+{% endfor %}
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {%- for scenario in testMethod.scenarios %}
-                                    {%- for row in testMethod.scenarioTable.rows %}
+{% set rows = testMethod.scenarioTable.rows %}
+{% for scenario in testMethod.scenarios %}
                                     <tr>
-                                            <td class='{{cssClass[scenario.status]}}'><a href="#{{scenario.name}}">
-                                                {%- if row.empty %}
+                                            <td class='{{ cssClass[scenario.status] }}'>
+                                                <a href="#{{ scenario.name | render }}">
+{%- if rows[loop.index] is empty -%}
                                                     (empty)
-                                                {%- else %}
-                                                    {{row}}
-                                                {%- endif %}</a>
+{%- else -%}
+                                                    {{ rows[loop.index] | join(',') }}
+{%- endif -%}
+                                                </a>
                                             </td>
                                     </tr>
-                                    {%- endfor %}
-                                {%- endfor %}
+{% endfor %}
                                 </tbody>
                             </table>
                         </section>
-                        {% endif %}
-                        {%- for scenario in testMethod.scenarios %}
-                        <section class="scenario" id="{{testMethod.uid}}_{{scenario.uid}}">
+{% endif %}
+{% for scenario in testMethod.scenarios %}
+                        <section class="scenario" id="{{ testMethod.uid }}_{{ scenario.uid }}">
                             <section class="specification">
-                                <h2>Specification<a id="{{scenario.name}}"></a></h2>
-                                <pre class="highlight specification">{{scenario.specification}}</pre>
+                                <h2>Specification<a id="{{ scenario.name | render }}"></a></h2>
+                                <pre class="highlight specification">{{ scenario.specification | render | escape }}</pre>
                             </section>
                             <section class="results">
                                 <h3 class="logKey">Test result:</h3>
-                                <pre class='highlight results {{cssClass[scenario.status]}}'>{{scenario.message}}</pre>
+                                <pre class='highlight results {{cssClass[scenario.status]}}'>{{ scenario.message | render }}</pre>
                             </section>
-                            {% if scenario.diagram %}
+{% if scenario.diagram is not null %}
                             <section class="diagram">
                                 <h3 logkey="Sequence_Diagram">Sequence Diagram</h3>
-                                <div class="highlight SvgWrapper" >{{scenario.diagram}}</div>
+                                <div class="highlight SvgWrapper" >{{ scenario.diagram | render | raw }}</div>
                             </section>
-                            {% endif %}
-                            {% if not scenario.interestingGivens.keys.empty %}
+{% endif %}
+{% if scenario.interestingGivens is not empty %}
                             <section class="interestingGivens">
                                 <h3 class="logKey">Interesting Givens</h3>
                                 <table class="interestingGivens">
-                                {%- for key in scenario.interestingGivens.keys %}    
+{% for entry in scenario.interestingGivens %}
                                     <tr>
-                                        <th class="key">{{key}}</th>
-                                        <td class="interestingGiven">{{scenario.interestingGivens[key]}}</td>
+                                        <th class="key">{{ entry.key | render }}</th>
+                                        <td class="interestingGiven">{{ entry.value | render }}</td>
                                     </tr>
-                                {%- endfor %}
+{% endfor %}
                                 </table>
                             </section>
-                            {% endif %}
+{% endif %}
                             <footer>
                                 <section class="interactions">
                                 <details>
                                     <summary>Captured Interactions</summary>
-                                    {%- for key in scenario.logs.keys %}
+{% for entry in scenario.logs %}
                                     <details class="interaction">
-                                        <summary class="logKey" logkey="{{key.htmlSafeValue}}">{{key.value}}</summary>
+                                        <summary class="logKey" logkey="{{ entry.key.htmlSafeValue }}">{{ entry.key.value | render | escape }}</summary>
                                         <div contenteditable="true" ondblclick="document.execCommand('selectAll',false,null)"
-                                             class="logValue highlight {{scenario.logs[key].class.simpleName}}">{{scenario.logs[key]}}</div>
+                                             class="logValue highlight {{ entry.value.class.simpleName}}">{{ entry.value | render }}</div>
                                     </details>
-                                    {%- endfor %}
+{% endfor %}
                                 </details>
                             </section>
                             </footer>
                         </section>
-                        {%- endfor %}
+{% endfor %}
                 </section>
             </article>
-            {%- endfor %}
+{% endfor %}
         </main>
         <footer>
             <div class="footer">
