@@ -36,11 +36,11 @@ class HtmlResultRendererTest {
 
     @Test
     void supportsCustomRenderingOfScenarioLogs() throws Exception {
-        TestResult result = aTestResultWithCustomRenderTypeAddedToScenarioLogs(new RenderedType());
+        TestResult testResult = aTestResultWithCustomRenderTypeAddedToScenarioLogs(new RenderedType());
 
         String html = new HtmlResultRenderer().
-                withCustomRenderer(RenderedType.class, new DefaultReturningRenderer(CUSTOM_RENDERED_TEXT)).
-                render(result);
+                withCustomRenderer(RenderedType.class::isInstance, result -> new DefaultReturningRenderer(CUSTOM_RENDERED_TEXT)).
+                render(testResult);
 
         assertThat(html, containsString(CUSTOM_RENDERED_TEXT));
     }

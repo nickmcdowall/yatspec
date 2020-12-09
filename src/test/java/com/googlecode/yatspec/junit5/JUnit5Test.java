@@ -31,8 +31,8 @@ class JUnit5Test implements WithCustomResultListeners {
     @Override
     public Collection<SpecResultListener> getResultListeners() {
         return List.of(
-                new HtmlResultRenderer().
-                        withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), NOTE_REGEX_PATTERN, REPLACEMENT_PATTERN)),
+                new HtmlResultRenderer()
+                        .withCustomRenderer(Notes.class::isInstance, result -> new HyperlinkRenderer(new NotesRenderer(), NOTE_REGEX_PATTERN, REPLACEMENT_PATTERN)),
                 new HtmlIndexRenderer());
     }
 }

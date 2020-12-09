@@ -104,7 +104,7 @@ public class SpecificationExampleTest implements WithCustomResultListeners {
     public Collection<SpecResultListener> getResultListeners() {
         return List.of(
                 new HtmlResultRenderer()
-                        .withCustomRenderer(Notes.class, new HyperlinkRenderer(new NotesRenderer(), REGEX_PATTERN, REPLACEMENT_PATTERN)),
+                        .withCustomRenderer(Notes.class::isInstance, result -> new HyperlinkRenderer(new NotesRenderer(), REGEX_PATTERN, REPLACEMENT_PATTERN)),
                 new HtmlIndexRenderer(),
                 new HtmlTagIndexRenderer()
         );

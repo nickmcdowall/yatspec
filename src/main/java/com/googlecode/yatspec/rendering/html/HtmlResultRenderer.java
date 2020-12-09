@@ -27,18 +27,21 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static com.googlecode.yatspec.parsing.FilesUtil.overwrite;
 import static java.lang.String.format;
-import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 public class HtmlResultRenderer implements SpecResultListener {
 
-    private Map<Class<?>, Renderer> renderers = new HashMap<>(Map.of(
-            ScenarioTableHeader.class, new ScenarioTableHeaderRenderer(),
-            JavaSource.class, new JavaSourceRenderer(),
-            Notes.class, new NotesRenderer(),
-            Document.class, new DocumentRenderer()));
+    private final Map<Predicate, Function<Result, Renderer>> renderers = new HashMap<>(Map.of(
+            ScenarioTableHeader.class::isInstance, result -> new ScenarioTableHeaderRenderer(),
+            JavaSource.class::isInstance, result -> new JavaSourceRenderer(),
+            Notes.class::isInstance, result -> new NotesRenderer(),
+            Document.class::isInstance, result -> new DocumentRenderer(),
+            LinkingNote.class::isInstance, result -> new LinkingNoteRenderer(result.getTestClass())
+    ));
 
     private final PebbleEngine engine = new PebbleEngine.Builder()
             .autoEscaping(false)
@@ -67,13 +70,9 @@ public class HtmlResultRenderer implements SpecResultListener {
         return writer.toString();
     }
 
-    public <T> HtmlResultRenderer withCustomRenderer(Class<T> type, Renderer<T> renderer) {
-        renderers.put(type, renderer);
+    public <T> HtmlResultRenderer withCustomRenderer(Predicate predicate, Function<Result, Renderer> renderer) {
+        renderers.put(predicate, renderer);
         return this;
-    }
-
-    public <T> Renderer<? super T> renderer(final Renderer<T> value) {
-        return value;
     }
 
     public static Content loadContent(final String resource) {
@@ -113,9 +112,7 @@ public class HtmlResultRenderer implements SpecResultListener {
     private class CustomRenderingExtension extends AbstractExtension {
         @Override
         public Map<String, Filter> getFilters() {
-            return Map.of(
-                    "render", new RenderFilter(),
-                    "notes", new NoteRenderFilter());
+            return Map.of("render", new RenderFilter());
         }
     }
 
@@ -126,33 +123,14 @@ public class HtmlResultRenderer implements SpecResultListener {
             if (input == null) {
                 return null;
             }
-            Renderer renderer = renderers.getOrDefault(input.getClass(), Object::toString);
-            return renderer.render(input);
-        }
-
-        @Override
-        public List<String> getArgumentNames() {
-            return null;
-        }
-    }
-
-    // TODO move out
-    private class NoteRenderFilter implements Filter {
-        @Override
-        public Object apply(Object input, Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) throws PebbleException {
-            if (isEmpty(input)) return null;
-
-            if (input instanceof Notes) {
-                return new NotesRenderer().render((Notes) input);
-            }
-            if (input instanceof LinkingNote) {
-                Result result = (Result) args.get("result");
-                if (isEmpty(result)) {
-                    throw new PebbleException(null, "LinkingNote requires a Result argument", lineNumber, self.getName());
-                }
-                return new LinkingNoteRenderer(result.getTestClass()).render((LinkingNote) input);
-            }
-            return input.toString();
+            Result result = (Result) args.get("result");
+            return renderers.entrySet().stream()
+                    .filter(entry -> entry.getKey().test(input))
+                    .map(Map.Entry::getValue)
+                    .map(rendererFromResult -> rendererFromResult.apply(result))
+                    .findFirst()
+                    .orElse(Object::toString)
+                    .render(input);
         }
 
         @Override

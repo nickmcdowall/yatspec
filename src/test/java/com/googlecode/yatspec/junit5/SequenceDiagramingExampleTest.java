@@ -94,7 +94,7 @@ class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResul
     public Collection<SpecResultListener> getResultListeners() {
         return List.of(
                 new HtmlValidatingResultRenderer("/expected/SequenceDiagramingExampleTest.html")
-                        .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())
+                        .withCustomRenderer(SvgWrapper.class::isInstance, result -> new DontHighlightRenderer())
         );
     }
 

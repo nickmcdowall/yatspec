@@ -118,7 +118,7 @@ public class YatspecForCucumber implements EventListener {
 
     private WithCustomResultListeners defaultSequenceDiagramResultListener() {
         return () -> List.of(
-                new HtmlResultRenderer().withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer<>())
+                new HtmlResultRenderer().withCustomRenderer(SvgWrapper.class::isInstance, result -> new DontHighlightRenderer<>())
         );
     }
 
