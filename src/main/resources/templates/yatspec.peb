@@ -21,7 +21,7 @@
         <header>
             <h1>{{testResult.name}}</h1>
 {% for annotation in testResult.annotations %}
-            <pre class="notes">{{annotation.value | render | escape }}</pre>
+            <pre class="notes">{{ annotation.value | notes(testResult) }}</pre>
 {% endfor %}
             <nav class="contents">
                 <h2>Contents</h2>
@@ -43,7 +43,7 @@
                 </header>
                 <section class="section-body">
 {% for annotation in testMethod.annotations %}
-                            <pre class="notes">{{annotation | render | escape}}</pre>
+                        <pre class="notes">{{annotation | notes(testResult) }}</pre>
 {% endfor %}
 {% if testMethod.scenarioTable.headers is not empty %}
                         <section>
@@ -52,7 +52,7 @@
                                 <thead>
                                 <tr>
 {% for header in testMethod.scenarioTable.headers %}
-                                    <th>{{header | render}}</th>
+                                    <th>{{ header | render }}</th>
 {% endfor %}
                                 </tr>
                                 </thead>
@@ -60,15 +60,11 @@
 {% set rows = testMethod.scenarioTable.rows %}
 {% for scenario in testMethod.scenarios %}
                                     <tr>
-                                            <td class='{{ cssClass[scenario.status] }}'>
-                                                <a href="#{{ scenario.name | render }}">
-{%- if rows[loop.index] is empty -%}
-                                                    (empty)
-{%- else -%}
-                                                    {{ rows[loop.index] | join(',') }}
-{%- endif -%}
-                                                </a>
-                                            </td>
+{% for column in rows[loop.index] %}
+                                        <td class='{% if loop.first %}{{ cssClass[scenario.status] }}{% endif %}'>   
+                                            <a href="#{{ scenario.name | render }}">{%- if column is empty -%} (empty) {%- else -%} {{ column }} {%- endif -%}</a>
+                                        </td>
+{% endfor %}                                        
                                     </tr>
 {% endfor %}
                                 </tbody>
@@ -104,6 +100,7 @@
                                 </table>
                             </section>
 {% endif %}
+{% if scenario.logs is not empty %}
                             <footer>
                                 <section class="interactions">
                                 <details>
@@ -118,6 +115,7 @@
                                 </details>
                             </section>
                             </footer>
+{% endif %}
                         </section>
 {% endfor %}
                 </section>

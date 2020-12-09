@@ -1,5 +1,6 @@
 package com.googlecode.yatspec.rendering.html;
 
+import com.googlecode.yatspec.junit.LinkingNote;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.parsing.FilesUtil;
@@ -23,13 +24,13 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.googlecode.yatspec.parsing.FilesUtil.overwrite;
 import static java.lang.String.format;
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 public class HtmlResultRenderer implements SpecResultListener {
 
@@ -37,8 +38,6 @@ public class HtmlResultRenderer implements SpecResultListener {
             ScenarioTableHeader.class, new ScenarioTableHeaderRenderer(),
             JavaSource.class, new JavaSourceRenderer(),
             Notes.class, new NotesRenderer(),
-//            LinkingNote.class, new LinkingNoteRenderer(result.getTestClass()), // TODO needs runtime result variable
-            ContentAtUrl.class, renderer(Object::toString),
             Document.class, new DocumentRenderer()));
 
     private final PebbleEngine engine = new PebbleEngine.Builder()
@@ -114,7 +113,9 @@ public class HtmlResultRenderer implements SpecResultListener {
     private class CustomRenderingExtension extends AbstractExtension {
         @Override
         public Map<String, Filter> getFilters() {
-            return Map.of("render", new RenderFilter());
+            return Map.of(
+                    "render", new RenderFilter(),
+                    "notes", new NoteRenderFilter());
         }
     }
 
@@ -132,6 +133,31 @@ public class HtmlResultRenderer implements SpecResultListener {
         @Override
         public List<String> getArgumentNames() {
             return null;
+        }
+    }
+
+    // TODO move out
+    private class NoteRenderFilter implements Filter {
+        @Override
+        public Object apply(Object input, Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) throws PebbleException {
+            if (isEmpty(input)) return null;
+
+            if (input instanceof Notes) {
+                return new NotesRenderer().render((Notes) input);
+            }
+            if (input instanceof LinkingNote) {
+                Result result = (Result) args.get("result");
+                if (isEmpty(result)) {
+                    throw new PebbleException(null, "LinkingNote requires a Result argument", lineNumber, self.getName());
+                }
+                return new LinkingNoteRenderer(result.getTestClass()).render((LinkingNote) input);
+            }
+            return input.toString();
+        }
+
+        @Override
+        public List<String> getArgumentNames() {
+            return List.of("result");
         }
     }
 }

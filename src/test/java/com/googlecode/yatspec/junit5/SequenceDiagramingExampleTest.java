@@ -24,6 +24,10 @@ class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResul
     private final InterestingGivens interestingGivens = interactions.interestingGivens();
 
     @Test
+    @Notes("Note that this test may make you feel hungry")
+    @LinkingNote(message = "For related test class see %s",
+            links = {SpecificationExampleTest.class}
+    )
     void bambamGetsFoodForHisDad() {
         givenMrFlintstoneIs("hungry");
         whenHeHarassesBambamForFood();
@@ -89,8 +93,8 @@ class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResul
     @Override
     public Collection<SpecResultListener> getResultListeners() {
         return List.of(
-                new HtmlValidatingResultRenderer("/expected/SequenceDiagramingExampleTest.html").
-                        withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())
+                new HtmlValidatingResultRenderer("/expected/SequenceDiagramingExampleTest.html")
+                        .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer())
         );
     }
 
