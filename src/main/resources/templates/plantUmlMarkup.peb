@@ -2,10 +2,12 @@
 
 {% for participant in participants %}
   {{participant}}
+
 {% endfor %}
 
 {% for interaction in interactions %}
   {{interaction}}
+
 {% endfor %}
 
 @enduml

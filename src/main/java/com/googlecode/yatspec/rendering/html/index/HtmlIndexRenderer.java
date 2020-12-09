@@ -21,7 +21,7 @@ public class HtmlIndexRenderer implements SpecResultListener {
     public final static Index INDEX = new Index();
 
     private final PebbleEngine engine = new PebbleEngine.Builder().build();
-    private final PebbleTemplate compiledTemplate = engine.getTemplate("index.peb");
+    private final PebbleTemplate compiledTemplate = engine.getTemplate("templates/index.peb");
 
 
     @Override

@@ -41,15 +41,13 @@ public class HtmlResultRenderer implements SpecResultListener {
             ContentAtUrl.class, renderer(Object::toString),
             Document.class, new DocumentRenderer()));
 
-    List<List<String>> rows = new ArrayList<>();
-
     private final PebbleEngine engine = new PebbleEngine.Builder()
             .autoEscaping(false)
             .methodAccessValidator((object, method) -> true) //TODO look into using the default validator when possible
             .extension(new CustomRenderingExtension())
             .build();
 
-    private final PebbleTemplate compiledTemplate = engine.getTemplate("yatspec.peb");
+    private final PebbleTemplate compiledTemplate = engine.getTemplate("templates/yatspec.peb");
 
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {

@@ -30,7 +30,7 @@ public class HtmlTagIndexRenderer implements SpecResultListener {
 
     private final TagFinder tagFinder;
     private final PebbleEngine engine = new PebbleEngine.Builder().build();
-    private final PebbleTemplate compiledTemplate = engine.getTemplate("tagIndex.peb");
+    private final PebbleTemplate compiledTemplate = engine.getTemplate("templates/tagIndex.peb");
 
     public HtmlTagIndexRenderer() {
         this(new NotesTagFinder());
