@@ -39,7 +39,7 @@ class HtmlResultRendererTest {
         TestResult testResult = aTestResultWithCustomRenderTypeAddedToScenarioLogs(new RenderedType());
 
         String html = new HtmlResultRenderer().
-                withCustomRenderer(RenderedType.class::isInstance, result -> new DefaultReturningRenderer(CUSTOM_RENDERED_TEXT)).
+                withCustomRenderer(RenderedType.class, result -> new DefaultReturningRenderer(CUSTOM_RENDERED_TEXT)).
                 render(testResult);
 
         assertThat(html, containsString(CUSTOM_RENDERED_TEXT));

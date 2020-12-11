@@ -14,6 +14,7 @@ import com.googlecode.yatspec.state.TestMethod;
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.extension.AbstractExtension;
+import com.mitchellbosecke.pebble.extension.Extension;
 import com.mitchellbosecke.pebble.extension.Filter;
 import com.mitchellbosecke.pebble.template.EvaluationContext;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
@@ -28,25 +29,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static com.googlecode.yatspec.parsing.FilesUtil.overwrite;
 import static java.lang.String.format;
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 public class HtmlResultRenderer implements SpecResultListener {
 
-    private final Map<Predicate, Function<Result, Renderer>> renderers = new HashMap<>(Map.of(
-            ScenarioTableHeader.class::isInstance, result -> new ScenarioTableHeaderRenderer(),
-            JavaSource.class::isInstance, result -> new JavaSourceRenderer(),
-            Notes.class::isInstance, result -> new NotesRenderer(),
-            Document.class::isInstance, result -> new DocumentRenderer(),
-            LinkingNote.class::isInstance, result -> new LinkingNoteRenderer(result.getTestClass())
+    private final Map<Class, Function<Result, Renderer>> typeRenderers = new HashMap<>(Map.of(
+            ScenarioTableHeader.class, result -> new ScenarioTableHeaderRenderer(),
+            JavaSource.class, result -> new JavaSourceRenderer(),
+            Notes.class, result -> new NotesRenderer(),
+            Document.class, result -> new DocumentRenderer(),
+            LinkingNote.class, result -> new LinkingNoteRenderer(result.getTestClass())
     ));
 
     private final PebbleEngine engine = new PebbleEngine.Builder()
             .autoEscaping(false)
             .methodAccessValidator((object, method) -> true) //TODO look into using the default validator when possible
-            .extension(new CustomRenderingExtension())
+            .extension(additionalFilters(Map.of("render", new RenderFilter())))
             .build();
 
     private final PebbleTemplate compiledTemplate = engine.getTemplate("templates/yatspec.peb");
@@ -70,8 +71,8 @@ public class HtmlResultRenderer implements SpecResultListener {
         return writer.toString();
     }
 
-    public <T> HtmlResultRenderer withCustomRenderer(Predicate predicate, Function<Result, Renderer> renderer) {
-        renderers.put(predicate, renderer);
+    public <T> HtmlResultRenderer withCustomRenderer(Class type, Function<Result, Renderer> renderer) {
+        typeRenderers.put(type, renderer);
         return this;
     }
 
@@ -108,24 +109,24 @@ public class HtmlResultRenderer implements SpecResultListener {
         Files.writeString(outputFile.toPath(), loadContent(fileName).toString());
     }
 
-    // TODO move out
-    private class CustomRenderingExtension extends AbstractExtension {
-        @Override
-        public Map<String, Filter> getFilters() {
-            return Map.of("render", new RenderFilter());
-        }
+    private Extension additionalFilters(final Map<String, Filter> filterMap) {
+        return new AbstractExtension() {
+            @Override
+            public Map<String, Filter> getFilters() {
+                return filterMap;
+            }
+        };
     }
 
     // TODO move out
     private class RenderFilter implements Filter {
         @Override
         public Object apply(Object input, Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) throws PebbleException {
-            if (input == null) {
-                return null;
-            }
+            if (isEmpty(input)) return null;
+
             Result result = (Result) args.get("result");
-            return renderers.entrySet().stream()
-                    .filter(entry -> entry.getKey().test(input))
+            return typeRenderers.entrySet().stream()
+                    .filter(entry -> entry.getKey().isInstance(input))
                     .map(Map.Entry::getValue)
                     .map(rendererFromResult -> rendererFromResult.apply(result))
                     .findFirst()

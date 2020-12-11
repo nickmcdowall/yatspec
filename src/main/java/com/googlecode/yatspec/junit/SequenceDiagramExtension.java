@@ -83,7 +83,7 @@ public class SequenceDiagramExtension extends SpecListener implements TestInstan
     private WithCustomResultListeners defaultSequenceDiagramResultListener() {
         return () -> List.of(
                 new HtmlResultRenderer().
-                        withCustomRenderer(SvgWrapper.class::isInstance, result -> new DontHighlightRenderer()),
+                        withCustomRenderer(SvgWrapper.class, result -> new DontHighlightRenderer()),
                 new HtmlIndexRenderer()
         );
     }

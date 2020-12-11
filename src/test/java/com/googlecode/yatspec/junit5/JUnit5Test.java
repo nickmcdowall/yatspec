@@ -32,7 +32,7 @@ class JUnit5Test implements WithCustomResultListeners {
     public Collection<SpecResultListener> getResultListeners() {
         return List.of(
                 new HtmlResultRenderer()
-                        .withCustomRenderer(Notes.class::isInstance, result -> new HyperlinkRenderer(new NotesRenderer(), NOTE_REGEX_PATTERN, REPLACEMENT_PATTERN)),
+                        .withCustomRenderer(Notes.class, result -> new HyperlinkRenderer(new NotesRenderer(), NOTE_REGEX_PATTERN, REPLACEMENT_PATTERN)),
                 new HtmlIndexRenderer());
     }
 }

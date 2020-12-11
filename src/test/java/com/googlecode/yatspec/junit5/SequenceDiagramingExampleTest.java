@@ -2,8 +2,10 @@ package com.googlecode.yatspec.junit5;
 
 import com.googlecode.yatspec.junit.*;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
+import com.googlecode.yatspec.rendering.NotesRenderer;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlValidatingResultRenderer;
+import com.googlecode.yatspec.rendering.html.HyperlinkRenderer;
 import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.state.givenwhenthen.InterestingGivens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
@@ -16,7 +18,7 @@ import java.util.List;
 
 import static com.googlecode.yatspec.sequence.Participants.ACTOR;
 
-
+@Notes("Includes example of linking to bug tracking references e.g. Issue#14")
 @ExtendWith(SequenceDiagramExtension.class)
 class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResultListeners {
 
@@ -94,7 +96,9 @@ class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResul
     public Collection<SpecResultListener> getResultListeners() {
         return List.of(
                 new HtmlValidatingResultRenderer("/expected/SequenceDiagramingExampleTest.html")
-                        .withCustomRenderer(SvgWrapper.class::isInstance, result -> new DontHighlightRenderer())
+                        .withCustomRenderer(SvgWrapper.class, result -> new DontHighlightRenderer())
+                        .withCustomRenderer(Notes.class, result -> new HyperlinkRenderer(new NotesRenderer(),
+                                "Issue#([0-9]+)", "<a href='https://github.com/nickmcdowall/yatspec/issues/$1'>$0</a>"))
         );
     }
 

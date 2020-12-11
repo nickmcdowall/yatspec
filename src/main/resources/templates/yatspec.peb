@@ -21,7 +21,7 @@
         <header>
             <h1>{{testResult.name}}</h1>
 {% for annotation in testResult.annotations %}
-            <pre class="notes">{{ annotation.value | render(testResult) }}</pre>
+            <pre class="notes">{{ annotation | render(testResult) }}</pre>
 {% endfor %}
             <nav class="contents">
                 <h2>Contents</h2>
