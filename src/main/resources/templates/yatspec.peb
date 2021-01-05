@@ -21,7 +21,7 @@
         <header>
             <h1>{{testResult.name}}</h1>
 {% for annotation in testResult.annotations %}
-            <pre class="notes">{{ annotation | render(testResult) }}</pre>
+            <pre class="notes">{{ annotation | render(testResult) | raw }}</pre>
 {% endfor %}
             <nav class="contents">
                 <h2>Contents</h2>
@@ -43,7 +43,7 @@
                 </header>
                 <section class="section-body">
 {% for annotation in testMethod.annotations %}
-                        <pre class="notes">{{ annotation | render(testResult) }}</pre>
+                        <pre class="notes">{{ annotation | render(testResult) | raw }}</pre>
 {% endfor %}
 {% if testMethod.scenarioTable.headers is not empty %}
                         <section>

@@ -45,7 +45,6 @@ public class HtmlResultRenderer implements SpecResultListener {
     ));
 
     private final PebbleEngine engine = new PebbleEngine.Builder()
-            .autoEscaping(false)
             .methodAccessValidator((object, method) -> true) //TODO look into using the default validator when possible
             .extension(additionalFilters(Map.of("render", new RenderFilter())))
             .build();

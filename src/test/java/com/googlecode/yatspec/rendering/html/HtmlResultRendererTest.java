@@ -16,7 +16,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 class HtmlResultRendererTest {
 
-    private static final String CUSTOM_RENDERED_TEXT = "some crazy and likely random string that wouldn't appear in the html";
+    private static final String CUSTOM_RENDERED_TEXT = "some crazy and likely random string " + System.currentTimeMillis();
 
     @Test
     void providesLinksToResultOutputRelativeToOutputDirectory() {

@@ -57,7 +57,7 @@ class SequenceDiagramingExampleTest implements WithParticipants, WithCustomResul
     }
 
     private void thenMrFlintstoneSharesHisFoodWithBarneyBecauseHeLikesHim() {
-        interactions.log("(kindness) bite of burger from mrflintstone to barney", "have some of my burger because I like you");
+        interactions.log("(kindness) bite of burger from mrflintstone to barney", "<xml><message>have some of my burger because I like you</message></xml>");
     }
 
     private void thenBambamGivesToMrFlintstone(String foodItem) {
