@@ -5,7 +5,7 @@ set -e
 # ./gradlew marNextVersion -Prelease.incrementer=incrementMinor
 
 # Bumpt patch version for release version by default
- ./gradlew release
+./gradlew release
 
 # Upload to bintray
- ./gradlew bintrayUpload
+./gradlew bintrayUpload
