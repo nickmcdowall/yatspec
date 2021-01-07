@@ -54,7 +54,7 @@ task javadocJar(type: Jar) {
 }
 
 dependencies {
-    implementation "io.cucumber:cucumber-spring:4.8.0"
+    implementation "io.cucumber:cucumber-spring:6.9.1"
     implementation "org.springframework:spring-context:5.2.6.RELEASE"
 
     api "net.sourceforge.plantuml:plantuml:1.2020.9"

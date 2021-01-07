@@ -11,10 +11,8 @@ import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import cucumber.api.Result;
-import cucumber.api.TestCase;
-import cucumber.api.TestStep;
-import cucumber.api.event.*;
+import io.cucumber.plugin.EventListener;
+import io.cucumber.plugin.event.*;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 
@@ -26,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static cucumber.api.Result.Type.FAILED;
+import static io.cucumber.plugin.event.Status.FAILED;
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -58,8 +56,7 @@ public class YatspecForCucumber implements EventListener {
         publisher.registerHandlerFor(TestCaseStarted.class,
                 this::handleTestCaseStarted);
 
-        publisher.registerHandlerFor(TestCaseFinished.class, event ->
-                testCaseFinishedEvents.add(event));
+        publisher.registerHandlerFor(TestCaseFinished.class, testCaseFinishedEvents::add);
 
         publisher.registerHandlerFor(TestRunFinished.class, event -> {
             finishProcessingCompletedScenario();
@@ -69,7 +66,7 @@ public class YatspecForCucumber implements EventListener {
 
     private void handleTestCaseStarted(TestCaseStarted event) {
         TestCase testCase = event.getTestCase();
-        String featureName = testCase.getUri().replaceAll(".*/(.*?).feature$", "$1");
+        String featureName = testCase.getUri().toString().replaceAll(".*/(.*?).feature$", "$1");
         String testScenarioName = String.format("%s - %s", featureName, testCase.getName());
         if (isVeryFirstRun()) {
             currentTestScenarioName = testScenarioName;
@@ -105,8 +102,8 @@ public class YatspecForCucumber implements EventListener {
                 .collect(toList());
         cucumberResult.add(scenarioName, allSteps);
         Optional<Result> failedResult = testCaseFinishedEvents.stream()
-                .map(testCaseFinished -> testCaseFinished.result)
-                .filter(result -> result.is(FAILED))
+                .map(TestCaseFinished::getResult)
+                .filter(result -> result.getStatus().is(FAILED))
                 .findFirst();
         Scenario yatspecScenario = cucumberResult.getScenario(scenarioName);
         failedResult.ifPresent(result -> yatspecScenario.setException(result.getError()));

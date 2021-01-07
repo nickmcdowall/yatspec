@@ -6,8 +6,8 @@ import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.ScenarioTable;
 import com.googlecode.yatspec.state.TestMethod;
-import cucumber.api.PickleStepTestStep;
-import cucumber.api.TestStep;
+import io.cucumber.plugin.event.PickleStepTestStep;
+import io.cucumber.plugin.event.TestStep;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ class CucumberResult implements Result {
         return new JavaSource(steps.stream()
                 .filter(PickleStepTestStep.class::isInstance)
                 .map(PickleStepTestStep.class::cast)
-                .map(PickleStepTestStep::getStepText)
+                .map(v -> v.getStep().getText())
                 .collect(joining("\n")));
     }
 
