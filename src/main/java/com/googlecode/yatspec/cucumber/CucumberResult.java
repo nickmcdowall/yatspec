@@ -28,7 +28,7 @@ class CucumberResult implements Result {
         return new JavaSource(steps.stream()
                 .filter(PickleStepTestStep.class::isInstance)
                 .map(PickleStepTestStep.class::cast)
-                .map(v -> v.getStep().getText())
+                .map(v -> v.getStep().getKeyword() + " " + v.getStep().getText())
                 .collect(joining("\n")));
     }
 
