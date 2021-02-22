@@ -1,8 +1,12 @@
 package com.googlecode.yatspec.plugin.sequencediagram;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
 import static java.lang.String.format;
 
 public class SequenceDiagramMessage {
+    private final String maxLength = System.getProperty("yatspec.sequence.text.abbreviate.length");
     private final String from;
     private final String to;
     private final String messageName;
@@ -11,8 +15,12 @@ public class SequenceDiagramMessage {
     public SequenceDiagramMessage(String from, String to, String messageName, String messageId) {
         this.from = from;
         this.to = to;
-        this.messageName = messageName;
         this.messageId = messageId;
+        if (NumberUtils.isDigits(maxLength)) {
+            this.messageName = StringUtils.abbreviate(messageName, "...", NumberUtils.createLong(maxLength).intValue());
+        } else {
+            this.messageName = messageName;
+        }
     }
 
     public String from() {

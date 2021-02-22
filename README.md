@@ -76,6 +76,12 @@ HTML reports will be generated under `<build_dir>/reports/yatspec`
 
 For an example project using yatspec see [yatspec-example](https://github.com/nickmcdowall/yatspec-example).
 
+### Properties
+
+* To specify the output directory for generated reports set a system property called `yatspec.output.dir`
+* To shorten the text displayed on the arrows of the sequence diagrams you can set the system property
+  `yatspec.sequence.text.abbreviate.length` to a numeric value that specifies the maximum character length.
+
 ### Supporting Libraries
 If you are writing SpringBootTests then you can make use of the [yatspec-lsd-interceptors](https://github.com/nickmcdowall/yatspec-lsd-interceptors) 
 library which provides interceptors for http calls and can also auto configure certain beans to minimise the boilerplate 
@@ -108,3 +114,4 @@ FYI Jitpack can be used as an alternative to jcenter() for latest releases too: 
 
 This often occurs if you use a source or destination name that contains a character that PlantUML doesn't like
 so try to keep the names simple and avoid special characters including hyphens '`-`'.
+
