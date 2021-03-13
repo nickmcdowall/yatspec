@@ -13,6 +13,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlFileRelativePath;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.rootDirectoryFor;
 import static java.util.stream.Collectors.joining;
 
 class CucumberResult implements Result {
@@ -38,11 +40,6 @@ class CucumberResult implements Result {
     }
 
     @Override
-    public Class<?> getTestClass() {
-        return klass;
-    }
-
-    @Override
     public Scenario getScenario(String name) {
         final Scenario testScenario = findScenario(name);
         testScenario.hasRun(true);
@@ -64,6 +61,16 @@ class CucumberResult implements Result {
     @Override
     public String getPackageName() {
         return klass.getPackageName();
+    }
+
+    @Override
+    public String getRootDirectory() {
+        return rootDirectoryFor(klass);
+    }
+
+    @Override
+    public String getHtmlFileRelativePath() {
+        return htmlFileRelativePath(klass);
     }
 
     public void add(String name, List<TestStep> steps) {

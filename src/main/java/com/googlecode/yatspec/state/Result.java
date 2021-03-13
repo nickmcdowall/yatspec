@@ -7,8 +7,6 @@ public interface Result {
 
     List<TestMethod> getTestMethods();
 
-    Class<?> getTestClass();
-
     Scenario getScenario(String name) throws Exception;
 
     String getName();
@@ -19,4 +17,7 @@ public interface Result {
         return List.of();
     }
 
+    String getRootDirectory();
+
+    String getHtmlFileRelativePath();
 }

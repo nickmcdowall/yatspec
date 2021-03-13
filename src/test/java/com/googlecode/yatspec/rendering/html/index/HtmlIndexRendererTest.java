@@ -13,6 +13,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlFileRelativePath;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.rootDirectoryFor;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,11 +64,6 @@ class HtmlIndexRendererTest {
             }
 
             @Override
-            public Class<?> getTestClass() {
-                return getClass();
-            }
-
-            @Override
             public Scenario getScenario(String name) {
                 return null;
             }
@@ -79,6 +76,16 @@ class HtmlIndexRendererTest {
             @Override
             public String getPackageName() {
                 return packageName;
+            }
+
+            @Override
+            public String getHtmlFileRelativePath() {
+                return htmlFileRelativePath(getClass());
+            }
+
+            @Override
+            public String getRootDirectory() {
+                return rootDirectoryFor(getClass());
             }
 
             private List<TestMethod> stubbedMethods(String... names) {

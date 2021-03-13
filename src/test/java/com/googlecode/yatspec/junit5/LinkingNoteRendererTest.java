@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.Optional;
 
 import static com.googlecode.yatspec.parsing.TestParser.parseTestMethods;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.rootDirectoryFor;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -33,6 +34,6 @@ class LinkingNoteRendererTest {
                 .map(LinkingNote.class::cast)
                 .findFirst();
 
-        return new LinkingNoteRenderer(LinkingNoteRendererTest.class).render(linkingNote.get());
+        return new LinkingNoteRenderer(rootDirectoryFor(LinkingNoteRendererTest.class)).render(linkingNote.get());
     }
 }

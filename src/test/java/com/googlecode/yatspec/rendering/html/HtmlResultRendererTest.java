@@ -21,7 +21,7 @@ class HtmlResultRendererTest {
     @Test
     void providesLinksToResultOutputRelativeToOutputDirectory() {
         assertThat(
-                HtmlResultRenderer.htmlResultRelativePath(this.getClass()),
+                HtmlResultRenderer.htmlFileRelativePath(this.getClass()),
                 is(Paths.get("com/googlecode/yatspec/rendering/html/HtmlResultRendererTest.html").toString()));
     }
 

@@ -32,6 +32,8 @@ import java.util.function.Function;
 
 import static com.googlecode.yatspec.parsing.FilesUtil.overwrite;
 import static java.lang.String.format;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 public class HtmlResultRenderer implements SpecResultListener {
@@ -41,7 +43,7 @@ public class HtmlResultRenderer implements SpecResultListener {
             JavaSource.class, result -> new JavaSourceRenderer(),
             Notes.class, result -> new NotesRenderer(),
             Document.class, result -> new DocumentRenderer(),
-            LinkingNote.class, result -> new LinkingNoteRenderer(result.getTestClass())
+            LinkingNote.class, result -> new LinkingNoteRenderer(result.getRootDirectory())
     ));
 
     private final PebbleEngine engine = new PebbleEngine.Builder()
@@ -53,7 +55,7 @@ public class HtmlResultRenderer implements SpecResultListener {
 
     @Override
     public void complete(File yatspecOutputDir, Result result) throws Exception {
-        File htmlResultFile = htmlResultFile(yatspecOutputDir, result.getTestClass());
+        File htmlResultFile = htmlResultFile(yatspecOutputDir, result.getHtmlFileRelativePath());
         overwrite(htmlResultFile, render(result));
         addAdjacentFile(htmlResultFile, "yatspec_classic.css");
         addAdjacentFile(htmlResultFile, "yatspec_alt.css");
@@ -87,17 +89,23 @@ public class HtmlResultRenderer implements SpecResultListener {
         }};
     }
 
-    public static String htmlResultRelativePath(Class<?> resultClass) {
+    public static String htmlFileRelativePath(Class<?> resultClass) {
         return FilesUtil.toPath(resultClass) + ".html";
     }
 
-    private static File htmlResultFile(File outputDirectory, Class<?> resultClass) {
-        return new File(outputDirectory, htmlResultRelativePath(resultClass));
+    public static String rootDirectoryFor(Class<?> resultClass) {
+        return stream(htmlFileRelativePath(resultClass).split("/"))
+                .map(s -> s.contains(".") ? "" : "../")
+                .collect(joining());
+    }
+
+    private static File htmlResultFile(File outputDirectory, String relativePath) {
+        return new File(outputDirectory, relativePath);
     }
 
     public static String testMethodRelativePath(TestMethod testMethod) {
         return format("%s#%s",
-                htmlResultRelativePath(testMethod.getTestClass()),
+                htmlFileRelativePath(testMethod.getTestClass()),
                 testMethod.getName());
     }
 

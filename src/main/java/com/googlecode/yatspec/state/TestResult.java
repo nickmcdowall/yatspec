@@ -8,6 +8,8 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlFileRelativePath;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.rootDirectoryFor;
 import static java.util.Arrays.asList;
 
 public class TestResult implements Result {
@@ -17,12 +19,7 @@ public class TestResult implements Result {
     public TestResult(Class<?> klass) {
         this.klass = klass;
     }
-
-    @Override
-    public Class<?> getTestClass() {
-        return klass;
-    }
-
+    
     @Override
     public List<TestMethod> getTestMethods() {
         if (testMethods == null) {
@@ -40,7 +37,7 @@ public class TestResult implements Result {
 
     @Override
     public String getName() {
-        String className = getTestClass().getSimpleName();
+        String className = klass.getSimpleName();
         if (className.endsWith("Test")) {
             className = removeTestFrom(className);
         }
@@ -49,7 +46,7 @@ public class TestResult implements Result {
 
     @Override
     public String getPackageName() {
-        return getTestClass().getPackage().getName();
+        return klass.getPackage().getName();
     }
 
     private static String removeTestFrom(String className) {
@@ -65,6 +62,16 @@ public class TestResult implements Result {
     }
 
     public List<Annotation> getAnnotations() {
-        return yatspecAnnotations(asList(getTestClass().getAnnotations()));
+        return yatspecAnnotations(asList(klass.getAnnotations()));
+    }
+
+    @Override
+    public String getRootDirectory() {
+        return rootDirectoryFor(klass);
+    }
+
+    @Override
+    public String getHtmlFileRelativePath() {
+        return htmlFileRelativePath(klass);
     }
 }

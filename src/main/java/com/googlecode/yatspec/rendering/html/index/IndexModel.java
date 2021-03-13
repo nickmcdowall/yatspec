@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
-import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultRelativePath;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.testMethodRelativePath;
 import static com.googlecode.yatspec.state.Status.Passed;
 import static com.googlecode.yatspec.state.StatusPriority.statusPriority;
@@ -46,7 +45,7 @@ public class IndexModel {
     private Map<String, Object> modelOfResult(Result result) {
         return Map.of(
                 "name", result.getName(),
-                "url", htmlResultRelativePath(result.getTestClass()),
+                "url", result.getHtmlFileRelativePath(),
                 "status", deriveResultStatus().apply(result),
                 "methods", result.getTestMethods().stream()
                         .map(this::testMethodModel)

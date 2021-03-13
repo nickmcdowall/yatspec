@@ -6,17 +6,16 @@ import java.io.File;
 import java.util.function.Function;
 
 import static com.googlecode.yatspec.parsing.Text.wordify;
-import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlResultRelativePath;
+import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlFileRelativePath;
 import static java.lang.String.format;
 import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.joining;
 
 public class LinkingNoteRenderer implements Renderer<LinkingNote> {
 
-    private final Class<?> source;
+    private final String rootDirectory;
 
-    public LinkingNoteRenderer(Class<?> source) {
-        this.source = source;
+    public LinkingNoteRenderer(String rootDirectory) {
+        this.rootDirectory = rootDirectory;
     }
 
     @Override
@@ -32,16 +31,10 @@ public class LinkingNoteRenderer implements Renderer<LinkingNote> {
 
     private Function<Class<?>, String> toHyperlink() {
         return targetClass -> format("<a href='%s'>%s</a>",
-                htmlResultFile(targetClass, source), wordify(targetClass.getSimpleName()));
+                htmlResultFile(rootDirectory + htmlFileRelativePath(targetClass)), wordify(targetClass.getSimpleName()));
     }
 
-    private File htmlResultFile(Class<?> resultClass, Class<?> sourceClass) {
-        return new File(getRootDirectoryPath(sourceClass) + htmlResultRelativePath(resultClass));
-    }
-
-    private String getRootDirectoryPath(Class<?> sourceClass) {
-        return stream(htmlResultRelativePath(sourceClass).split("/"))
-                .map(s -> s.contains(".") ? "" : "../")
-                .collect(joining());
+    private File htmlResultFile(String pathname) {
+        return new File(pathname);
     }
 }
