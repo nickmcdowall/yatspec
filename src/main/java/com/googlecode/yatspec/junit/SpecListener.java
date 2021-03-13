@@ -2,10 +2,7 @@ package com.googlecode.yatspec.junit;
 
 import com.googlecode.yatspec.rendering.ScenarioNameRenderer;
 import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
-import com.googlecode.yatspec.state.Result;
-import com.googlecode.yatspec.state.Scenario;
-import com.googlecode.yatspec.state.ScenarioName;
-import com.googlecode.yatspec.state.TestResult;
+import com.googlecode.yatspec.state.*;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -46,7 +43,7 @@ public class SpecListener implements AfterAllCallback, AfterEachMethodAdapter, T
         Scenario scenario = testResult.getScenario(nameWithArguments);
         Throwable failure = failures.remove(extensionContext.getRequiredTestMethod());
         if (failure != null) {
-            scenario.setException(failure);
+            scenario.setFailureMessage(new FailureMessage(failure.getMessage()));
         }
         currentScenario.put(fullyQualifiedTestMethod, scenario);
 

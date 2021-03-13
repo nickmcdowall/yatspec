@@ -8,12 +8,13 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Scenario {
     private TestState testState = new TestState();
     private final String name;
     private final JavaSource specification;
-    private Throwable exception;
+    private FailureMessage failureMessage;
     private boolean wasRun = false;
 
     public Scenario(String name, JavaSource specification) {
@@ -50,16 +51,12 @@ public class Scenario {
         return testState.getInterestingTypes();
     }
 
-    public void setException(Throwable exception) {
-        this.exception = exception;
-    }
-
-    public Throwable getException() {
-        return exception;
+    public void setFailureMessage(FailureMessage failureMessage) {
+        this.failureMessage = failureMessage;
     }
 
     public boolean hasFailed() {
-        return exception != null;
+        return Optional.ofNullable(failureMessage).isPresent();
     }
 
     @SuppressWarnings("unused") //used by template
@@ -81,7 +78,7 @@ public class Scenario {
             result = "Test passed";
         }
         if (hasFailed()) {
-            result = getException().toString();
+            result = failureMessage.getValue();
         }
         return result;
     }

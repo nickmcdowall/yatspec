@@ -9,6 +9,7 @@ import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.sequence.Participant;
+import com.googlecode.yatspec.state.FailureMessage;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import io.cucumber.plugin.EventListener;
@@ -106,7 +107,8 @@ public class YatspecForCucumber implements EventListener {
                 .filter(result -> result.getStatus().is(FAILED))
                 .findFirst();
         Scenario yatspecScenario = cucumberResult.getScenario(scenarioName);
-        failedResult.ifPresent(result -> yatspecScenario.setException(result.getError()));
+        failedResult.ifPresent(result -> 
+                yatspecScenario.setFailureMessage(new FailureMessage(result.getError().getMessage())));
         getOptionalBean(TestState.class).ifPresent(testState -> {
             yatspecScenario.copyTestState(testState);
             testState.reset();
