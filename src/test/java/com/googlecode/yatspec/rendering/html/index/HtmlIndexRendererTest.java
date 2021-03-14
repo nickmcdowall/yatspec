@@ -1,6 +1,6 @@
 package com.googlecode.yatspec.rendering.html.index;
 
-import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.parsing.TestText;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.ScenarioTable;
@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlFileRelativePath;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.rootDirectoryFor;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -97,10 +98,10 @@ class HtmlIndexRendererTest {
             private TestMethod aStubbedMethod(String methodName) {
                 return new TestMethod(
                         getClass(),
-                        getClass().getEnclosingMethod(),
                         methodName,
-                        new JavaSource(""),
-                        new ScenarioTable()
+                        new TestText(""),
+                        new ScenarioTable(), 
+                        emptyList()
                 );
             }
         };

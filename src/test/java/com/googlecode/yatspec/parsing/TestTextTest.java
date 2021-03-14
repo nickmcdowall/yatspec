@@ -6,7 +6,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-class JavaSourceTest {
+class TestTextTest {
 
     @Test
     void replaceMethodArgumentsWithValues() {
@@ -19,9 +19,9 @@ class JavaSourceTest {
     }
 
     private void verifyReplacement(String original, String replaced, String argument, String value) {
-        JavaSource originalSource = new JavaSource(original);
+        TestText originalSource = new TestText(original);
 
-        JavaSource replacedSource = originalSource.replace(asList(argument), asList(value));
+        TestText replacedSource = originalSource.replace(asList(argument), asList(value));
 
         assertThat(replacedSource.value(), is(replaced));
 

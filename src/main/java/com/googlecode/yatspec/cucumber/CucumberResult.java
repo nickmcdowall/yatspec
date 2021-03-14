@@ -1,6 +1,6 @@
 package com.googlecode.yatspec.cucumber;
 
-import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.parsing.TestText;
 import com.googlecode.yatspec.parsing.Text;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
@@ -9,25 +9,24 @@ import com.googlecode.yatspec.state.TestMethod;
 import io.cucumber.plugin.event.PickleStepTestStep;
 import io.cucumber.plugin.event.TestStep;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlFileRelativePath;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.rootDirectoryFor;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 
 class CucumberResult implements Result {
     private final Class<?> klass;
-    private final Method dummyMethod = this.getClass().getMethods()[0]; //Only used to get at the annotations
     private final List<TestMethod> testMethods = new ArrayList<>();
 
     public CucumberResult(Class<?> klass) {
         this.klass = klass;
     }
 
-    private JavaSource stepsToJavaSource(List<TestStep> steps) {
-        return new JavaSource(steps.stream()
+    private TestText testTextFrom(List<TestStep> steps) {
+        return new TestText(steps.stream()
                 .filter(PickleStepTestStep.class::isInstance)
                 .map(PickleStepTestStep.class::cast)
                 .map(v -> v.getStep().getKeyword() + " " + v.getStep().getText())
@@ -74,7 +73,6 @@ class CucumberResult implements Result {
     }
 
     public void add(String name, List<TestStep> steps) {
-        JavaSource methodBody = stepsToJavaSource(steps);
-        testMethods.add(new TestMethod(klass, dummyMethod, name, methodBody, new ScenarioTable()));
+        testMethods.add(new TestMethod(klass, name, testTextFrom(steps), new ScenarioTable(), emptyList()));
     }
 }

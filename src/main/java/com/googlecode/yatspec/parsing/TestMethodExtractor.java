@@ -16,16 +16,19 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 
 public class TestMethodExtractor {
     public TestMethod toTestMethod(Class aClass, JavaMethod javaMethod, Method method) {
-        final String name = javaMethod.getName();
-
-        final JavaSource source = new JavaSource(javaMethod.getSourceCode());
-        final ScenarioTable scenarioTable = getScenarioTable(javaMethod);
-        return new TestMethod(aClass, method, name, source, scenarioTable);
+        final var name = javaMethod.getName();
+        final var source = new TestText(javaMethod.getSourceCode());
+        final var scenarioTable = getScenarioTable(javaMethod);
+        final var yatspecAnnotations = yatspecAnnotations(asList(method.getAnnotations()));
+        
+        return new TestMethod(aClass, name, source, scenarioTable, yatspecAnnotations);
     }
 
     private ScenarioTable getScenarioTable(JavaMethod method) {
@@ -93,5 +96,4 @@ public class TestMethodExtractor {
                 .map(JavaParameter::getName)
                 .collect(toList());
     }
-
 }

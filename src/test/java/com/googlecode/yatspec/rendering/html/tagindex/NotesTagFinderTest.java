@@ -1,7 +1,7 @@
 package com.googlecode.yatspec.rendering.html.tagindex;
 
 import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.parsing.TestText;
 import com.googlecode.yatspec.state.ScenarioTable;
 import com.googlecode.yatspec.state.TestMethod;
 import org.junit.jupiter.api.Test;
@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
+import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,10 +37,10 @@ class NotesTagFinderTest {
     private TestMethod aTestMethodWrapper(Method method) {
         return new TestMethod(
                 method.getDeclaringClass(),
-                method,
                 method.getName(),
-                new JavaSource(""),
-                new ScenarioTable()
+                new TestText(""),
+                new ScenarioTable(), 
+                yatspecAnnotations(asList(method.getAnnotations()))
         );
     }
 }

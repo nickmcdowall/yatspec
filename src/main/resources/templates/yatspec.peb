@@ -75,7 +75,7 @@
                         <section class="scenario" id="{{ testMethod.uid }}_{{ scenario.uid }}">
                             <section class="specification">
                                 <h2>Specification<a id="{{ scenario.name | render }}"></a></h2>
-                                <pre class="highlight specification">{{ scenario.specification | render | escape }}</pre>
+                                <pre class="highlight specification">{{ scenario.testText | render | escape }}</pre>
                             </section>
                             <section class="results">
                                 <h3 class="logKey">Test result:</h3>

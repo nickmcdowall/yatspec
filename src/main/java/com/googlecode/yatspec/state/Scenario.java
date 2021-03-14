@@ -1,6 +1,6 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.parsing.TestText;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -13,13 +13,13 @@ import java.util.Optional;
 public class Scenario {
     private TestState testState = new TestState();
     private final String name;
-    private final JavaSource specification;
+    private final TestText testText;
     private FailureMessage failureMessage;
     private boolean wasRun = false;
 
-    public Scenario(String name, JavaSource specification) {
+    public Scenario(String name, TestText testText) {
         this.name = name;
-        this.specification = specification;
+        this.testText = testText;
     }
 
     public String getName() {
@@ -60,8 +60,8 @@ public class Scenario {
     }
 
     @SuppressWarnings("unused") //used by template
-    public JavaSource getSpecification() {
-        return specification;
+    public TestText getTestText() {
+        return testText;
     }
 
     public boolean wasRun() {
@@ -94,7 +94,7 @@ public class Scenario {
     }
 
     public String getUid() {
-        return name.hashCode() + "_" + specification.hashCode();
+        return name.hashCode() + "_" + testText.hashCode();
     }
 
     @Override

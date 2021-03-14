@@ -1,10 +1,11 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.parsing.TestText;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TestMethodTest {
@@ -43,10 +44,10 @@ class TestMethodTest {
     private TestMethod aStubbedMethod(String methodName) {
         return new TestMethod(
                 getClass(),
-                getClass().getEnclosingMethod(),
                 methodName,
-                new JavaSource(""),
-                new ScenarioTable()
+                new TestText(""),
+                new ScenarioTable(), 
+                emptyList()
         );
     }
 }

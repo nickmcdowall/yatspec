@@ -1,7 +1,7 @@
 package com.googlecode.yatspec.rendering.html.tagindex;
 
 import com.googlecode.yatspec.junit.Notes;
-import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.parsing.TestText;
 import com.googlecode.yatspec.state.Result;
 import com.googlecode.yatspec.state.Scenario;
 import com.googlecode.yatspec.state.ScenarioTable;
@@ -13,8 +13,10 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.List;
 
+import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.htmlFileRelativePath;
 import static com.googlecode.yatspec.rendering.html.HtmlResultRenderer.rootDirectoryFor;
+import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -107,10 +109,10 @@ class HtmlTagIndexRendererTest {
             private TestMethod aTestMethodWrapper(Method method) {
                 return new TestMethod(
                         method.getDeclaringClass(),
-                        method,
                         method.getName(),
-                        new JavaSource(""),
-                        new ScenarioTable()
+                        new TestText(""),
+                        new ScenarioTable(), 
+                        yatspecAnnotations(asList(method.getAnnotations()))
                 );
             }
         };

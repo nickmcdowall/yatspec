@@ -1,21 +1,18 @@
 package com.googlecode.yatspec.state;
 
-import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.parsing.TestText;
 import com.googlecode.yatspec.parsing.Text;
 import com.googlecode.yatspec.rendering.ScenarioNameRendererFactory;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.googlecode.yatspec.junit.YatspecAnnotation.methods.yatspecAnnotations;
 import static java.lang.System.lineSeparator;
-import static java.util.Arrays.asList;
 import static java.util.Collections.nCopies;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -23,24 +20,24 @@ import static java.util.stream.Stream.concat;
 
 public class TestMethod {
     private final Class<?> testClass;
-    private final Method method;
     private final String methodName;
     private final ScenarioTable scenarioTable;
-    private final JavaSource specification;
+    private final TestText testText;
     private final Map<String, Scenario> scenarioResults = new LinkedHashMap<>();
+    private final List<Annotation> yatspecAnnotations;
 
-    public TestMethod(Class<?> testClass, Method method, String methodName, JavaSource methodBody, ScenarioTable scenarioTable) {
+    public TestMethod(Class<?> testClass, String methodName, TestText testText, ScenarioTable scenarioTable, List<Annotation> yatspecAnnotations) {
         this.testClass = testClass;
-        this.method = method;
         this.methodName = methodName;
         this.scenarioTable = scenarioTable;
-        this.specification = methodBody;
+        this.testText = testText;
+        this.yatspecAnnotations = yatspecAnnotations;
         buildUpScenarios();
     }
 
     private void buildUpScenarios() {
         if (scenarioTable.isEmpty()) {
-            scenarioResults.put(methodName, new Scenario("", specification));
+            scenarioResults.put(methodName, new Scenario("", testText));
         } else {
             for (List<String> row : scenarioTable.getRows()) {
                 ScenarioName scenarioName = new ScenarioName(methodName, row);
@@ -49,7 +46,7 @@ public class TestMethod {
                         .map(ScenarioTableHeader::value)
                         .collect(toList());
                 List<String> processedValues = processValues(row, headers);
-                Scenario scenario = new Scenario(name, specification.replace(headers, processedValues));
+                Scenario scenario = new Scenario(name, testText.replace(headers, processedValues));
                 scenarioResults.put(name, scenario);
             }
         }
@@ -106,13 +103,13 @@ public class TestMethod {
         return Status.Passed;
     }
 
-    public JavaSource getSpecification() {
-        return specification;
+    public TestText getTestText() {
+        return testText;
     }
 
     @Override
     public String toString() {
-        return getName() + lineSeparator() + getSpecification();
+        return getName() + lineSeparator() + getTestText();
     }
 
 
@@ -134,7 +131,7 @@ public class TestMethod {
     }
 
     public List<Annotation> getAnnotations() {
-        return yatspecAnnotations(asList(method.getAnnotations()));
+        return yatspecAnnotations;
     }
 
     public String getUid() {

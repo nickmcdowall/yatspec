@@ -4,7 +4,7 @@ import com.googlecode.yatspec.junit.LinkingNote;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.parsing.FilesUtil;
-import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.parsing.TestText;
 import com.googlecode.yatspec.plugin.jdom.DocumentRenderer;
 import com.googlecode.yatspec.rendering.*;
 import com.googlecode.yatspec.state.Result;
@@ -40,7 +40,7 @@ public class HtmlResultRenderer implements SpecResultListener {
 
     private final Map<Class, Function<Result, Renderer>> typeRenderers = new HashMap<>(Map.of(
             ScenarioTableHeader.class, result -> new ScenarioTableHeaderRenderer(),
-            JavaSource.class, result -> new JavaSourceRenderer(),
+            TestText.class, result -> new JavaSourceRenderer(),
             Notes.class, result -> new NotesRenderer(),
             Document.class, result -> new DocumentRenderer(),
             LinkingNote.class, result -> new LinkingNoteRenderer(result.getRootDirectory())

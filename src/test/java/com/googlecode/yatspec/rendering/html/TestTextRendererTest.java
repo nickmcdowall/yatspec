@@ -1,19 +1,19 @@
 package com.googlecode.yatspec.rendering.html;
 
 
-import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.parsing.TestText;
 import org.junit.jupiter.api.Test;
 
 import static com.googlecode.yatspec.rendering.html.JavaSourceRenderer.removeDotClass;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JavaSourceRendererTest {
+class TestTextRendererTest {
 
     private final JavaSourceRenderer renderer = new JavaSourceRenderer();
 
     @Test
     void noLongerEscapeXmlCharactersInRenderer() {
-        assertThat(renderer.render(new JavaSource("<abc>&:</abc>\\+:\n"))).isEqualTo("<abc>& </abc>\\+");
+        assertThat(renderer.render(new TestText("<abc>&:</abc>\\+:\n"))).isEqualTo("<abc>& </abc>\\+");
     }
 
     @Test
