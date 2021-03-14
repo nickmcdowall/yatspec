@@ -47,7 +47,7 @@ class CucumberResult implements Result {
     }
 
     private Scenario findScenario(final String name) {
-        return getTestMethods().stream()
+        return testMethods.stream()
                 .filter(testMethod -> testMethod.hasScenario(name))
                 .findFirst().get()
                 .getScenario(name);

@@ -14,17 +14,15 @@ import static java.util.Arrays.asList;
 
 public class TestResult implements Result {
     private final Class<?> klass;
-    private List<TestMethod> testMethods;
+    private final List<TestMethod> testMethods;
 
     public TestResult(Class<?> klass) {
         this.klass = klass;
+        this.testMethods = TestParser.parseTestMethods(klass);
     }
-    
+
     @Override
     public List<TestMethod> getTestMethods() {
-        if (testMethods == null) {
-            testMethods = TestParser.parseTestMethods(klass);
-        }
         return testMethods;
     }
 
@@ -55,12 +53,13 @@ public class TestResult implements Result {
     }
 
     private Scenario findScenario(final String name) {
-        return getTestMethods().stream()
+        return testMethods.stream()
                 .filter(testMethod -> testMethod.hasScenario(name))
                 .findFirst().get()
                 .getScenario(name);
     }
 
+    @Override
     public List<Annotation> getAnnotations() {
         return yatspecAnnotations(asList(klass.getAnnotations()));
     }
