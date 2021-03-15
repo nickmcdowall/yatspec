@@ -71,6 +71,9 @@ dependencies {
     testCompile 'org.assertj:assertj-core:3.15.0'
 
     implementation "org.apache.commons:commons-lang3:3.11"
+    
+    compileOnly 'org.projectlombok:lombok:1.18.16'
+    annotationProcessor 'org.projectlombok:lombok:1.18.16'
 }
 
 artifacts {

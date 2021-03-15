@@ -1,13 +1,10 @@
 package com.googlecode.yatspec.state;
 
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+
+@Value
+@RequiredArgsConstructor
 public class FailureMessage {
-    private final String value;
-
-    public FailureMessage(String value) {
-        this.value = value;
-    }
-
-    public String getValue() {
-        return value;
-    }
+    String value;
 }

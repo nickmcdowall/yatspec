@@ -3,6 +3,7 @@ package com.googlecode.yatspec.state;
 import com.googlecode.yatspec.parsing.TestText;
 import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import lombok.Data;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -10,21 +11,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Data
 public class Scenario {
-    private TestState testState = new TestState();
     private final String name;
     private final TestText testText;
-    private FailureMessage failureMessage;
+
+    private TestState testState = new TestState();
     private boolean wasRun = false;
-
-    public Scenario(String name, TestText testText) {
-        this.name = name;
-        this.testText = testText;
-    }
-
-    public String getName() {
-        return name;
-    }
+    private FailureMessage failureMessage;
 
     public void copyTestState(TestState testState) {
         this.testState = new TestState(testState);
@@ -51,17 +45,8 @@ public class Scenario {
         return testState.getInterestingTypes();
     }
 
-    public void setFailureMessage(FailureMessage failureMessage) {
-        this.failureMessage = failureMessage;
-    }
-
     public boolean hasFailed() {
         return Optional.ofNullable(failureMessage).isPresent();
-    }
-
-    @SuppressWarnings("unused") //used by template
-    public TestText getTestText() {
-        return testText;
     }
 
     public boolean wasRun() {
@@ -95,15 +80,5 @@ public class Scenario {
 
     public String getUid() {
         return name.hashCode() + "_" + testText.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

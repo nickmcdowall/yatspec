@@ -7,6 +7,6 @@ import static com.googlecode.yatspec.parsing.Text.wordify;
 public class ScenarioTableHeaderRenderer implements Renderer<ScenarioTableHeader> {
     @Override
     public String render(ScenarioTableHeader header) {
-        return wordify(header.value());
+        return wordify(header.getValue());
     }
 }

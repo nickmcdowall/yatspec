@@ -16,7 +16,7 @@ public class JavaSourceRenderer implements Renderer<TestText> {
 
     @Override
     public String render(TestText testText) {
-        List<String> lines = lines(removeDotClass(testText.value().trim()));
+        List<String> lines = lines(removeDotClass(testText.getValue().trim()));
         return lines.stream()
                 .map(Text::wordify)
                 .collect(joining("\n"));

@@ -43,7 +43,7 @@ public class TestMethod {
                 ScenarioName scenarioName = new ScenarioName(methodName, row);
                 String name = ScenarioNameRendererFactory.renderer().render(scenarioName);
                 final List<String> headers = scenarioTable.getHeaders().stream()
-                        .map(ScenarioTableHeader::value)
+                        .map(ScenarioTableHeader::getValue)
                         .collect(toList());
                 List<String> processedValues = processValues(row, headers);
                 Scenario scenario = new Scenario(name, testText.replace(headers, processedValues));

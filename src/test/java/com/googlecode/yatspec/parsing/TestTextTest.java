@@ -23,7 +23,7 @@ class TestTextTest {
 
         TestText replacedSource = originalSource.replace(asList(argument), asList(value));
 
-        assertThat(replacedSource.value(), is(replaced));
+        assertThat(replacedSource.getValue(), is(replaced));
 
     }
 }
